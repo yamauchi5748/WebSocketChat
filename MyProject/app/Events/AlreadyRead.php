@@ -10,14 +10,14 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use App\User;
-use Nexmo\Application\MessagesConfig;
+use App\Chat;
 
-class MessageRecieved implements ShouldBroadcast
+class AlreadyRead implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /** @var */
-    public $message;
+    public $chat;
     public $user;
 
     /**
@@ -25,10 +25,10 @@ class MessageRecieved implements ShouldBroadcast
      *
      * @param array $message
      */
-    public function __construct(User $user, Array $message)
+    public function __construct(Chat $chat)
     {
-        $this->user = $user;
-        $this->message = $message;
+        $this->chat = $chat;
+        $this->user = User::where('id', $chat->sender_id)->first();
     }
 
     /**
@@ -38,11 +38,12 @@ class MessageRecieved implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PresenceChannel('room.'.$this->message["room_id"]);
+        \Log::debug($this->chat);
+        return new PrivateChannel('user.'.$this->user->id.'.room.'.$this->chat["room_id"]);
     }
 
     public function broadcastWith()
     {
-        return ['message' => $this->message];
+        return ['chat' => $this->chat];
     }
 }

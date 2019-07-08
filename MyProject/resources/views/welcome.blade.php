@@ -10,11 +10,16 @@
 <body>
     <div id="app" class="container-fluid">
         <my-chat
-            :user_id={{ $user->id }}
+            :user_id="'{{ $user->id }}'"
         ></my-chat>
     </div>
     User
     {{ $user }}
+    <script>
+        window.Laravel = {!! json_encode([
+            'apiToken' => \Auth::user()->api_token ?? null
+        ]) !!};
+    </script>
     <script src="{{mix('js/app.js')}}"></script>
 </body>
 </html>

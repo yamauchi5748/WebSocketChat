@@ -13,15 +13,11 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::middleware('auth:api')->get('/users', 'UserController@index');
+Route::middleware('auth:api')->get('/rooms', 'ChatRoomController@index');
+Route::middleware('auth:api')->get('/rooms/{room_id}/messages', 'MessageController@index');
+Route::middleware('auth:api')->get('/new-messages', 'MessageController@newIndex');
+Route::middleware('auth:api')->post('/rooms/{room_id}/file', 'MessageController@fileStore');
+Route::middleware('auth:api')->post('/rooms', 'ChatRoomController@store');
+Route::middleware('auth:api')->post('/check-at', 'ChatRoomController@checkAt');
 
-Route::middleware('api')->get('/user', function(Request $request) {
-    return App\User::paginate();
-});
-
-// ドキュメントの抜粋（今回は設定しないため）
-Broadcast::channel('order.{orderId}', function ($user, $orderId) {
-    return $user->id === Order::findOrNew($orderId)->user_id;
-});

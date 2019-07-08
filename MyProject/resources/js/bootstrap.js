@@ -35,6 +35,7 @@ let api_token = document.head.querySelector('meta[name="api-token"]');
 
 if (token) {
     window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
+    window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + api_token.content;
 } else {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
@@ -48,11 +49,10 @@ if (token) {
  import Echo from 'laravel-echo'
 
  window.io = require('socket.io-client');
- console.log(api_token.content)
 
  window.Echo = new Echo({
     broadcaster: 'socket.io',
-    host: '192.168.99.1:6001',
+    host: 'localhost:6001',
     auth: {
         headers: {
             'Authorization' : 'Bearer ' + api_token.content,
