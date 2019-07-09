@@ -5,7 +5,7 @@
         <div class="dropdown-text">{{ label }}</div>
         <i class="el-icon-caret-bottom"></i>
       </div>
-      <div v-if="this.$root.now_room">
+      <div v-if="this.$root.now_room && this.$root.now_room.admin == this.$root.user_id">
         <GroupEdit />
       </div>
       <transition>

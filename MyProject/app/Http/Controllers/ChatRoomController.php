@@ -62,11 +62,15 @@ class ChatRoomController extends Controller
             }
         }
 
+        $admin = null;
+        $request->is_group ? $admin = Auth::id() : null;
+
         $uuid = (string) Str::uuid();
         $chat_room = [
             'id' => $uuid,
             'group_name' => $request->group_name,
-            'is_group' => $request->is_group
+            'is_group' => $request->is_group,
+            'admin' => $admin
         ];
 
         ChatRoom::create($chat_room);
@@ -92,6 +96,10 @@ class ChatRoomController extends Controller
 
         $chat_room = ChatRoom::where('id', $room_id)
         ->first();
+
+        if(!$chat_room->admin == Auth::id()){
+            return 'timpo';
+        }
 
         $chat_room->group_name = $request->name;
         $chat_room->save();

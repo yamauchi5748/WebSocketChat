@@ -130,8 +130,8 @@ const app = new Vue({
       axios.put('/api/rooms/' + this.now_room.id, room)
         .then(res => {
           console.log(res.data);
-          for(let room of this.rooms){
-            if(room.id == res.data.id){
+          for (let room of this.rooms) {
+            if (room.id == res.data.id) {
               room = res.data;
               this.now_room = res.data;
             }
@@ -193,10 +193,12 @@ const app = new Vue({
     },
     // ルーム作成
     addRoom(join_users, is_group, group_name) {
+      admin = is_group ? this.user_id : null;
       axios.post("/api/rooms", {
         join_users: join_users,
         is_group: is_group,
-        group_name: group_name
+        group_name: group_name,
+        admin: admin
       })
         .then(res => {
           for (let user of this.listItems) {

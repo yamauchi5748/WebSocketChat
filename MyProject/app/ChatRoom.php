@@ -9,7 +9,7 @@ class ChatRoom extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'id', 'group_name', 'is_group', 'users'
+        'id', 'group_name', 'is_group', 'admin', 'users'
     ];
 
     // room_idをキャスト

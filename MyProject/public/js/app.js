@@ -77,7 +77,7 @@
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
 /******/
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "/";
+/******/ 	__webpack_require__.p = "http://192.168.99.100:80/";
 /******/
 /******/
 /******/ 	// Load entry module and return exports
@@ -49216,7 +49216,9 @@ var render = function() {
           ]
         ),
         _vm._v(" "),
-        this.$root.now_room ? _c("div", [_c("GroupEdit")], 1) : _vm._e(),
+        this.$root.now_room && this.$root.now_room.admin == this.$root.user_id
+          ? _c("div", [_c("GroupEdit")], 1)
+          : _vm._e(),
         _vm._v(" "),
         _c("transition", [
           _vm.isActive
@@ -62325,10 +62327,12 @@ var app = new Vue({
     addRoom: function addRoom(join_users, is_group, group_name) {
       var _this5 = this;
 
+      admin = is_group ? this.user_id : null;
       axios.post("/api/rooms", {
         join_users: join_users,
         is_group: is_group,
-        group_name: group_name
+        group_name: group_name,
+        admin: admin
       }).then(function (res) {
         var _iteratorNormalCompletion6 = true;
         var _didIteratorError6 = false;
