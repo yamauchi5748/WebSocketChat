@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Storage;
 use App\Events\MessageRecieved;
 use Carbon\Carbon;
 use App\Chat;
@@ -29,6 +28,7 @@ class MessageController extends Controller
                 continue;
             };
             $already_read = $room->is_group ? 0 : false;
+            \Log::debug($message);
             foreach ($room_users as $room_user) {
                 // 自ユーザは省く
                 if ($room_user->user_id == Auth::user()->id) {
@@ -102,16 +102,27 @@ class MessageController extends Controller
         $user = Auth::user();
         $uuid = (string) Str::uuid();
         $now = (string) Carbon::now();
+        $content_type;
 
-        $path = $request->file('image')->storeAs('public/images', $room_id . '.' . $user->id . '.' . $uuid . '.jpg');
-        $path = Str::replaceFirst('public', 'storage', $path);
+        \Log::debug($request->file('image'));
+        if ($request->file('image')) {
+            $path = $request->file('image')->storeAs('public/images', $room_id . '.' . $user->id . '.' . $uuid . '.jpg');
+            $path = Str::replaceFirst('public', 'storage', $path);
+            $content_type = "image";
+        } else {
+            $path = $request->file('video')->storeAs('public/videos', $room_id . '.' . $user->id . '.' . $uuid . '.mp4');
+            $path = Str::replaceFirst('public', 'storage', $path);
+            $content_type = "video";
+        }
+
+
 
         $chat = [
             'id' => $uuid,
             'room_id' => $request->room_id,
             'sender_id' => $user->id,
-            'image' => $path,
-            'content_type' => 'image',
+            $content_type => $path,
+            'content_type' => $content_type,
             'created_at' => $now
         ];
 

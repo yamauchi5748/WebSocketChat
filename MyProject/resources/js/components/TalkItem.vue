@@ -13,16 +13,30 @@
             <span v-if="talk.already_read">Read</span>
           </span>
           <div class="talk-clear"></div>
-          <span>{{ talk.created_at }}</span>
+          <div>{{ talk.created_at }}</div>
         </div>
-        <span class="talk-message" v-if="talk.content_type == 'text'">{{ talk.message }}</span>
-        <img class="talk-message" :src="talk.image" v-if="talk.content_type == 'image'">
+        <div class="talk-message talk-message-right" v-if="talk.content_type == 'text'">{{ talk.message }}</div>
+        <img a class="talk-message" :src="talk.image" v-if="talk.content_type == 'image'" />
+        <video
+          a
+          class="talk-message"
+          :src="talk.video"
+          v-if="talk.content_type == 'video'"
+          controls
+        ></video>
       </div>
       <div :class="getClassName(talk)" v-else>
         <p class="talk-sender-name">{{ talk.sender_name }}</p>
-        <span class="talk-message" v-if="talk.content_type == 'text'">{{ talk.message }}</span>
-        <img class="talk-message" :src="talk.image" v-if="talk.content_type == 'image'">
-        <span>{{ talk.created_at }}</span>
+        <div class="talk-message" v-if="talk.content_type == 'text'">{{ talk.message }}</div>
+        <img class="talk-message" :src="talk.image" v-if="talk.content_type == 'image'" />
+        <video
+          a
+          class="talk-message"
+          :src="talk.video"
+          v-if="talk.content_type == 'video'"
+          controls
+        ></video>
+        <div>{{ talk.created_at }}</div>
       </div>
     </div>
     <div class="talk-clear"></div>
@@ -83,9 +97,13 @@
 }
 /* メッセージ */
 .talk-message {
+  max-width: 300px;
   padding-right: 10px; /*文字や画像（コンテンツ）の外側に隙間を入れる*/
   padding-left: 10px; /*文字や画像（コンテンツ）の外側に隙間を入れる*/
   font-size: 21px;
+}
+.talk-message-right {
+  float: right;
 }
 </style>
 

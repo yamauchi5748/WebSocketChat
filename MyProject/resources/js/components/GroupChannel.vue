@@ -5,6 +5,9 @@
         <div class="dropdown-text">{{ label }}</div>
         <i class="el-icon-caret-bottom"></i>
       </div>
+      <div v-if="this.$root.now_room">
+        <GroupEdit />
+      </div>
       <transition>
         <div class="list-items" v-if="isActive">
           <template v-if="existsListItems">
@@ -116,7 +119,10 @@ i {
 </style>
 
 <script>
+import GroupEdit from "./GroupEdit";
+
 export default {
+  components: { GroupEdit },
   data() {
     return {
       label: "グループを選択して下さい▿",
@@ -144,7 +150,6 @@ export default {
         }
       }
       this.badge_counter[index] = counter;
-      console.log(this.badge_counter[index]);
       if (counter > 0) {
         return true;
       }

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use App\Events\Alreadyread;
+use App\User;
 use App\Chat;
 use App\ChatRoom;
 use App\ChatRoomUser;
@@ -20,6 +21,13 @@ class ChatRoomController extends Controller
             ->where('chat_rooms.is_group', true)
             ->get();
 
+        foreach ($rooms as $room) {
+            $room['users'] = User::select('users.id', 'users.name')
+            ->join('chat_room_users', 'users.id', '=', 'chat_room_users.user_id')
+            ->where('room_id', $room['id'])
+            ->get();
+        }
+
         return $rooms;
     }
 
@@ -27,12 +35,14 @@ class ChatRoomController extends Controller
     {
         if (!$request->is_group) {
             // 自ユーザの参加ルームを取得
-            $my_rooms = ChatRoom::join('chat_room_users', 'chat_rooms.id', '=', 'chat_room_users.room_id')
+            $my_rooms = ChatRoom::select('chat_rooms.id', 'chat_rooms.group_name', 'chat_rooms.is_group')
+                ->join('chat_room_users', 'chat_rooms.id', '=', 'chat_room_users.room_id')
                 ->where('chat_room_users.user_id', $request->join_users[1])
                 ->where('chat_rooms.is_group', false)
                 ->get();
             // 相手ユーザの参加ルームを取得
-            $target_rooms = ChatRoom::join('chat_room_users', 'chat_rooms.id', '=', 'chat_room_users.room_id')
+            $target_rooms = ChatRoom::select('chat_rooms.id', 'chat_rooms.group_name', 'chat_rooms.is_group')
+                ->join('chat_room_users', 'chat_rooms.id', '=', 'chat_room_users.room_id')
                 ->where('chat_room_users.user_id', $request->join_users[0])
                 ->where('chat_rooms.is_group', false)
                 ->get();
@@ -69,6 +79,32 @@ class ChatRoomController extends Controller
                 'checked_at' => Carbon::now()
             ]);
         }
+
+        $chat_room['users'] = User::select('users.id', 'users.name')
+            ->join('chat_room_users', 'users.id', '=', 'chat_room_users.user_id')
+            ->where('chat_room_users.room_id', $uuid)
+            ->get();
+
+        return $chat_room;
+    }
+
+    public function update($room_id, Request $request){
+
+        $chat_room = ChatRoom::where('id', $room_id)
+        ->first();
+
+        $chat_room->group_name = $request->name;
+        $chat_room->save();
+
+        ChatRoomUser::where('room_id', $room_id)->delete();
+        foreach ($request->users as $user) {
+            ChatRoomUser::create([
+                'room_id' => $room_id,
+                'user_id' => $user['id'],
+                'checked_at' => Carbon::now()
+            ]);
+        }
+        $chat_room['users'] = $request->users;
 
         return $chat_room;
     }

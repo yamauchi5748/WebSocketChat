@@ -30,20 +30,29 @@ export default {
     },
     send() {
       // なぜかテキストと画像は別処理
+      const sendText = this.text.trim().replace(/\n$/, "");
+      if (this.text.length <= 0) {
+        console.log("noneText");
+      } else {
+        this.text = "";
+        this.$root.postMessage({
+          type: "text",
+          body: sendText
+        });
+      }
+
+      //ファイルアップロード
       let data = new FormData();
-      data.append("image", this.file);
+
+      if (this.file.type.match("video")) {
+        data.append("video", this.file);
+      } else if (this.file.type.match("image")) {
+        data.append("image", this.file);
+      }
+      console.log(this.file.type);
+
       this.$root.postFile(data);
       this.file = null;
-      const sendText = this.text.trim().replace(/\n$/, "");
-      if(this.text.length <= 0){
-        console.log("noneText");
-          return;
-      }
-      this.text = "";
-      this.$root.postMessage({
-        type: "text",
-        body: sendText
-      });
     }
   }
 };

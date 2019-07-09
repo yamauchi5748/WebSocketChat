@@ -19,7 +19,8 @@ class CreateChatsTable extends Migration
             $table->uuid('sender_id');
             $table->text('message')->nullable();
             $table->text('image')->nullable();
-            $table->enum('content_type', ['text', 'image']);
+            $table->text('video')->nullable();
+            $table->enum('content_type', ['text', 'image', 'video']);
             $table->timestamp('created_at');
         });
     }

@@ -163,7 +163,6 @@ export default {
     action(key, id, name, room_id) {
       this.$root.activeItemKey = key;
       for (let room of this.$root.rooms) {
-        console.log(room.id);
         if (room.id == room_id) {
           this.$root.now_room = room;
         }
@@ -176,7 +175,6 @@ export default {
     },
     existsListItem(index) {
       // データ取得が完了するまで表示しない
-      console.log(this.$root.listItems[index]);
       return this.$root.listItems[index].room_id ? true : false;
     },
     is_myId(id, index) {

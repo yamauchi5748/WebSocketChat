@@ -125,6 +125,22 @@ const app = new Vue({
         }
       }
     },
+    // グループ情報更新
+    updateRoomStatus(room) {
+      axios.put('/api/rooms/' + this.now_room.id, room)
+        .then(res => {
+          console.log(res.data);
+          for(let room of this.rooms){
+            if(room.id == res.data.id){
+              room = res.data;
+              this.now_room = res.data;
+            }
+          }
+        }).catch(error => {
+          console.log(error)
+          console.log('データの取得に失敗しました。')
+        });
+    },
     // チャット取得
     getMessages() {
       let url = "/api/rooms/" + this.now_room.id + "/messages"
@@ -134,6 +150,7 @@ const app = new Vue({
         .then(res => {
           let messages = res.data;
           for (let message of messages) {
+            console.log("tinpooooo", message);
             // 送信者名を追加
             for (let user of this.listItems) {
               if (user.id == message.sender_id) {
@@ -184,7 +201,7 @@ const app = new Vue({
         .then(res => {
           for (let user of this.listItems) {
             if (user.id == join_users[0]) {
-              user.room_id = res.data.room_id
+              user.room_id = res.data.id
             }
           }
           console.log("addRoom", res.data)
@@ -227,7 +244,7 @@ const app = new Vue({
 
         for (let room of res.data) {
           this.rooms.push(room);
-          console.log("room", room.id);
+          console.log("room", room.users);
           this.connectChannel(room.room_id);
           this.connectPrivateChannel(room.room_id);
         }
