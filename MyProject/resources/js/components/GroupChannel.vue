@@ -11,20 +11,36 @@
       <transition>
         <div class="list-items" v-if="isActive">
           <template v-if="existsListItems">
-            <template v-for="(value, index) in $root.rooms">
+            <div class="group-search-box">
+              検索:
+              <input type="text" v-model="search_key" />
+            </div>
+            <template v-for="(room, index) in roomList">
               <div
                 class="list-item"
-                v-if="value.is_group"
+                v-if="room.is_group"
                 v-bind:key="index"
                 :class="[index == activeItemKey ? 'active' : '' ]"
-                @click="handleClickItem(index, value.group_name, value.room_id)"
+                @click="handleClickItem(index, room.group_name, room.id)"
               >
-                <span
+                <div
                   :id="'badge-' + index"
                   class="badge"
                   v-if="badgeChecker(index)"
-                >{{ badge_counter[index] }}</span>
-                {{value.group_name}}
+                >{{ badge_counter[index] }}</div>
+                {{room.group_name}}
+                <div
+                  class="latest-talk-contents"
+                  v-if="room.contents[0] && room.contents[0].content_type == 'text'"
+                >{{ room.contents[0].message }}</div>
+                <div
+                  class="latest-talk-contents"
+                  v-if="room.contents[0] && room.contents[0].content_type == 'image'"
+                >send an image</div>
+                <div
+                  class="latest-talk-contents"
+                  v-if="room.contents[0] && room.contents[0].content_type == 'video'"
+                >send a video</div>
               </div>
             </template>
           </template>
@@ -116,6 +132,9 @@ i {
   text-align: center;
   line-height: 15px;
 }
+.group-search-box {
+  margin-left: 15px;
+}
 </style>
 
 <script>
@@ -126,6 +145,7 @@ export default {
   data() {
     return {
       label: "グループを選択して下さい▿",
+      search_key: "",
       isActive: false,
       activeItemKey: null,
       rooms: this.$root.rooms,
@@ -138,6 +158,15 @@ export default {
         return false;
       }
       return true;
+    },
+    roomList: function() {
+      return this.$root.rooms.filter(room => {
+        if(room.is_group){
+          return room.group_name.indexOf(this.search_key) != -1;
+        }else{
+          return false;
+        }
+      });
     }
   },
   methods: {
@@ -145,7 +174,7 @@ export default {
       let badge = document.getElementById("badge-" + index);
       let counter = 0;
       for (let message of this.$root.new_group_messages) {
-        if (message.room_id == this.$root.rooms[index].room_id) {
+        if (message.room_id == this.$root.rooms[index].id) {
           counter++;
         }
       }

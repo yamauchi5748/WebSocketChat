@@ -16,16 +16,39 @@ class ChatRoomController extends Controller
 {
     public function index()
     {
-        $rooms = ChatRoom::join('chat_room_users', 'chat_rooms.id', '=', 'chat_room_users.room_id')
-            ->where('chat_room_users.user_id', Auth::user()->id)
-            ->where('chat_rooms.is_group', true)
+        $rooms = ChatRoom::select('chat_rooms.id', 'chat_rooms.group_name', 'chat_rooms.is_group', 'chat_rooms.admin', 'chat_rooms.created_at')
+            ->join('chat_room_users', 'chat_rooms.id', '=', 'chat_room_users.room_id')
+            ->where('chat_room_users.user_id', Auth::id())
+            ->orderBy('chat_rooms.created_at', 'DESC')
             ->get();
 
         foreach ($rooms as $room) {
-            $room['users'] = User::select('users.id', 'users.name')
-            ->join('chat_room_users', 'users.id', '=', 'chat_room_users.user_id')
-            ->where('room_id', $room['id'])
-            ->get();
+            $room['users'] = [];
+            if ($room->is_group) {
+                $room['users'] = User::select('users.id', 'users.name')
+                    ->join('chat_room_users', 'users.id', '=', 'chat_room_users.user_id')
+                    ->where('room_id', $room['id'])
+                    ->get();
+            } else {
+                $room['users'] = [
+                    0 => User::select('users.id', 'users.name')
+                        ->join('chat_room_users', 'users.id', '=', 'chat_room_users.user_id')
+                        ->where('room_id', $room['id'])
+                        ->where('user_id', Auth::id())
+                        ->first(),
+                    1 => User::select('users.id', 'users.name')
+                        ->join('chat_room_users', 'users.id', '=', 'chat_room_users.user_id')
+                        ->where('room_id', $room['id'])
+                        ->where('user_id', '!=', Auth::id())
+                        ->first()
+
+                ];
+            }
+
+            $room['contents'] = Chat::where('room_id', $room['id'])
+                ->take(5)
+                ->orderBy('created_at', 'DESC')
+                ->get();
         }
 
         return $rooms;
@@ -33,71 +56,44 @@ class ChatRoomController extends Controller
 
     public function store(Request $request)
     {
-        if (!$request->is_group) {
-            // 自ユーザの参加ルームを取得
-            $my_rooms = ChatRoom::select('chat_rooms.id', 'chat_rooms.group_name', 'chat_rooms.is_group')
-                ->join('chat_room_users', 'chat_rooms.id', '=', 'chat_room_users.room_id')
-                ->where('chat_room_users.user_id', $request->join_users[1])
-                ->where('chat_rooms.is_group', false)
-                ->get();
-            // 相手ユーザの参加ルームを取得
-            $target_rooms = ChatRoom::select('chat_rooms.id', 'chat_rooms.group_name', 'chat_rooms.is_group')
-                ->join('chat_room_users', 'chat_rooms.id', '=', 'chat_room_users.room_id')
-                ->where('chat_room_users.user_id', $request->join_users[0])
-                ->where('chat_rooms.is_group', false)
-                ->get();
-            $result = null;
-
-            // 一致するルームがあれば返す
-            foreach ($my_rooms as $value1) {
-                foreach ($target_rooms as $value2) {
-                    if ($value1->room_id == $value2->room_id) {
-                        $result = $value1;
-                    }
-                }
-            }
-
-            if ($result) {
-                return $result;
-            }
-        }
-
         $admin = null;
         $request->is_group ? $admin = Auth::id() : null;
 
         $uuid = (string) Str::uuid();
-        $chat_room = [
+        $room = [
             'id' => $uuid,
             'group_name' => $request->group_name,
             'is_group' => $request->is_group,
-            'admin' => $admin
+            'admin' => $admin,
+            'created_at' => Carbon::now()
         ];
 
-        ChatRoom::create($chat_room);
-        $chat_room['room_id'] = $uuid;
+        ChatRoom::create($room);
 
         foreach ($request->join_users as $user_id) {
             ChatRoomUser::create([
-                'room_id' => $chat_room['id'],
+                'room_id' => $room['id'],
                 'user_id' => $user_id,
                 'checked_at' => Carbon::now()
             ]);
         }
 
-        $chat_room['users'] = User::select('users.id', 'users.name')
+        $room['contents'] = [];
+        $room['users'] = User::select('users.id', 'users.name')
             ->join('chat_room_users', 'users.id', '=', 'chat_room_users.user_id')
             ->where('chat_room_users.room_id', $uuid)
             ->get();
 
-        return $chat_room;
+        return $room;
     }
 
-    public function update($room_id, Request $request){
+    public function update($room_id, Request $request)
+    {
 
         $chat_room = ChatRoom::where('id', $room_id)
-        ->first();
+            ->first();
 
-        if(!$chat_room->admin == Auth::id()){
+        if (!$chat_room->admin == Auth::id()) {
             return 'timpo';
         }
 

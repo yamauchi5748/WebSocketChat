@@ -2155,6 +2155,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -2163,6 +2182,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       label: "グループを選択して下さい▿",
+      search_key: "",
       isActive: false,
       activeItemKey: null,
       rooms: this.$root.rooms,
@@ -2176,6 +2196,17 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       return true;
+    },
+    roomList: function roomList() {
+      var _this = this;
+
+      return this.$root.rooms.filter(function (room) {
+        if (room.is_group) {
+          return room.group_name.indexOf(_this.search_key) != -1;
+        } else {
+          return false;
+        }
+      });
     }
   },
   methods: {
@@ -2190,7 +2221,7 @@ __webpack_require__.r(__webpack_exports__);
         for (var _iterator = this.$root.new_group_messages[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
           var message = _step.value;
 
-          if (message.room_id == this.$root.rooms[index].room_id) {
+          if (message.room_id == this.$root.rooms[index].id) {
             counter++;
           }
         }
@@ -2495,10 +2526,13 @@ __webpack_require__.r(__webpack_exports__);
 
       var data = new FormData();
 
-      if (this.file.type.match("video")) {
+      if (this.file && this.file.type.match("video")) {
         data.append("video", this.file);
-      } else if (this.file.type.match("image")) {
+      } else if (this.file && this.file.type.match("image")) {
         data.append("image", this.file);
+      } else {
+        console.log("画像なし");
+        return;
       }
 
       console.log(this.file.type);
@@ -2552,6 +2586,10 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
 //
 //
 //
@@ -2736,74 +2774,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       label: "ユーザーを選択して下さい▿",
+      search_key: "",
       isActive: false,
       activeItemKey: null,
       badge_counter: []
@@ -2811,15 +2786,23 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     existsListItems: function existsListItems() {
-      if (this.$root.listItems.length == 0) {
+      if (this.$root.rooms.length == 0) {
         return false;
       }
 
       return true;
+    },
+    roomList: function roomList() {
+      var _this = this;
+
+      console.log(this.search_key);
+      return this.$root.rooms.filter(function (room) {
+        return room.users[1].name.indexOf(_this.search_key) != -1;
+      });
     }
   },
   methods: {
-    badgeChecker: function badgeChecker(index) {
+    badgeChecker: function badgeChecker(index, room_id) {
       var badge = document.getElementById("badge-" + index);
       var counter = 0;
       var _iteratorNormalCompletion = true;
@@ -2830,7 +2813,7 @@ __webpack_require__.r(__webpack_exports__);
         for (var _iterator = this.$root.new_personal_messages[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
           var message = _step.value;
 
-          if (message.room_id == this.$root.listItems[index].room_id) {
+          if (message.room_id == room_id) {
             counter++;
           }
         }
@@ -2850,7 +2833,6 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       this.badge_counter[index] = counter;
-      console.log(this.badge_counter[index]);
 
       if (counter > 0) {
         return true;
@@ -2861,44 +2843,18 @@ __webpack_require__.r(__webpack_exports__);
     changeActive: function changeActive() {
       this.isActive = !this.isActive;
     },
-    handleClickItem: function handleClickItem(key, id, name, room_id) {
+    handleClickItem: function handleClickItem(key, room) {
       if (key == this.activeItemKey) {
         return;
       }
 
       this.isActive = false;
-      this.action(key, id, name, room_id);
+      this.action(key, room);
     },
-    action: function action(key, id, name, room_id) {
+    action: function action(key, room) {
       this.$root.activeItemKey = key;
-      var _iteratorNormalCompletion2 = true;
-      var _didIteratorError2 = false;
-      var _iteratorError2 = undefined;
-
-      try {
-        for (var _iterator2 = this.$root.rooms[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-          var room = _step2.value;
-
-          if (room.id == room_id) {
-            this.$root.now_room = room;
-          }
-        }
-      } catch (err) {
-        _didIteratorError2 = true;
-        _iteratorError2 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion2 && _iterator2["return"] != null) {
-            _iterator2["return"]();
-          }
-        } finally {
-          if (_didIteratorError2) {
-            throw _iteratorError2;
-          }
-        }
-      }
-
-      this.label = name + "▿";
+      this.$root.now_room = room;
+      this.label = room.users[1].name + "▿";
       this.$root.clearTimeline();
       this.$root.getMessages();
       this.$root.newMessageUpdate();
@@ -9906,7 +9862,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.dropdown-bg {\r\n  width: 100vw;\r\n  height: 100vh;\r\n  position: absolute;\r\n  top: 0;\r\n  bottom: 0;\r\n  left: 0;\r\n  right: 0;\r\n  z-index: 2;\n}\n.all-wrapper {\r\n  position: relative;\n}\n.dropdown-wrapper {\r\n  padding: 10px;\r\n  padding-left: 20px;\r\n  color: #666666;\r\n\r\n  display: flex;\r\n  align-items: center;\n}\n.dropdown-text {\r\n  background-color: #f3f4f6;\r\n  font-size: 16px;\n}\n.dropdown-text:hover {\r\n  background-color: #d3f4f6;\r\n  cursor: pointer;\n}\ni {\r\n  font-size: 10px;\r\n  margin-left: 6px;\n}\n.list-items {\r\n  width: 260px;\r\n  max-height: 300px;\r\n  background-color: #fff;\r\n  border-radius: 2px;\r\n  border: 1px solid #b9bfc9;\r\n  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.12), 0 0 6px 0 rgba(0, 0, 0, 0.04);\r\n  position: absolute;\r\n  overflow-y: scroll;\r\n  z-index: 3;\r\n  padding: 0.5rem 0;\n}\n.list-item {\r\n  color: #333;\r\n  font-size: 14px;\r\n  line-height: 16px;\r\n  padding: 0.75rem 1rem;\r\n\r\n  overflow: hidden;\r\n  text-overflow: ellipsis;\r\n  white-space: nowrap;\r\n\r\n  position: relative;\n}\n.list-item:not(.active):hover {\r\n  background-color: #d3f4f6;\r\n  cursor: pointer;\n}\n.list-item.active {\r\n  color: #fff;\r\n  background-color: #182a4b;\n}\n.badge {\r\n  margin-top: 0%;\r\n  width: 20px;\r\n  height: 20px;\r\n  border-radius: 50%;\r\n  background: lawngreen; /*背景色*/\r\n  text-align: center;\r\n  line-height: 15px;\n}\r\n", ""]);
+exports.push([module.i, "\n.dropdown-bg {\r\n  width: 100vw;\r\n  height: 100vh;\r\n  position: absolute;\r\n  top: 0;\r\n  bottom: 0;\r\n  left: 0;\r\n  right: 0;\r\n  z-index: 2;\n}\n.all-wrapper {\r\n  position: relative;\n}\n.dropdown-wrapper {\r\n  padding: 10px;\r\n  padding-left: 20px;\r\n  color: #666666;\r\n\r\n  display: flex;\r\n  align-items: center;\n}\n.dropdown-text {\r\n  background-color: #f3f4f6;\r\n  font-size: 16px;\n}\n.dropdown-text:hover {\r\n  background-color: #d3f4f6;\r\n  cursor: pointer;\n}\ni {\r\n  font-size: 10px;\r\n  margin-left: 6px;\n}\n.list-items {\r\n  width: 260px;\r\n  max-height: 300px;\r\n  background-color: #fff;\r\n  border-radius: 2px;\r\n  border: 1px solid #b9bfc9;\r\n  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.12), 0 0 6px 0 rgba(0, 0, 0, 0.04);\r\n  position: absolute;\r\n  overflow-y: scroll;\r\n  z-index: 3;\r\n  padding: 0.5rem 0;\n}\n.list-item {\r\n  color: #333;\r\n  font-size: 14px;\r\n  line-height: 16px;\r\n  padding: 0.75rem 1rem;\r\n\r\n  overflow: hidden;\r\n  text-overflow: ellipsis;\r\n  white-space: nowrap;\r\n\r\n  position: relative;\n}\n.list-item:not(.active):hover {\r\n  background-color: #d3f4f6;\r\n  cursor: pointer;\n}\n.list-item.active {\r\n  color: #fff;\r\n  background-color: #182a4b;\n}\n.badge {\r\n  margin-top: 0%;\r\n  width: 20px;\r\n  height: 20px;\r\n  border-radius: 50%;\r\n  background: lawngreen; /*背景色*/\r\n  text-align: center;\r\n  line-height: 15px;\n}\n.group-search-box {\r\n  margin-left: 15px;\n}\r\n", ""]);
 
 // exports
 
@@ -9963,7 +9919,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/* メッセージ全般のスタイル */\n.talk-body {\r\n  margin: 0px;\r\n  padding: 0 14px; /*吹き出しがタイムラインの側面にひっつかない様に隙間を開ける*/\r\n  word-wrap: break-word; /* 吹き出し内で自動で改行 */\r\n  white-space: normal; /*指定widthに合わせて、文字を自動的に改行*/\r\n  margin-top: 20px; /*上下の吹き出しがひっつかない様に隙間を入れる*/\r\n  max-width: 100%; /*文字が長くなった時に吹き出しがタイムラインからはみ出さない様にする*/\n}\n.talk-box {\r\n  color: #fff; /*テキストを白にする*/\r\n  float: left;\n}\r\n/* メッセージ１（左側） */\n.talk-detail-left {\r\n  float: left; /*吹き出しをtalkに対して左寄せ*/\r\n  line-height: 1.3em;\n}\n.talk-detail-left .talk-message {\r\n  color: #333; /*テキストを黒にする*/\r\n  background: #fff;\r\n  border-radius: 30px 30px 30px 0px; /*左下だけ尖らせて吹き出し感を出す*/\n}\r\n/* メッセージ２（右側） */\n.talk-detail-right {\r\n  float: right; /*吹き出しをtalkに対して右寄せ*/\r\n  line-height: 1.3em;\n}\n.talk-detail-right .talk-message {\r\n  background: lawngreen;\r\n  border: 2px solid lawngreen;\r\n  border-radius: 30px 30px 0px 30px; /*右下だけ尖らせて吹き出し感を出す*/\r\n  margin-left: 5px; /*右側の発言だとわかる様に、吹き出し左側に隙間を入れる*/\n}\r\n/* 回り込みを解除 */\n.talk-clear {\r\n  clear: both; /* 左メッセージと右メッセージの回り込み(float)の効果の干渉を防ぐために必要（これが無いと、自分より下のメッセージにfloatが影響する） */\n}\r\n/* ユーザー名 */\n.talk-sender-name {\r\n  font-size: 18px;\n}\n.talk-detail-right .talk-sender-name {\r\n  float: right;\n}\r\n/* 既読 */\n.talk-already-read {\r\n  font-size: 12px;\r\n  float: right;\n}\r\n/* メッセージ */\n.talk-message {\r\n  max-width: 300px;\r\n  padding-right: 10px; /*文字や画像（コンテンツ）の外側に隙間を入れる*/\r\n  padding-left: 10px; /*文字や画像（コンテンツ）の外側に隙間を入れる*/\r\n  font-size: 21px;\n}\n.talk-message-right {\r\n  float: right;\n}\r\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/* メッセージ全般のスタイル */\n.talk-body {\r\n  margin: 0px;\r\n  padding: 0 14px; /*吹き出しがタイムラインの側面にひっつかない様に隙間を開ける*/\r\n  word-wrap: break-word; /* 吹き出し内で自動で改行 */\r\n  white-space: normal; /*指定widthに合わせて、文字を自動的に改行*/\r\n  margin-top: 20px; /*上下の吹き出しがひっつかない様に隙間を入れる*/\r\n  max-width: 100%; /*文字が長くなった時に吹き出しがタイムラインからはみ出さない様にする*/\n}\n.talk-box {\r\n  color: #fff; /*テキストを白にする*/\r\n  float: left;\n}\r\n/* メッセージ１（左側） */\n.talk-detail-left {\r\n  float: left; /*吹き出しをtalkに対して左寄せ*/\r\n  line-height: 1.3em;\n}\n.talk-detail-left .talk-message {\r\n  color: #333; /*テキストを黒にする*/\r\n  background: #fff;\r\n  border: 2px;\r\n  border-radius: 30px 30px 30px 0px; /*左下だけ尖らせて吹き出し感を出す*/\n}\r\n/* メッセージ２（右側） */\n.talk-detail-right {\r\n  float: right; /*吹き出しをtalkに対して右寄せ*/\r\n  line-height: 1.3em;\n}\n.talk-detail-right .talk-message {\r\n  background: lawngreen;\r\n  border: 2px solid lawngreen;\r\n  border-radius: 30px 30px 0px 30px; /*右下だけ尖らせて吹き出し感を出す*/\r\n  margin-left: 5px; /*右側の発言だとわかる様に、吹き出し左側に隙間を入れる*/\n}\r\n/* 回り込みを解除 */\n.talk-clear {\r\n  clear: both; /* 左メッセージと右メッセージの回り込み(float)の効果の干渉を防ぐために必要（これが無いと、自分より下のメッセージにfloatが影響する） */\n}\r\n/* ユーザー名 */\n.talk-sender-name {\r\n  font-size: 18px;\n}\n.talk-detail-right .talk-sender-name {\r\n  float: right;\n}\r\n/* 既読 */\n.talk-already-read {\r\n  font-size: 12px;\r\n  float: right;\n}\r\n/* メッセージ */\n.talk-message {\r\n  max-width: 300px;\r\n  padding-right: 10px; /*文字や画像（コンテンツ）の外側に隙間を入れる*/\r\n  padding-left: 10px; /*文字や画像（コンテンツ）の外側に隙間を入れる*/\r\n  font-size: 21px;\n}\n.talk-message-right {\r\n  float: right;\n}\n.talk-message-left {\r\n  float: left;\n}\r\n", ""]);
 
 // exports
 
@@ -9982,7 +9938,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.dropdown-bg {\r\n  width: 100vw;\r\n  height: 100vh;\r\n  position: absolute;\r\n  top: 0;\r\n  bottom: 0;\r\n  left: 0;\r\n  right: 0;\r\n  z-index: 2;\n}\n.all-wrapper {\r\n  position: relative;\n}\n.dropdown-wrapper {\r\n  padding: 10px;\r\n  padding-left: 20px;\r\n  color: #666666;\r\n\r\n  display: flex;\r\n  align-items: center;\n}\n.dropdown-text {\r\n  background-color: #f3f4f6;\r\n  font-size: 16px;\n}\n.dropdown-text:hover {\r\n  background-color: #d3f4f6;\r\n  cursor: pointer;\n}\ni {\r\n  font-size: 10px;\r\n  margin-left: 6px;\n}\n.list-items {\r\n  width: 260px;\r\n  max-height: 300px;\r\n  background-color: #fff;\r\n  border-radius: 2px;\r\n  border: 1px solid #b9bfc9;\r\n  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.12), 0 0 6px 0 rgba(0, 0, 0, 0.04);\r\n  position: absolute;\r\n  overflow-y: scroll;\r\n  z-index: 3;\r\n  padding: 0.5rem 0;\n}\n.list-item {\r\n  color: #333;\r\n  font-size: 14px;\r\n  line-height: 16px;\r\n  padding: 0.75rem 1rem;\r\n\r\n  overflow: hidden;\r\n  text-overflow: ellipsis;\r\n  white-space: nowrap;\r\n\r\n  position: relative;\n}\n.list-item:not(.active):hover {\r\n  background-color: #d3f4f6;\r\n  cursor: pointer;\n}\n.list-item.active {\r\n  color: #fff;\r\n  background-color: #182a4b;\n}\n.badge {\r\n  margin-top: 0%;\r\n  width: 20px;\r\n  height: 20px;\r\n  border-radius: 50%;\r\n  background: lawngreen; /*背景色*/\r\n  text-align: center;\r\n  line-height: 15px;\n}\r\n", ""]);
+exports.push([module.i, "\n.dropdown-bg {\r\n  width: 100vw;\r\n  height: 100vh;\r\n  position: absolute;\r\n  top: 0;\r\n  bottom: 0;\r\n  left: 0;\r\n  right: 0;\r\n  z-index: 2;\n}\n.all-wrapper {\r\n  position: relative;\n}\n.dropdown-wrapper {\r\n  padding: 10px;\r\n  padding-left: 20px;\r\n  color: #666666;\r\n\r\n  display: flex;\r\n  align-items: center;\n}\n.dropdown-text {\r\n  background-color: #f3f4f6;\r\n  font-size: 16px;\n}\n.dropdown-text:hover {\r\n  background-color: #d3f4f6;\r\n  cursor: pointer;\n}\ni {\r\n  font-size: 10px;\r\n  margin-left: 6px;\n}\n.list-items {\r\n  width: 260px;\r\n  max-height: 300px;\r\n  background-color: #fff;\r\n  border-radius: 2px;\r\n  border: 1px solid #b9bfc9;\r\n  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.12), 0 0 6px 0 rgba(0, 0, 0, 0.04);\r\n  position: absolute;\r\n  overflow-y: scroll;\r\n  z-index: 3;\r\n  padding: 0.5rem 0;\n}\n.list-item {\r\n  clear: both;\r\n  color: #333;\r\n  font-size: 14px;\r\n  line-height: 16px;\r\n  padding: 0.75rem 1rem;\r\n\r\n  overflow: hidden;\r\n  text-overflow: ellipsis;\r\n  white-space: nowrap;\r\n\r\n  position: relative;\n}\n.list-item:not(.active):hover {\r\n  background-color: #d3f4f6;\r\n  cursor: pointer;\n}\n.list-item.active {\r\n  color: #fff;\r\n  background-color: #182a4b;\n}\n.badge {\r\n  margin-top: 0%;\r\n  width: 20px;\r\n  height: 20px;\r\n  border-radius: 50%;\r\n  background: lawngreen; /*背景色*/\r\n  text-align: center;\r\n  line-height: 15px;\n}\n.latest-talk-contents {\r\n  color: #b9bfc9;\n}\n.user-search-box {\r\n  margin-left: 15px;\n}\r\n", ""]);
 
 // exports
 
@@ -48938,7 +48894,7 @@ var render = function() {
         _c(
           "button",
           {
-            staticClass: "btn btn-success active",
+            staticClass: "btn btn-primary btn-lg",
             attrs: { id: "personal" },
             on: {
               click: function($event) {
@@ -48963,7 +48919,7 @@ var render = function() {
         _c(
           "button",
           {
-            staticClass: "btn btn-primary btn-lg",
+            staticClass: "btn btn-success active",
             attrs: { id: "group" },
             on: {
               click: function($event) {
@@ -49160,14 +49116,14 @@ var render = function() {
       )
     ]),
     _vm._v(" "),
+    _c("div", { staticClass: "user-channel" }, [_c("UserChannel")], 1),
+    _vm._v(" "),
     _c(
       "div",
-      { staticClass: "user-channel", staticStyle: { display: "none" } },
-      [_c("UserChannel")],
+      { staticClass: "group-channel", staticStyle: { display: "none" } },
+      [_c("GroupChannel")],
       1
-    ),
-    _vm._v(" "),
-    _c("div", { staticClass: "group-channel" }, [_c("GroupChannel")], 1)
+    )
   ])
 }
 var staticRenderFns = []
@@ -49228,9 +49184,33 @@ var render = function() {
                 [
                   _vm.existsListItems
                     ? [
-                        _vm._l(_vm.$root.rooms, function(value, index) {
+                        _c("div", { staticClass: "group-search-box" }, [
+                          _vm._v("\n            検索:\n            "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.search_key,
+                                expression: "search_key"
+                              }
+                            ],
+                            attrs: { type: "text" },
+                            domProps: { value: _vm.search_key },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.search_key = $event.target.value
+                              }
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _vm._l(_vm.roomList, function(room, index) {
                           return [
-                            value.is_group
+                            room.is_group
                               ? _c(
                                   "div",
                                   {
@@ -49243,8 +49223,8 @@ var render = function() {
                                       click: function($event) {
                                         return _vm.handleClickItem(
                                           index,
-                                          value.group_name,
-                                          value.room_id
+                                          room.group_name,
+                                          room.id
                                         )
                                       }
                                     }
@@ -49252,7 +49232,7 @@ var render = function() {
                                   [
                                     _vm.badgeChecker(index)
                                       ? _c(
-                                          "span",
+                                          "div",
                                           {
                                             staticClass: "badge",
                                             attrs: { id: "badge-" + index }
@@ -49266,9 +49246,45 @@ var render = function() {
                                       : _vm._e(),
                                     _vm._v(
                                       "\n              " +
-                                        _vm._s(value.group_name) +
-                                        "\n            "
-                                    )
+                                        _vm._s(room.group_name) +
+                                        "\n              "
+                                    ),
+                                    room.contents[0] &&
+                                    room.contents[0].content_type == "text"
+                                      ? _c(
+                                          "div",
+                                          {
+                                            staticClass: "latest-talk-contents"
+                                          },
+                                          [
+                                            _vm._v(
+                                              _vm._s(room.contents[0].message)
+                                            )
+                                          ]
+                                        )
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    room.contents[0] &&
+                                    room.contents[0].content_type == "image"
+                                      ? _c(
+                                          "div",
+                                          {
+                                            staticClass: "latest-talk-contents"
+                                          },
+                                          [_vm._v("send an image")]
+                                        )
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    room.contents[0] &&
+                                    room.contents[0].content_type == "video"
+                                      ? _c(
+                                          "div",
+                                          {
+                                            staticClass: "latest-talk-contents"
+                                          },
+                                          [_vm._v("send a video")]
+                                        )
+                                      : _vm._e()
                                   ]
                                 )
                               : _vm._e()
@@ -49646,7 +49662,7 @@ var render = function() {
             ]),
             _vm._v(" "),
             _vm.talk.content_type == "text"
-              ? _c("div", { staticClass: "talk-message" }, [
+              ? _c("div", { staticClass: "talk-message talk-message-left" }, [
                   _vm._v(_vm._s(_vm.talk.message))
                 ])
               : _vm._e(),
@@ -49726,9 +49742,33 @@ var render = function() {
                 [
                   _vm.existsListItems
                     ? [
-                        _vm._l(_vm.$root.listItems, function(value, index) {
+                        _c("div", { staticClass: "user-search-box" }, [
+                          _vm._v("\n            検索:\n            "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.search_key,
+                                expression: "search_key"
+                              }
+                            ],
+                            attrs: { type: "text" },
+                            domProps: { value: _vm.search_key },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.search_key = $event.target.value
+                              }
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _vm._l(_vm.roomList, function(room, index) {
                           return [
-                            _vm.is_myId(value.id, index)
+                            !room.is_group
                               ? _c(
                                   "div",
                                   {
@@ -49739,19 +49779,14 @@ var render = function() {
                                     ],
                                     on: {
                                       click: function($event) {
-                                        return _vm.handleClickItem(
-                                          index,
-                                          value.id,
-                                          value.name,
-                                          value.room_id
-                                        )
+                                        return _vm.handleClickItem(index, room)
                                       }
                                     }
                                   },
                                   [
-                                    _vm.badgeChecker(index)
+                                    _vm.badgeChecker(index, room.id)
                                       ? _c(
-                                          "span",
+                                          "div",
                                           {
                                             staticClass: "badge",
                                             attrs: { id: "badge-" + index }
@@ -49765,9 +49800,45 @@ var render = function() {
                                       : _vm._e(),
                                     _vm._v(
                                       "\n              " +
-                                        _vm._s(value.name) +
-                                        "\n            "
-                                    )
+                                        _vm._s(room.users[1].name) +
+                                        "\n              "
+                                    ),
+                                    room.contents[0] &&
+                                    room.contents[0].content_type == "text"
+                                      ? _c(
+                                          "div",
+                                          {
+                                            staticClass: "latest-talk-contents"
+                                          },
+                                          [
+                                            _vm._v(
+                                              _vm._s(room.contents[0].message)
+                                            )
+                                          ]
+                                        )
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    room.contents[0] &&
+                                    room.contents[0].content_type == "image"
+                                      ? _c(
+                                          "div",
+                                          {
+                                            staticClass: "latest-talk-contents"
+                                          },
+                                          [_vm._v("send an image")]
+                                        )
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    room.contents[0] &&
+                                    room.contents[0].content_type == "video"
+                                      ? _c(
+                                          "div",
+                                          {
+                                            staticClass: "latest-talk-contents"
+                                          },
+                                          [_vm._v("send a video")]
+                                        )
+                                      : _vm._e()
                                   ]
                                 )
                               : _vm._e()
@@ -62074,6 +62145,27 @@ var app = new Vue({
     clearTimeline: function clearTimeline() {
       this.timeline.splice(0);
     },
+    //ルームをソート
+    sortRoom: function sortRoom() {
+      for (var index = 1; index < this.rooms.length;) {
+        var room = this.rooms[index];
+        var forward = this.rooms[index - 1];
+        var exist_room_content = room.contents.length == 0 ? false : true;
+        var exist_forward_content = forward.contents.length == 0 ? false : true;
+
+        if (exist_room_content) {
+          console.log(forward.group_name, forward.created_at, room.contents[0].created_at > forward.created_at);
+        }
+
+        if (exist_room_content && (!exist_forward_content || room.contents[0].created_at > forward.contents[0].created_at) && room.contents[0].created_at > forward.created_at) {
+          this.rooms[index] = forward;
+          this.rooms[index - 1] = room;
+          index == 1 ? index++ : index--;
+        } else {
+          index++;
+        }
+      }
+    },
     // テキスト投稿
     postMessage: function postMessage(text) {
       axios.post("/api/message", {
@@ -62143,23 +62235,23 @@ var app = new Vue({
         // 新しいメッセージを新着ボックスに格納
         console.log(message);
         message.is_group ? this.new_group_messages.push(message) : this.new_personal_messages.push(message);
-      }
-    },
-    //既読処理
-    alreadyReadUpdate: function alreadyReadUpdate(target) {
+      } // ルームにメッセージを格納
+
+
       var _iteratorNormalCompletion2 = true;
       var _didIteratorError2 = false;
       var _iteratorError2 = undefined;
 
       try {
-        for (var _iterator2 = this.timeline[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-          var chat = _step2.value;
+        for (var _iterator2 = this.rooms[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+          var room = _step2.value;
 
-          if (chat.id == target.id) {
-            console.log(chat.already_read);
-            chat.already_read = this.now_room.is_group ? parseInt(chat.already_read) + 1 : true;
+          if (room.id == message.room_id) {
+            room.contents.unshift(message);
+            console.log(room.contents[0].message);
           }
-        }
+        } // ルームをソート
+
       } catch (err) {
         _didIteratorError2 = true;
         _iteratorError2 = err;
@@ -62171,6 +62263,38 @@ var app = new Vue({
         } finally {
           if (_didIteratorError2) {
             throw _iteratorError2;
+          }
+        }
+      }
+
+      this.sortRoom();
+    },
+    //既読処理
+    alreadyReadUpdate: function alreadyReadUpdate(target) {
+      var _iteratorNormalCompletion3 = true;
+      var _didIteratorError3 = false;
+      var _iteratorError3 = undefined;
+
+      try {
+        for (var _iterator3 = this.timeline[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+          var chat = _step3.value;
+
+          if (chat.id == target.id) {
+            console.log(chat.already_read);
+            chat.already_read = this.now_room.is_group ? parseInt(chat.already_read) + 1 : true;
+          }
+        }
+      } catch (err) {
+        _didIteratorError3 = true;
+        _iteratorError3 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion3 && _iterator3["return"] != null) {
+            _iterator3["return"]();
+          }
+        } finally {
+          if (_didIteratorError3) {
+            throw _iteratorError3;
           }
         }
       }
@@ -62199,13 +62323,13 @@ var app = new Vue({
 
       axios.put('/api/rooms/' + this.now_room.id, room).then(function (res) {
         console.log(res.data);
-        var _iteratorNormalCompletion3 = true;
-        var _didIteratorError3 = false;
-        var _iteratorError3 = undefined;
+        var _iteratorNormalCompletion4 = true;
+        var _didIteratorError4 = false;
+        var _iteratorError4 = undefined;
 
         try {
-          for (var _iterator3 = _this.rooms[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-            var _room = _step3.value;
+          for (var _iterator4 = _this.rooms[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+            var _room = _step4.value;
 
             if (_room.id == res.data.id) {
               _room = res.data;
@@ -62213,16 +62337,16 @@ var app = new Vue({
             }
           }
         } catch (err) {
-          _didIteratorError3 = true;
-          _iteratorError3 = err;
+          _didIteratorError4 = true;
+          _iteratorError4 = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion3 && _iterator3["return"] != null) {
-              _iterator3["return"]();
+            if (!_iteratorNormalCompletion4 && _iterator4["return"] != null) {
+              _iterator4["return"]();
             }
           } finally {
-            if (_didIteratorError3) {
-              throw _iteratorError3;
+            if (_didIteratorError4) {
+              throw _iteratorError4;
             }
           }
         }
@@ -62240,38 +62364,38 @@ var app = new Vue({
         room_id: this.now_room.id
       }).then(function (res) {
         var messages = res.data;
-        var _iteratorNormalCompletion4 = true;
-        var _didIteratorError4 = false;
-        var _iteratorError4 = undefined;
+        var _iteratorNormalCompletion5 = true;
+        var _didIteratorError5 = false;
+        var _iteratorError5 = undefined;
 
         try {
-          for (var _iterator4 = messages[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-            var message = _step4.value;
+          for (var _iterator5 = messages[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+            var message = _step5.value;
             console.log("tinpooooo", message); // 送信者名を追加
 
-            var _iteratorNormalCompletion5 = true;
-            var _didIteratorError5 = false;
-            var _iteratorError5 = undefined;
+            var _iteratorNormalCompletion6 = true;
+            var _didIteratorError6 = false;
+            var _iteratorError6 = undefined;
 
             try {
-              for (var _iterator5 = _this2.listItems[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-                var user = _step5.value;
+              for (var _iterator6 = _this2.listItems[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+                var user = _step6.value;
 
                 if (user.id == message.sender_id) {
                   message.sender_name = user.name;
                 }
               }
             } catch (err) {
-              _didIteratorError5 = true;
-              _iteratorError5 = err;
+              _didIteratorError6 = true;
+              _iteratorError6 = err;
             } finally {
               try {
-                if (!_iteratorNormalCompletion5 && _iterator5["return"] != null) {
-                  _iterator5["return"]();
+                if (!_iteratorNormalCompletion6 && _iterator6["return"] != null) {
+                  _iterator6["return"]();
                 }
               } finally {
-                if (_didIteratorError5) {
-                  throw _iteratorError5;
+                if (_didIteratorError6) {
+                  throw _iteratorError6;
                 }
               }
             }
@@ -62279,16 +62403,16 @@ var app = new Vue({
             _this2.timeline.push(message);
           }
         } catch (err) {
-          _didIteratorError4 = true;
-          _iteratorError4 = err;
+          _didIteratorError5 = true;
+          _iteratorError5 = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion4 && _iterator4["return"] != null) {
-              _iterator4["return"]();
+            if (!_iteratorNormalCompletion5 && _iterator5["return"] != null) {
+              _iterator5["return"]();
             }
           } finally {
-            if (_didIteratorError4) {
-              throw _iteratorError4;
+            if (_didIteratorError5) {
+              throw _iteratorError5;
             }
           }
         }
@@ -62334,40 +62458,40 @@ var app = new Vue({
         group_name: group_name,
         admin: admin
       }).then(function (res) {
-        var _iteratorNormalCompletion6 = true;
-        var _didIteratorError6 = false;
-        var _iteratorError6 = undefined;
+        var _iteratorNormalCompletion7 = true;
+        var _didIteratorError7 = false;
+        var _iteratorError7 = undefined;
 
         try {
-          for (var _iterator6 = _this5.listItems[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
-            var user = _step6.value;
+          for (var _iterator7 = _this5.listItems[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
+            var user = _step7.value;
 
             if (user.id == join_users[0]) {
               user.room_id = res.data.id;
             }
           }
         } catch (err) {
-          _didIteratorError6 = true;
-          _iteratorError6 = err;
+          _didIteratorError7 = true;
+          _iteratorError7 = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion6 && _iterator6["return"] != null) {
-              _iterator6["return"]();
+            if (!_iteratorNormalCompletion7 && _iterator7["return"] != null) {
+              _iterator7["return"]();
             }
           } finally {
-            if (_didIteratorError6) {
-              throw _iteratorError6;
+            if (_didIteratorError7) {
+              throw _iteratorError7;
             }
           }
         }
 
         console.log("addRoom", res.data);
 
-        _this5.rooms.push(res.data);
+        _this5.rooms.unshift(res.data);
 
-        _this5.connectChannel(res.data.room_id);
+        _this5.connectChannel(res.data.id);
 
-        _this5.connectPrivateChannel(res.data.room_id);
+        _this5.connectPrivateChannel(res.data.id);
       })["catch"](function (error) {
         console.log(error);
         console.log('データの取得に失敗しました。');
@@ -62380,61 +62504,19 @@ var app = new Vue({
     // ユーザー検索
     axios.get("/api/users").then(function (res) {
       var users = res.data;
-      var listItems = [];
-      var _iteratorNormalCompletion7 = true;
-      var _didIteratorError7 = false;
-      var _iteratorError7 = undefined;
-
-      try {
-        for (var _iterator7 = users[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
-          var user = _step7.value;
-          listItems.push({
-            id: user.id,
-            name: user.name,
-            room_id: null
-          });
-
-          if (user.id != _this6.user_id) {
-            _this6.addRoom([user.id, _this6.user_id], false);
-          }
-        }
-      } catch (err) {
-        _didIteratorError7 = true;
-        _iteratorError7 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion7 && _iterator7["return"] != null) {
-            _iterator7["return"]();
-          }
-        } finally {
-          if (_didIteratorError7) {
-            throw _iteratorError7;
-          }
-        }
-      }
-
-      _this6.listItems = listItems;
-    })["catch"](function (error) {
-      console.log(error);
-      console.log('データの取得に失敗しました。');
-    }); // ルーム検索
-
-    axios.get("/api/rooms").then(function (res) {
       var _iteratorNormalCompletion8 = true;
       var _didIteratorError8 = false;
       var _iteratorError8 = undefined;
 
       try {
-        for (var _iterator8 = res.data[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
-          var room = _step8.value;
+        for (var _iterator8 = users[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
+          var user = _step8.value;
 
-          _this6.rooms.push(room);
-
-          console.log("room", room.users);
-
-          _this6.connectChannel(room.room_id);
-
-          _this6.connectPrivateChannel(room.room_id);
+          _this6.listItems.push({
+            id: user.id,
+            name: user.name,
+            room_id: null
+          });
         }
       } catch (err) {
         _didIteratorError8 = true;
@@ -62450,6 +62532,46 @@ var app = new Vue({
           }
         }
       }
+    })["catch"](function (error) {
+      console.log(error);
+      console.log('データの取得に失敗しました。');
+    }); // ルーム検索
+
+    axios.get("/api/rooms").then(function (res) {
+      var _iteratorNormalCompletion9 = true;
+      var _didIteratorError9 = false;
+      var _iteratorError9 = undefined;
+
+      try {
+        for (var _iterator9 = res.data[Symbol.iterator](), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
+          var room = _step9.value;
+
+          _this6.rooms.push(room);
+
+          console.log("room", room.contents);
+
+          _this6.connectChannel(room.id);
+
+          _this6.connectPrivateChannel(room.id);
+        }
+      } catch (err) {
+        _didIteratorError9 = true;
+        _iteratorError9 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion9 && _iterator9["return"] != null) {
+            _iterator9["return"]();
+          }
+        } finally {
+          if (_didIteratorError9) {
+            throw _iteratorError9;
+          }
+        }
+      }
+
+      _this6.sortRoom();
+
+      console.log(_this6.rooms[0]);
     })["catch"](function (error) {
       console.log(error);
       console.log('データの取得に失敗しました。');

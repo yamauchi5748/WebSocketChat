@@ -27,7 +27,7 @@
       </div>
       <div :class="getClassName(talk)" v-else>
         <p class="talk-sender-name">{{ talk.sender_name }}</p>
-        <div class="talk-message" v-if="talk.content_type == 'text'">{{ talk.message }}</div>
+        <div class="talk-message talk-message-left" v-if="talk.content_type == 'text'">{{ talk.message }}</div>
         <img class="talk-message" :src="talk.image" v-if="talk.content_type == 'image'" />
         <video
           a
@@ -65,6 +65,7 @@
 .talk-detail-left .talk-message {
   color: #333; /*テキストを黒にする*/
   background: #fff;
+  border: 2px;
   border-radius: 30px 30px 30px 0px; /*左下だけ尖らせて吹き出し感を出す*/
 }
 /* メッセージ２（右側） */
@@ -104,6 +105,9 @@
 }
 .talk-message-right {
   float: right;
+}
+.talk-message-left {
+  float: left;
 }
 </style>
 

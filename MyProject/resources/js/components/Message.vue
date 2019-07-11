@@ -44,10 +44,14 @@ export default {
       //ファイルアップロード
       let data = new FormData();
 
-      if (this.file.type.match("video")) {
+      if (this.file && this.file.type.match("video")) {
         data.append("video", this.file);
-      } else if (this.file.type.match("image")) {
+      } else if (this.file && this.file.type.match("image")) {
         data.append("image", this.file);
+      }
+      else{
+        console.log("画像なし");
+        return;
       }
       console.log(this.file.type);
 

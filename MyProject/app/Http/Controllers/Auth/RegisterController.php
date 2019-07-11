@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use App\ChatRoom;
+use App\ChatRoomUser;
+use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -52,8 +55,7 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:6', 'confirmed'],
-            'api_token' => ['required', 'string', 'unique:users']
+            'password' => ['required', 'string', 'min:6', 'confirmed']
         ]);
     }
 
@@ -65,12 +67,40 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'id' => (string) Str::uuid(),
+        $my_uuid = (string) Str::uuid();
+        $my_user = User::create([
+            'id' => $my_uuid,
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'api_token' => $data['api_token']
+            'api_token' => Str::uuid()
         ]);
+
+        $users = User::select('id')->where('id', '!=', $my_uuid)->get();
+
+        foreach ($users as $user) {
+            $room = [
+                'id' => (string) Str::uuid(),
+                'group_name' => null,
+                'is_group' => false,
+                'admin' => null,
+                'created_at' => Carbon::now()
+            ];
+
+            \Log::debug($user->id);
+            ChatRoom::create($room);
+            ChatRoomUser::create([
+                'room_id' => $room['id'],
+                'user_id' => $user->id,
+                'checked_at' => Carbon::now()
+            ]);
+            ChatRoomUser::create([
+                'room_id' => $room['id'],
+                'user_id' => $my_uuid,
+                'checked_at' => Carbon::now()
+            ]);
+        }
+
+        return $my_user;
     }
 }

@@ -2,7 +2,7 @@
   <div class="main">
     <div class="input-group">
       <span class="input-group-btn">
-        <button id="personal" class="btn btn-success active" @click="change('personal')">
+        <button id="personal" class="btn btn-primary btn-lg" @click="change('personal')">
           <span
             id="personal-badge"
             class="badge"
@@ -11,7 +11,7 @@
         </button>
       </span>
       <span class="input-group-btn">
-        <button id="group" class="btn btn-primary btn-lg" @click="change('group')">
+        <button id="group" class="btn btn-success active" @click="change('group')">
           <span
             id="group-badge"
             class="badge"
@@ -55,10 +55,10 @@
         </transition>
       </div>
     </div>
-    <div class="user-channel" style="display : none;">
+    <div class="user-channel">
       <UserChannel />
     </div>
-    <div class="group-channel">
+    <div class="group-channel" style="display : none;">
       <GroupChannel />
     </div>
   </div>
