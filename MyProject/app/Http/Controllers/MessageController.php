@@ -102,7 +102,7 @@ class MessageController extends Controller
         $user = Auth::user();
         $uuid = (string) Str::uuid();
         $now = (string) Carbon::now();
-        $content_type;
+        $content_type = 'image';
 
         \Log::debug($request->file('image'));
         if ($request->file('image')) {

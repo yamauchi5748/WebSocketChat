@@ -8,25 +8,22 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use App\User;
-use App\Chat;
 
-class AlreadyRead implements ShouldBroadcast
+class RoomRecieved implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /** @var */
-    public $chat;
-    public $user;
-
+    var $user;
+    var $room;
     /**
      * Create a new event instance.
      *
      * @param array $message
      */
-    public function __construct(Chat $chat)
+    public function __construct(User $user, Array $room)
     {
-        $this->chat = $chat;
-        $this->user = User::where('id', $chat->sender_id)->first();
+        $this->user = $user;
+        $this->room = $room;
     }
 
     /**
@@ -36,12 +33,13 @@ class AlreadyRead implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        \Log::debug($this->chat);
-        return new PrivateChannel('user.'.$this->user->id.'.room.'.$this->chat["room_id"]);
+        \Log::debug("roomStore");
+        \Log::debug($this->room);
+        return new PrivateChannel('user.' . $this->user['id']);
     }
 
     public function broadcastWith()
     {
-        return ['chat' => $this->chat];
+        return ['room' => $this->room];
     }
 }
