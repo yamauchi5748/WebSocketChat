@@ -13,8 +13,6 @@
             :user_id="'{{ $user->id }}'"
         ></my-chat>
     </div>
-    User
-    {{ $user }}
     <script>
         window.Laravel = {!! json_encode([
             'apiToken' => \Auth::user()->api_token ?? null

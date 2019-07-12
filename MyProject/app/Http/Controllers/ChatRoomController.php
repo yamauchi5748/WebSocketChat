@@ -113,6 +113,46 @@ class ChatRoomController extends Controller
         return $chat_room;
     }
 
+    public function destroy($room_id)
+    {
+        $user = Auth::user();
+
+        $room = ChatRoom::select('admin')
+            ->where('id', $room_id)
+            ->first();
+
+        if ($user->id == $room->admin) {
+            Chat::where('room_id', $room_id)->delete();
+            ChatRoom::where('id', $room_id)->delete();
+            ChatRoomUser::where('room_id', $room_id)->delete();
+
+            return $this->index();
+        } else {
+            return 'no authorization';
+        }
+    }
+    public function exit($room_id, $user_id)
+    {
+        if ($user_id != Auth::id()) {
+            return 'エッチ';
+        }
+
+        $room = ChatRoom::select('id', 'admin')
+            ->where('id', $room_id)
+            ->first();
+        if ($user_id == $room->admin) {
+            Chat::where('room_id', $room_id)->delete();
+            ChatRoom::where('id', $room_id)->delete();
+            ChatRoomUser::where('room_id', $room_id)->delete();
+
+            return $this->index();
+        } else {
+            ChatRoomUser::where('room_id', $room_id)->where('user_id', $user_id)->delete();
+
+            return $this->index();
+        }
+    }
+
     public function checkAt(Request $request)
     {
         $room_user = ChatRoomUser::where('user_id', $request->user_id)

@@ -20,5 +20,6 @@ Route::middleware('auth:api')->get('/new-messages', 'MessageController@newIndex'
 Route::middleware('auth:api')->post('/rooms/{room_id}/file', 'MessageController@fileStore');
 Route::middleware('auth:api')->post('/rooms', 'ChatRoomController@store');
 Route::middleware('auth:api')->put('/rooms/{room_id}', 'ChatRoomController@update');
+Route::middleware('auth:api')->delete('/rooms/{room_id}/users/{user_id}', 'ChatRoomController@exit');
 Route::middleware('auth:api')->post('/check-at', 'ChatRoomController@checkAt');
 

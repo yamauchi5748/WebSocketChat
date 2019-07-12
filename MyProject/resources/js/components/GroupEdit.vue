@@ -37,10 +37,16 @@
           </div>
         </template>
         <div>
-          <button id="group-create" class="btn btn-success active" @click="editSave()">保存</button>
+          <div class="group-update-wrapper">
+            <button id="group-update" class="btn btn-success active" @click="editSave()">保存</button>
+          </div>
+          <div>
+            <button id="group-delete" class="btn btn-primary btn-lg exit" @click="roomDelete()">ルーム削除</button>
+          </div>
         </div>
       </div>
     </transition>
+    <div class="dropdown-bg" @click="isActive = false" v-if="isActive"></div>
   </div>
 </template>
 
@@ -57,19 +63,23 @@
   z-index: 3;
   padding: 0.5rem 0;
 }
+.group-update-wrapper {
+  margin-bottom: 10px;
+}
 </style>
 
 <script>
 export default {
   data() {
     return {
+      label : this.props_label,
       isActive: false,
       update_group: {
-        id : "id",
-        name : "name",
-        users : []
+        id: "id",
+        name: "name",
+        users: []
       },
-      user_list : []
+      user_list: []
     };
   },
   computed: {
@@ -113,9 +123,22 @@ export default {
       this.user_list = this.userList;
     },
     editSave() {
-      console.log(this.update_group.id, this.update_group.name, this.update_group.users);
+      console.log(
+        this.update_group.id,
+        this.update_group.name,
+        this.update_group.users
+      );
       this.$root.updateRoomStatus(this.update_group);
       this.isActive = !this.isActive;
+    },
+    roomDelete(){
+      if(confirm("ルームを削除しますか？")){
+        this.$root.deleteRoom();
+        this.isActive = !this.isActive;
+        this.$parent.label = "グループを選択してください▿"
+      }else{
+        console.log("no");
+      }
     }
   }
 };

@@ -55,8 +55,8 @@ const app = new Vue({
         const exist_room_content = room.contents.length == 0 ? false : true;
         const exist_forward_content = forward.contents.length == 0 ? false : true;
 
-        if(exist_room_content){
-          console.log(forward.group_name,forward.created_at,(room.contents[0].created_at > forward.created_at));
+        if (exist_room_content) {
+          console.log(forward.group_name, forward.created_at, (room.contents[0].created_at > forward.created_at));
         }
         if (exist_room_content && (!exist_forward_content || room.contents[0].created_at > forward.contents[0].created_at) && (room.contents[0].created_at > forward.created_at)) {
           this.rooms[index] = forward;
@@ -242,6 +242,32 @@ const app = new Vue({
           this.rooms.unshift(res.data);
           this.connectChannel(res.data.id);
           this.connectPrivateChannel(res.data.id);
+        })
+        .catch(error => {
+          console.log(error)
+          console.log('データの取得に失敗しました。')
+        });
+    },
+    // ルーム削除
+    deleteRoom() {
+      axios.delete("api/rooms/" + this.now_room.id)
+        .then(res => {
+          console.log("削除しました");
+          this.rooms = res.data;
+          this.clearTimeline();
+        })
+        .catch(error => {
+          console.log(error)
+          console.log('データの取得に失敗しました。')
+        });
+    },
+    // ルーム退出
+    exitRoom() {
+      axios.delete("api/rooms/" + this.now_room.id + "/users/" + this.user_id)
+        .then(res => {
+          console.log("退出しました", res.data);
+          this.rooms = res.data;
+          this.clearTimeline();
         })
         .catch(error => {
           console.log(error)

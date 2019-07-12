@@ -1,20 +1,30 @@
 <template>
   <div>
     <div class="all-wrapper">
-      <div class="dropdown-wrapper" @click="isActive = !isActive">
-        <div class="dropdown-text">{{ label }}</div>
-        <i class="el-icon-caret-bottom"></i>
-      </div>
-      <div v-if="this.$root.now_room && this.$root.now_room.admin == this.$root.user_id">
-        <GroupEdit />
+      <div class="dropdown-wrapper">
+        <div class="dropdown-text" @click="isActive = !isActive">{{ label }}</div>
+        <div
+          class="group-edit-component"
+          v-if="this.$root.now_room && this.$root.now_room.admin == this.$root.user_id"
+        >
+          <GroupEdit />
+        </div>
+        <div>
+          <button
+            id="group-exit"
+            class="btn btn-primary btn-lg exit"
+            v-if="$root.now_room"
+            @click="roomExit()"
+          >退出</button>
+        </div>
       </div>
       <transition>
         <div class="list-items" v-if="isActive">
+          <div class="group-search-box">
+            検索:
+            <input type="text" v-model="search_key" />
+          </div>
           <template v-if="existsListItems">
-            <div class="group-search-box">
-              検索:
-              <input type="text" v-model="search_key" />
-            </div>
             <template v-for="(room, index) in roomList">
               <div
                 class="list-item"
@@ -80,9 +90,17 @@
 .dropdown-text {
   background-color: #f3f4f6;
   font-size: 16px;
+  margin-right: 15px;
 }
 .dropdown-text:hover {
   background-color: #d3f4f6;
+  cursor: pointer;
+}
+.exit {
+  background-color: red;
+}
+.exit:hover {
+  background-color: brown;
   cursor: pointer;
 }
 
@@ -135,6 +153,10 @@ i {
 .group-search-box {
   margin-left: 15px;
 }
+.group-edit-component {
+  padding-right: 10px;
+  float: left;
+}
 </style>
 
 <script>
@@ -153,20 +175,20 @@ export default {
     };
   },
   computed: {
-    existsListItems() {
-      if (this.$root.rooms.length == 0) {
-        return false;
-      }
-      return true;
-    },
     roomList: function() {
       return this.$root.rooms.filter(room => {
-        if(room.is_group){
+        if (room.is_group) {
           return room.group_name.indexOf(this.search_key) != -1;
-        }else{
+        } else {
           return false;
         }
       });
+    },
+    existsListItems() {
+      if (this.roomList.length == 0) {
+        return false;
+      }
+      return true;
     }
   },
   methods: {
@@ -204,6 +226,20 @@ export default {
       this.$root.getMessages();
       this.$root.newMessageUpdate();
       this.$root.checkAt(this.$root.now_room.id);
+    },
+    roomExit() {
+      let text = null;
+      if (this.$root.user_id == this.$root.now_room.admin) {
+        text = "管理者が退出するとルームが削除されますが退出しますか？";
+      } else {
+        text = "ルームから退出しますか？";
+      }
+      if (confirm(text)) {
+        this.$root.exitRoom();
+        this.label = "グループを選択してください▿";
+      } else {
+        console.log("キャンセル");
+      }
     }
   }
 };

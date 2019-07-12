@@ -1,17 +1,17 @@
 <template>
   <div>
     <div class="all-wrapper">
-      <div class="dropdown-wrapper" @click="changeActive()">
-        <div class="dropdown-text">{{ label }}</div>
+      <div class="dropdown-wrapper">
+        <div class="dropdown-text" @click="changeActive()">{{ label }}</div>
         <i class="el-icon-caret-bottom"></i>
       </div>
       <transition>
         <div class="list-items" v-if="isActive">
+          <div class="user-search-box">
+            検索:
+            <input type="text" v-model="search_key" />
+          </div>
           <template v-if="existsListItems">
-            <div class="user-search-box">
-              検索:
-              <input type="text" v-model="search_key" />
-            </div>
             <template v-for="(room, index) in roomList">
               <div
                 class="list-item"
@@ -63,15 +63,20 @@ export default {
     };
   },
   computed: {
+    roomList: function() {
+      return this.$root.rooms.filter(room => {
+        if (room.users && !room.is_group) {
+          return room.users[1].name.indexOf(this.search_key) != -1;
+        } else {
+          return false;
+        }
+      });
+    },
     existsListItems() {
-      if (this.$root.rooms.length == 0) {
+      if (this.roomList.length == 0) {
         return false;
       }
       return true;
-    },
-    roomList: function() {
-      console.log(this.search_key);
-      return this.$root.rooms.filter(room => room.users[1].name.indexOf(this.search_key) != -1);
     }
   },
   methods: {
