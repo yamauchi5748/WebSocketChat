@@ -45,7 +45,11 @@
                 <textarea v-model="group_name" placeholder="グループ名を入力してください"></textarea>
               </div>
               <div>
-                <button id="group-create" class="btn btn-success active" @click="changeActive()">グループ作成</button>
+                <button
+                  id="group-create"
+                  class="btn btn-success active"
+                  @click="changeActive()"
+                >グループ作成</button>
               </div>
             </template>
             <template v-else>
@@ -54,12 +58,16 @@
           </div>
         </transition>
       </div>
+      <div class="dropdown-bg" @click="isActive = false" v-if="isActive"></div>
     </div>
     <div class="user-channel">
       <UserChannel />
     </div>
-    <div class="group-channel" style="display : none;">
+    <div class="group-channel">
       <GroupChannel />
+    </div>
+    <div class="user-list-component" v-if="$root.now_room">
+      <UserList />
     </div>
   </div>
 </template>
@@ -67,10 +75,11 @@
 <script>
 import UserChannel from "./UserChannel";
 import GroupChannel from "./GroupChannel";
+import UserList from "./UserList";
 import talk from "./Talk";
 
 export default {
-  components: { UserChannel, GroupChannel, talk },
+  components: { UserChannel, GroupChannel, UserList, talk },
   data() {
     return {
       group_name: "",
@@ -156,5 +165,8 @@ export default {
 .input-group-btn {
   padding-top: 1%;
   padding-right: 10px;
+}
+.group-channel {
+  display : none;
 }
 </style>

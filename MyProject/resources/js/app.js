@@ -47,6 +47,27 @@ const app = new Vue({
     clearTimeline() {
       this.timeline.splice(0);
     },
+    //ルームをソート
+    sortRoom() {
+      for (let index = 1; index < this.rooms.length;) {
+        const room = this.rooms[index];
+        const forward = this.rooms[index - 1];
+        const exist_room_content = room.contents.length == 0 ? false : true;
+        const exist_forward_content = forward.contents.length == 0 ? false : true;
+
+        if (exist_room_content) {
+          console.log(forward.group_name, forward.created_at, (room.contents[0].created_at > forward.created_at));
+        }
+        if (exist_room_content && (!exist_forward_content || room.contents[0].created_at > forward.contents[0].created_at) && (room.contents[0].created_at > forward.created_at)) {
+          this.rooms[index] = forward;
+          this.rooms[index - 1] = room;
+
+          index == 1 ? index++ : index--;
+        } else {
+          index++
+        }
+      }
+    },
     // テキスト投稿
     postMessage(text) {
       axios.post("/api/message", {
@@ -97,6 +118,16 @@ const app = new Vue({
         console.log(message);
         message.is_group ? this.new_group_messages.push(message) : this.new_personal_messages.push(message)
       }
+      // ルームにメッセージを格納
+      for (let room of this.rooms) {
+        if (room.id == message.room_id) {
+          room.contents.unshift(message);
+          console.log(room.contents[0].message);
+        }
+
+      }
+      // ルームをソート
+      this.sortRoom();
     },
     //既読処理
     alreadyReadUpdate(target) {
@@ -125,6 +156,22 @@ const app = new Vue({
         }
       }
     },
+    // グループ情報更新
+    updateRoomStatus(room) {
+      axios.put('/api/rooms/' + this.now_room.id, room)
+        .then(res => {
+          console.log(res.data);
+          for (let room of this.rooms) {
+            if (room.id == res.data.id) {
+              room = res.data;
+              this.now_room = res.data;
+            }
+          }
+        }).catch(error => {
+          console.log(error)
+          console.log('データの取得に失敗しました。')
+        });
+    },
     // チャット取得
     getMessages() {
       let url = "/api/rooms/" + this.now_room.id + "/messages"
@@ -134,6 +181,7 @@ const app = new Vue({
         .then(res => {
           let messages = res.data;
           for (let message of messages) {
+            console.log("tinpooooo", message);
             // 送信者名を追加
             for (let user of this.listItems) {
               if (user.id == message.sender_id) {
@@ -176,21 +224,50 @@ const app = new Vue({
     },
     // ルーム作成
     addRoom(join_users, is_group, group_name) {
+      admin = is_group ? this.user_id : null;
       axios.post("/api/rooms", {
         join_users: join_users,
         is_group: is_group,
-        group_name: group_name
+        group_name: group_name,
+        admin: admin
       })
         .then(res => {
           for (let user of this.listItems) {
             if (user.id == join_users[0]) {
-              user.room_id = res.data.room_id
+              user.room_id = res.data.id
             }
+
           }
-          console.log("addRoom", res.data)
-          this.rooms.push(res.data);
-          this.connectChannel(res.data.room_id);
-          this.connectPrivateChannel(res.data.room_id);
+          console.log("addRoom", res.data);
+          this.rooms.unshift(res.data);
+          this.connectChannel(res.data.id);
+          this.connectPrivateChannel(res.data.id);
+        })
+        .catch(error => {
+          console.log(error)
+          console.log('データの取得に失敗しました。')
+        });
+    },
+    // ルーム削除
+    deleteRoom() {
+      axios.delete("api/rooms/" + this.now_room.id)
+        .then(res => {
+          console.log("削除しました");
+          this.rooms = res.data;
+          this.clearTimeline();
+        })
+        .catch(error => {
+          console.log(error)
+          console.log('データの取得に失敗しました。')
+        });
+    },
+    // ルーム退出
+    exitRoom() {
+      axios.delete("api/rooms/" + this.now_room.id + "/users/" + this.user_id)
+        .then(res => {
+          console.log("退出しました", res.data);
+          this.rooms = res.data;
+          this.clearTimeline();
         })
         .catch(error => {
           console.log(error)
@@ -203,19 +280,14 @@ const app = new Vue({
     axios.get("/api/users")
       .then(res => {
         let users = res.data
-        let listItems = [];
 
         for (let user of users) {
-          listItems.push({
+          this.listItems.push({
             id: user.id,
             name: user.name,
             room_id: null
           });
-          if (user.id != this.user_id) {
-            this.addRoom([user.id, this.user_id], false);
-          }
         }
-        this.listItems = listItems;
       })
       .catch(error => {
         console.log(error)
@@ -227,10 +299,12 @@ const app = new Vue({
 
         for (let room of res.data) {
           this.rooms.push(room);
-          console.log("room", room.id);
-          this.connectChannel(room.room_id);
-          this.connectPrivateChannel(room.room_id);
+          console.log("room", room.contents);
+          this.connectChannel(room.id);
+          this.connectPrivateChannel(room.id);
         }
+        this.sortRoom();
+        console.log(this.rooms[0]);
       })
       .catch(error => {
         console.log(error)

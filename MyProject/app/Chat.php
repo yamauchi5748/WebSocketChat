@@ -9,7 +9,7 @@ class Chat extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'id', 'room_id', 'sender_id', 'message', 'image', 'content_type' , 'already_read', 'created_at'
+        'id', 'room_id', 'sender_id', 'message', 'image', 'video', 'content_type' , 'already_read', 'created_at'
     ];
 
     // idをキャスト

@@ -11,7 +11,6 @@
         <Message />
       </div>
     </div>
-    room : {{ state.now_room }}
   </div>
 </template>
 

@@ -52,7 +52,7 @@ if (token) {
 
  window.Echo = new Echo({
     broadcaster: 'socket.io',
-    host: 'localhost:6001',
+    host: '192.168.5.115:6001',
     auth: {
         headers: {
             'Authorization' : 'Bearer ' + api_token.content,

@@ -12,27 +12,27 @@ const mix = require('laravel-mix');
  */
 
 mix.js('resources/js/app.js', 'public/js')
-   .sass('resources/sass/app.scss', 'public/css')
-   .version()
-   .webpackConfig({
-      output: {
-        publicPath: "http://192.168.99.100:80/" // (ホストOSのhostsで割り当てたドメイン):8080 でもＯＫ
-      },
-      devServer: {
-        disableHostCheck: true,
-        contentBase: path.join(__dirname, "public"),
-        publicPath: '/',
-        host: '0.0.0.0',
-        port: 80,
-        proxy: {
-          '/': {
-            target : 'http://nginx'
-          }
+  .sass('resources/sass/app.scss', 'public/css')
+  .version()
+  .webpackConfig({
+    output: {
+      publicPath: "http://192.168.99.100:80/" // (ホストOSのhostsで割り当てたドメイン):8080 でもＯＫ
+    },
+    devServer: {
+      disableHostCheck: true,
+      contentBase: path.join(__dirname, "public"),
+      publicPath: '/',
+      host: '0.0.0.0',
+      port: 80,
+      proxy: {
+        '/': {
+          target: 'http://nginx'
         }
-      },
-      watchOptions: {
-        poll: true,
-        ignored: /node_modules/
       }
-    })
-  
+    },
+    watchOptions: {
+      poll: true,
+      ignored: /node_modules/
+    }
+  });
+

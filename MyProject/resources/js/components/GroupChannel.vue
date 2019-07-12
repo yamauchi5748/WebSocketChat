@@ -1,27 +1,56 @@
 <template>
   <div>
     <div class="all-wrapper">
-      <div class="dropdown-wrapper" @click="isActive = !isActive">
-        <div class="dropdown-text">{{ label }}</div>
-        <i class="el-icon-caret-bottom"></i>
+      <div class="dropdown-wrapper">
+        <div class="dropdown-text" @click="isActive = !isActive">{{ label }}</div>
+        <div
+          class="group-edit-component"
+          v-if="this.$root.now_room && this.$root.now_room.admin == this.$root.user_id"
+        >
+          <GroupEdit />
+        </div>
+        <div>
+          <button
+            id="group-exit"
+            class="btn btn-primary btn-lg exit"
+            v-if="$root.now_room"
+            @click="roomExit()"
+          >退出</button>
+        </div>
       </div>
       <transition>
         <div class="list-items" v-if="isActive">
+          <div class="group-search-box">
+            検索:
+            <input type="text" v-model="search_key" />
+          </div>
           <template v-if="existsListItems">
-            <template v-for="(value, index) in $root.rooms">
+            <template v-for="(room, index) in roomList">
               <div
                 class="list-item"
-                v-if="value.is_group"
+                v-if="room.is_group"
                 v-bind:key="index"
                 :class="[index == activeItemKey ? 'active' : '' ]"
-                @click="handleClickItem(index, value.group_name, value.room_id)"
+                @click="handleClickItem(index, room.group_name, room.id)"
               >
-                <span
+                <div
                   :id="'badge-' + index"
                   class="badge"
                   v-if="badgeChecker(index)"
-                >{{ badge_counter[index] }}</span>
-                {{value.group_name}}
+                >{{ badge_counter[index] }}</div>
+                {{room.group_name}}
+                <div
+                  class="latest-talk-contents"
+                  v-if="room.contents[0] && room.contents[0].content_type == 'text'"
+                >{{ room.contents[0].message }}</div>
+                <div
+                  class="latest-talk-contents"
+                  v-if="room.contents[0] && room.contents[0].content_type == 'image'"
+                >send an image</div>
+                <div
+                  class="latest-talk-contents"
+                  v-if="room.contents[0] && room.contents[0].content_type == 'video'"
+                >send a video</div>
               </div>
             </template>
           </template>
@@ -61,9 +90,17 @@
 .dropdown-text {
   background-color: #f3f4f6;
   font-size: 16px;
+  margin-right: 15px;
 }
 .dropdown-text:hover {
   background-color: #d3f4f6;
+  cursor: pointer;
+}
+.exit {
+  background-color: red;
+}
+.exit:hover {
+  background-color: brown;
   cursor: pointer;
 }
 
@@ -113,13 +150,24 @@ i {
   text-align: center;
   line-height: 15px;
 }
+.group-search-box {
+  margin-left: 15px;
+}
+.group-edit-component {
+  padding-right: 10px;
+  float: left;
+}
 </style>
 
 <script>
+import GroupEdit from "./GroupEdit";
+
 export default {
+  components: { GroupEdit },
   data() {
     return {
       label: "グループを選択して下さい▿",
+      search_key: "",
       isActive: false,
       activeItemKey: null,
       rooms: this.$root.rooms,
@@ -127,8 +175,17 @@ export default {
     };
   },
   computed: {
+    roomList: function() {
+      return this.$root.rooms.filter(room => {
+        if (room.is_group) {
+          return room.group_name.indexOf(this.search_key) != -1;
+        } else {
+          return false;
+        }
+      });
+    },
     existsListItems() {
-      if (this.$root.rooms.length == 0) {
+      if (this.roomList.length == 0) {
         return false;
       }
       return true;
@@ -139,12 +196,11 @@ export default {
       let badge = document.getElementById("badge-" + index);
       let counter = 0;
       for (let message of this.$root.new_group_messages) {
-        if (message.room_id == this.$root.rooms[index].room_id) {
+        if (message.room_id == this.$root.rooms[index].id) {
           counter++;
         }
       }
       this.badge_counter[index] = counter;
-      console.log(this.badge_counter[index]);
       if (counter > 0) {
         return true;
       }
@@ -170,6 +226,20 @@ export default {
       this.$root.getMessages();
       this.$root.newMessageUpdate();
       this.$root.checkAt(this.$root.now_room.id);
+    },
+    roomExit() {
+      let text = null;
+      if (this.$root.user_id == this.$root.now_room.admin) {
+        text = "管理者が退出するとルームが削除されますが退出しますか？";
+      } else {
+        text = "ルームから退出しますか？";
+      }
+      if (confirm(text)) {
+        this.$root.exitRoom();
+        this.label = "グループを選択してください▿";
+      } else {
+        console.log("キャンセル");
+      }
     }
   }
 };

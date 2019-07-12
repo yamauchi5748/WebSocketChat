@@ -1,27 +1,43 @@
 <template>
   <div>
     <div class="all-wrapper">
-      <div class="dropdown-wrapper" @click="changeActive()">
-        <div class="dropdown-text">{{ label }}</div>
+      <div class="dropdown-wrapper">
+        <div class="dropdown-text" @click="changeActive()">{{ label }}</div>
         <i class="el-icon-caret-bottom"></i>
       </div>
       <transition>
         <div class="list-items" v-if="isActive">
+          <div class="user-search-box">
+            検索:
+            <input type="text" v-model="search_key" />
+          </div>
           <template v-if="existsListItems">
-            <template v-for="(value, index) in $root.listItems">
+            <template v-for="(room, index) in roomList">
               <div
                 class="list-item"
-                v-if="is_myId(value.id, index)"
+                v-if="!room.is_group"
                 v-bind:key="index"
                 :class="[index == activeItemKey ? 'active' : '' ]"
-                @click="handleClickItem(index, value.id, value.name, value.room_id)"
+                @click="handleClickItem(index, room)"
               >
-                <span
+                <div
                   :id="'badge-' + index"
                   class="badge"
-                  v-if="badgeChecker(index)"
-                >{{ badge_counter[index] }}</span>
-                {{value.name}}
+                  v-if="badgeChecker(index, room.id)"
+                >{{ badge_counter[index] }}</div>
+                {{room.users[1].name}}
+                <div
+                  class="latest-talk-contents"
+                  v-if="room.contents[0] && room.contents[0].content_type == 'text'"
+                >{{ room.contents[0].message }}</div>
+                <div
+                  class="latest-talk-contents"
+                  v-if="room.contents[0] && room.contents[0].content_type == 'image'"
+                >send an image</div>
+                <div
+                  class="latest-talk-contents"
+                  v-if="room.contents[0] && room.contents[0].content_type == 'video'"
+                >send a video</div>
               </div>
             </template>
           </template>
@@ -34,6 +50,83 @@
     <div class="dropdown-bg" @click="isActive = false" v-if="isActive"></div>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      label: "ユーザーを選択して下さい▿",
+      search_key: "",
+      isActive: false,
+      activeItemKey: null,
+      badge_counter: []
+    };
+  },
+  computed: {
+    roomList: function() {
+      return this.$root.rooms.filter(room => {
+        if (room.users && !room.is_group) {
+          return room.users[1].name.indexOf(this.search_key) != -1;
+        } else {
+          return false;
+        }
+      });
+    },
+    existsListItems() {
+      if (this.roomList.length == 0) {
+        return false;
+      }
+      return true;
+    }
+  },
+  methods: {
+    badgeChecker(index, room_id) {
+      let badge = document.getElementById("badge-" + index);
+      let counter = 0;
+      for (let message of this.$root.new_personal_messages) {
+        if (message.room_id == room_id) {
+          counter++;
+        }
+      }
+      this.badge_counter[index] = counter;
+      if (counter > 0) {
+        return true;
+      }
+      return false;
+    },
+    changeActive() {
+      this.isActive = !this.isActive;
+    },
+    handleClickItem(key, room) {
+      if (key == this.activeItemKey) {
+        return;
+      }
+
+      this.isActive = false;
+      this.action(key, room);
+    },
+    action(key, room) {
+      this.$root.activeItemKey = key;
+      this.$root.now_room = room;
+      this.label = room.users[1].name + "▿";
+      this.$root.clearTimeline();
+      this.$root.getMessages();
+      this.$root.newMessageUpdate();
+      this.$root.checkAt(this.$root.now_room.id);
+    },
+    existsListItem(index) {
+      // データ取得が完了するまで表示しない
+      return this.$root.listItems[index].room_id ? true : false;
+    },
+    is_myId(id, index) {
+      if (id != this.$root.user_id && this.existsListItem(index)) {
+        return true;
+      }
+      return false;
+    }
+  }
+};
+</script>
 
 <style>
 .dropdown-bg {
@@ -85,6 +178,7 @@ i {
   padding: 0.5rem 0;
 }
 .list-item {
+  clear: both;
   color: #333;
   font-size: 14px;
   line-height: 16px;
@@ -113,78 +207,10 @@ i {
   text-align: center;
   line-height: 15px;
 }
+.latest-talk-contents {
+  color: #b9bfc9;
+}
+.user-search-box {
+  margin-left: 15px;
+}
 </style>
-
-<script>
-export default {
-  data() {
-    return {
-      label: "ユーザーを選択して下さい▿",
-      isActive: false,
-      activeItemKey: null,
-      badge_counter: []
-    };
-  },
-  computed: {
-    existsListItems() {
-      if (this.$root.listItems.length == 0) {
-        return false;
-      }
-      return true;
-    }
-  },
-  methods: {
-    badgeChecker(index) {
-      let badge = document.getElementById("badge-" + index);
-      let counter = 0;
-      for (let message of this.$root.new_personal_messages) {
-        if (message.room_id == this.$root.listItems[index].room_id) {
-          counter++;
-        }
-      }
-      this.badge_counter[index] = counter;
-      console.log(this.badge_counter[index]);
-      if (counter > 0) {
-        return true;
-      }
-      return false;
-    },
-    changeActive() {
-      this.isActive = !this.isActive;
-    },
-    handleClickItem(key, id, name, room_id) {
-      if (key == this.activeItemKey) {
-        return;
-      }
-
-      this.isActive = false;
-      this.action(key, id, name, room_id);
-    },
-    action(key, id, name, room_id) {
-      this.$root.activeItemKey = key;
-      for (let room of this.$root.rooms) {
-        console.log(room.id);
-        if (room.id == room_id) {
-          this.$root.now_room = room;
-        }
-      }
-      this.label = name + "▿";
-      this.$root.clearTimeline();
-      this.$root.getMessages();
-      this.$root.newMessageUpdate();
-      this.$root.checkAt(this.$root.now_room.id);
-    },
-    existsListItem(index) {
-      // データ取得が完了するまで表示しない
-      console.log(this.$root.listItems[index]);
-      return this.$root.listItems[index].room_id ? true : false;
-    },
-    is_myId(id, index) {
-      if (id != this.$root.user_id && this.existsListItem(index)) {
-        return true;
-      }
-      return false;
-    }
-  }
-};
-</script>

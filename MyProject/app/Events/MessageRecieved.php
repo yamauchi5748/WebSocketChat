@@ -38,6 +38,7 @@ class MessageRecieved implements ShouldBroadcast
      */
     public function broadcastOn()
     {
+        \Log::debug("tinnpo");
         return new PresenceChannel('room.'.$this->message["room_id"]);
     }
 

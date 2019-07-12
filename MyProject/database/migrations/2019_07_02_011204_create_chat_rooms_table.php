@@ -17,6 +17,8 @@ class CreateChatRoomsTable extends Migration
             $table->uuid('id');
             $table->string('group_name')->nullable();
             $table->boolean('is_group');
+            $table->uuid('admin')->nullable();
+            $table->timestamp('created_at');
         });
     }
 
