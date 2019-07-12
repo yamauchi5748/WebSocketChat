@@ -29,9 +29,9 @@
 import Message from "./Message";
 import Talk from "./Talk";
 import ChatChannel from "./ChatChannel";
-
+import LineApp from "./LineApp";
 export default {
-  components: { ChatChannel, Talk, Message },
+  components: { ChatChannel, Talk, Message, LineApp },
   props: {
     user_id: String
   },
