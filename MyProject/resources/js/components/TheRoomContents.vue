@@ -8,12 +8,12 @@
       <div class="input-item-list">
         <label class="input-img-wrapper">
           <img class="input-img-icon" src="/img/send-file.png" />
-          <input class="input-img" type="file" @change="onDrop"/>
+          <input class="input-img" type="file" @change="onDrop" />
         </label>
       </div>
       <div class="input-text-wrapper">
         <textarea class="input-text" v-model="text"></textarea>
-        <img class="send-action" src="/img/send.png" @click="send"/>
+        <img class="send-action" src="/img/send.png" @click="send" />
       </div>
     </div>
   </div>
@@ -25,19 +25,20 @@ export default {
   components: { TheRoomContentsHeader, RoomContentsMessage },
   data() {
     return {
-      text : '',
+      text: "",
       file: null
-    }
+    };
   },
   computed: {
-    timeLine : function(){
-      console.log()
-      return this.$root.timeline;
+    timeLine: function() {
+      if (this.$root.now_room) {
+        return this.$root.now_room.contents;
+      }
+      return false;
     }
   },
   methods: {
     onDrop: function(event) {
-      console.log("otinnnnn", event);
       this.file = event.target.files[0];
       this.send();
     },
@@ -61,8 +62,7 @@ export default {
         data.append("video", this.file);
       } else if (this.file && this.file.type.match("image")) {
         data.append("image", this.file);
-      }
-      else{
+      } else {
         console.log("画像なし");
         return;
       }

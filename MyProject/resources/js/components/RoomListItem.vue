@@ -2,22 +2,25 @@
   <div class="room-list-item" @click="action(room)">
     <div class="room-list-item-information-left">
       <span class="room-list-item-name" v-if="room.is_group">{{ room.group_name }}</span>
-      <span class="room-list-item-name" v-if="!room.is_group">{{ room.users[1].name }}</span>
+      <span
+        class="room-list-item-name"
+        v-if="!room.is_group && room.users[1]"
+      >{{ room.users[1].name }}</span>
       <span
         class="latest-content"
-        v-if="room.contents[0] && room.contents[0].content_type == 'text'"
-      >{{ room.contents[0].message }}</span>
+        v-if="content && content.content_type == 'text'"
+      >{{ content.message }}</span>
       <span
         class="latest-content"
-        v-if="room.contents[0] && room.contents[0].content_type == 'image'"
+        v-if="content && content.content_type == 'image'"
       >send an image</span>
       <span
         class="latest-content"
-        v-if="room.contents[0] && room.contents[0].content_type == 'video'"
+        v-if="content && content.content_type == 'video'"
       >send a video</span>
     </div>
     <div class="room-list-item-information-right">
-      <span class="update-date" v-if="room.contents[0]">{{ room.contents[0].created_at }}</span>
+      <span class="update-date" v-if="content">{{ content.created_at }}</span>
       <span
         class="room-list-item-unread"
         :id="'badge-' + index"
@@ -37,6 +40,12 @@ export default {
       activeItemKey: null,
       badge_counter: []
     };
+  },
+  computed: {
+    content: function() {
+      const contents = this.room.contents;
+      return contents[contents.length-1];
+    }
   },
   methods: {
     badgeChecker(index, is_group) {
@@ -63,7 +72,6 @@ export default {
     },
     action(room) {
       this.$root.now_room = room;
-      this.$root.clearTimeline();
       this.$root.getMessages();
       this.$root.newMessageUpdate();
       this.$root.checkAt();

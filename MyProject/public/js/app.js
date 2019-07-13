@@ -2032,6 +2032,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     room: Object,
@@ -2042,6 +2045,12 @@ __webpack_require__.r(__webpack_exports__);
       activeItemKey: null,
       badge_counter: []
     };
+  },
+  computed: {
+    content: function content() {
+      var contents = this.room.contents;
+      return contents[contents.length - 1];
+    }
   },
   methods: {
     badgeChecker: function badgeChecker(index, is_group) {
@@ -2114,7 +2123,6 @@ __webpack_require__.r(__webpack_exports__);
     },
     action: function action(room) {
       this.$root.now_room = room;
-      this.$root.clearTimeline();
       this.$root.getMessages();
       this.$root.newMessageUpdate();
       this.$root.checkAt();
@@ -2164,19 +2172,21 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      text: '',
+      text: "",
       file: null
     };
   },
   computed: {
     timeLine: function timeLine() {
-      console.log();
-      return this.$root.timeline;
+      if (this.$root.now_room) {
+        return this.$root.now_room.contents;
+      }
+
+      return false;
     }
   },
   methods: {
     onDrop: function onDrop(event) {
-      console.log("otinnnnn", event);
       this.file = event.target.files[0];
       this.send();
     },
@@ -2402,8 +2412,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      image: "data:image/jpeg;base64,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",
-      join_users: []
+      image: "data:image/jpeg;base64,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"
     };
   }
 });
@@ -48823,25 +48832,25 @@ var render = function() {
             ])
           : _vm._e(),
         _vm._v(" "),
-        !_vm.room.is_group
+        !_vm.room.is_group && _vm.room.users[1]
           ? _c("span", { staticClass: "room-list-item-name" }, [
               _vm._v(_vm._s(_vm.room.users[1].name))
             ])
           : _vm._e(),
         _vm._v(" "),
-        _vm.room.contents[0] && _vm.room.contents[0].content_type == "text"
+        _vm.content && _vm.content.content_type == "text"
           ? _c("span", { staticClass: "latest-content" }, [
-              _vm._v(_vm._s(_vm.room.contents[0].message))
+              _vm._v(_vm._s(_vm.content.message))
             ])
           : _vm._e(),
         _vm._v(" "),
-        _vm.room.contents[0] && _vm.room.contents[0].content_type == "image"
+        _vm.content && _vm.content.content_type == "image"
           ? _c("span", { staticClass: "latest-content" }, [
               _vm._v("send an image")
             ])
           : _vm._e(),
         _vm._v(" "),
-        _vm.room.contents[0] && _vm.room.contents[0].content_type == "video"
+        _vm.content && _vm.content.content_type == "video"
           ? _c("span", { staticClass: "latest-content" }, [
               _vm._v("send a video")
             ])
@@ -48849,9 +48858,9 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "room-list-item-information-right" }, [
-        _vm.room.contents[0]
+        _vm.content
           ? _c("span", { staticClass: "update-date" }, [
-              _vm._v(_vm._s(_vm.room.contents[0].created_at))
+              _vm._v(_vm._s(_vm.content.created_at))
             ])
           : _vm._e(),
         _vm._v(" "),
@@ -49190,45 +49199,12 @@ var render = function() {
     }),
     _vm._v(" "),
     _c("span", { staticClass: "user-list-item-profile-name" }, [
-      _vm._v(_vm._s(_vm.user.name))
+      _vm._v("氏名")
     ]),
     _vm._v(" "),
     _c("input", {
-      directives: [
-        {
-          name: "model",
-          rawName: "v-model",
-          value: _vm.join_users,
-          expression: "join_users"
-        }
-      ],
       staticClass: "user-list-item-checkbox",
-      attrs: { type: "checkbox" },
-      domProps: {
-        value: _vm.user.id,
-        checked: Array.isArray(_vm.join_users)
-          ? _vm._i(_vm.join_users, _vm.user.id) > -1
-          : _vm.join_users
-      },
-      on: {
-        change: function($event) {
-          var $$a = _vm.join_users,
-            $$el = $event.target,
-            $$c = $$el.checked ? true : false
-          if (Array.isArray($$a)) {
-            var $$v = _vm.user.id,
-              $$i = _vm._i($$a, $$v)
-            if ($$el.checked) {
-              $$i < 0 && (_vm.join_users = $$a.concat([$$v]))
-            } else {
-              $$i > -1 &&
-                (_vm.join_users = $$a.slice(0, $$i).concat($$a.slice($$i + 1)))
-            }
-          } else {
-            _vm.join_users = $$c
-          }
-        }
-      }
+      attrs: { type: "checkbox" }
     })
   ])
 }
@@ -61496,17 +61472,12 @@ var app = new Vue({
       rooms: [],
       new_group_messages: [],
       new_personal_messages: [],
-      timeline: [],
       user_list: [],
       activeItemKey: null,
       search_key: ""
     };
   },
   methods: {
-    //timelineクリア
-    clearTimeline: function clearTimeline() {
-      this.timeline.splice(0);
-    },
     //ルームをソート
     sortRoom: function sortRoom() {
       for (var index = 1; index < this.rooms.length;) {
@@ -61515,7 +61486,7 @@ var app = new Vue({
         var exist_room_content = room.contents.length == 0 ? false : true;
         var exist_forward_content = forward.contents.length == 0 ? false : true;
 
-        if (exist_room_content && (!exist_forward_content || room.contents[0].created_at > forward.contents[0].created_at) && room.contents[0].created_at > forward.created_at) {
+        if (exist_room_content && (!exist_forward_content || room.contents[room.contents.length - 1].created_at > forward.contents[forward.contents.length - 1].created_at) && room.contents[room.contents.length - 1].created_at > forward.created_at) {
           this.rooms.splice(index, 1, forward);
           this.rooms.splice(index - 1, 1, room);
           index == 1 ? index++ : index--;
@@ -61562,44 +61533,41 @@ var app = new Vue({
       ; // 投稿時にルーム内にいるなら投稿を表示し、参加状況を更新する
 
       if (this.now_room && message.room_id == this.now_room.id) {
-        console.log(message);
-        this.timeline.push(message);
+        this.now_room.contents.push(message);
         this.checkAt(this.now_room.id);
       } else {
         // 新しいメッセージを新着ボックスに格納
         console.log(message);
-        message.is_group ? this.new_group_messages.push(message) : this.new_personal_messages.push(message);
-      } // ルームにメッセージを格納
+        message.is_group ? this.new_group_messages.push(message) : this.new_personal_messages.push(message); // ルームにメッセージを格納
 
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
 
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        for (var _iterator = this.rooms[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var room = _step.value;
-
-          if (room.id == message.room_id) {
-            room.contents.unshift(message);
-            console.log('unshift', room.contents[0].message);
-          }
-        } // ルームをソート
-
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
         try {
-          if (!_iteratorNormalCompletion && _iterator["return"] != null) {
-            _iterator["return"]();
+          for (var _iterator = this.rooms[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var room = _step.value;
+
+            if (room.id == message.room_id) {
+              room.contents.push(message);
+            }
           }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
         } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
+          try {
+            if (!_iteratorNormalCompletion && _iterator["return"] != null) {
+              _iterator["return"]();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
           }
         }
-      }
+      } // ルームをソート
+
 
       console.log('sort');
       this.sortRoom();
@@ -61611,11 +61579,10 @@ var app = new Vue({
       var _iteratorError2 = undefined;
 
       try {
-        for (var _iterator2 = this.timeline[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+        for (var _iterator2 = this.now_room.contents[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
           var chat = _step2.value;
 
           if (chat.id == target.id) {
-            console.log(chat.already_read);
             chat.already_read = this.now_room.is_group ? parseInt(chat.already_read) + 1 : true;
           }
         }
@@ -61657,7 +61624,6 @@ var app = new Vue({
       var _this = this;
 
       axios.put('/api/rooms/' + this.now_room.id, room).then(function (res) {
-        console.log(res.data);
         var _iteratorNormalCompletion3 = true;
         var _didIteratorError3 = false;
         var _iteratorError3 = undefined;
@@ -61694,10 +61660,12 @@ var app = new Vue({
     getMessages: function getMessages() {
       var _this2 = this;
 
-      var url = "/api/rooms/" + this.now_room.id + "/messages";
-      axios.get(url, {
-        room_id: this.now_room.id
-      }).then(function (res) {
+      if (!this.now_room.contents[0]) {
+        return;
+      }
+
+      var url = "/api/rooms/" + this.now_room.id + "/messages/" + this.now_room.contents[0].created_at;
+      axios.get(url).then(function (res) {
         var messages = res.data;
         var _iteratorNormalCompletion4 = true;
         var _didIteratorError4 = false;
@@ -61706,36 +61674,8 @@ var app = new Vue({
         try {
           for (var _iterator4 = messages[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
             var message = _step4.value;
-            console.log("tinpooooo", message); // 送信者名を追加
 
-            var _iteratorNormalCompletion5 = true;
-            var _didIteratorError5 = false;
-            var _iteratorError5 = undefined;
-
-            try {
-              for (var _iterator5 = _this2.user_list[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-                var user = _step5.value;
-
-                if (user.id == message.sender_id) {
-                  message.sender_name = user.name;
-                }
-              }
-            } catch (err) {
-              _didIteratorError5 = true;
-              _iteratorError5 = err;
-            } finally {
-              try {
-                if (!_iteratorNormalCompletion5 && _iterator5["return"] != null) {
-                  _iterator5["return"]();
-                }
-              } finally {
-                if (_didIteratorError5) {
-                  throw _iteratorError5;
-                }
-              }
-            }
-
-            _this2.timeline.push(message);
+            _this2.now_room.contents.unshift(message);
           }
         } catch (err) {
           _didIteratorError4 = true;
@@ -61829,18 +61769,49 @@ var app = new Vue({
 
     axios.get("/api/users").then(function (res) {
       var users = res.data;
-      var _iteratorNormalCompletion6 = true;
-      var _didIteratorError6 = false;
-      var _iteratorError6 = undefined;
+      var _iteratorNormalCompletion5 = true;
+      var _didIteratorError5 = false;
+      var _iteratorError5 = undefined;
 
       try {
-        for (var _iterator6 = users[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
-          var user = _step6.value;
+        for (var _iterator5 = users[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+          var user = _step5.value;
 
           _this5.user_list.push({
             id: user.id,
             name: user.name
           });
+        }
+      } catch (err) {
+        _didIteratorError5 = true;
+        _iteratorError5 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion5 && _iterator5["return"] != null) {
+            _iterator5["return"]();
+          }
+        } finally {
+          if (_didIteratorError5) {
+            throw _iteratorError5;
+          }
+        }
+      }
+    })["catch"](function (error) {
+      console.log(error);
+      console.log('データの取得に失敗しました。');
+    }); // ルーム検索
+
+    axios.get("/api/rooms").then(function (res) {
+      var _iteratorNormalCompletion6 = true;
+      var _didIteratorError6 = false;
+      var _iteratorError6 = undefined;
+
+      try {
+        for (var _iterator6 = res.data[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+          var room = _step6.value;
+          room.contents.reverse();
+
+          _this5.rooms.push(room);
         }
       } catch (err) {
         _didIteratorError6 = true;
@@ -61853,36 +61824,6 @@ var app = new Vue({
         } finally {
           if (_didIteratorError6) {
             throw _iteratorError6;
-          }
-        }
-      }
-    })["catch"](function (error) {
-      console.log(error);
-      console.log('データの取得に失敗しました。');
-    }); // ルーム検索
-
-    axios.get("/api/rooms").then(function (res) {
-      var _iteratorNormalCompletion7 = true;
-      var _didIteratorError7 = false;
-      var _iteratorError7 = undefined;
-
-      try {
-        for (var _iterator7 = res.data[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
-          var room = _step7.value;
-
-          _this5.rooms.push(room);
-        }
-      } catch (err) {
-        _didIteratorError7 = true;
-        _iteratorError7 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion7 && _iterator7["return"] != null) {
-            _iterator7["return"]();
-          }
-        } finally {
-          if (_didIteratorError7) {
-            throw _iteratorError7;
           }
         }
       }

@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 
 Route::middleware('auth:api')->get('/users', 'UserController@index');
 Route::middleware('auth:api')->get('/rooms', 'ChatRoomController@index');
-Route::middleware('auth:api')->get('/rooms/{room_id}/messages', 'MessageController@index');
+Route::middleware('auth:api')->get('/rooms/{room_id}/messages/{created_at}', 'MessageController@index');
 Route::middleware('auth:api')->get('/new-messages', 'MessageController@newIndex');
 Route::middleware('auth:api')->post('/rooms/{room_id}/file', 'MessageController@fileStore');
 Route::middleware('auth:api')->post('/rooms', 'ChatRoomController@store');

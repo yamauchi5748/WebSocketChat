@@ -48,7 +48,7 @@ class ChatRoomController extends Controller
             }
 
             $room['contents'] = Chat::where('room_id', $room['id'])
-                ->take(5)
+                ->take(10)
                 ->orderBy('created_at', 'DESC')
                 ->get();
         }
@@ -109,7 +109,7 @@ class ChatRoomController extends Controller
         ];
 
         $room['contents'] = Chat::where('room_id', $room_id)
-            ->take(5)
+            ->take(10)
             ->orderBy('created_at', 'DESC')
             ->get();
         $room['users'] = User::select('users.id', 'users.name')
