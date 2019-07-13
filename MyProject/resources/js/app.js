@@ -20,7 +20,7 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('my-chat', require('./components/App.vue').default);
+Vue.component('my-chat', require('./components/LineApp.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -38,8 +38,9 @@ const app = new Vue({
       new_group_messages: [],
       new_personal_messages: [],
       timeline: [],
-      listItems: [],
-      activeItemKey: null
+      user_list: [],
+      activeItemKey: null,
+      search_key: "",
     }
   },
   methods: {
@@ -86,16 +87,16 @@ const app = new Vue({
         });
     },
     // ルームに参加すると呼ばれる
-    checkAt(room_id) {
+    checkAt() {
       axios.post("/api/check-at", {
         user_id: this.user_id,
-        room_id: room_id
+        room_id: this.now_room.id
       });
     },
     // 投稿されたメッセージがこれで呼ばれる
     recieveMessage(message) {
       // 送信者名を追加
-      message.sender_name = this.listItems.filter(user => user.id == message.sender_id)[0].name;
+      message.sender_name = this.user_list.filter(user => user.id == message.sender_id)[0].name;
 
       // 自ユーザのみ既読表示
       if (message.sender_id == this.user_id) {
@@ -178,43 +179,17 @@ const app = new Vue({
           for (let message of messages) {
             console.log("tinpooooo", message);
             // 送信者名を追加
-            for (let user of this.listItems) {
+            for (let user of this.user_list) {
               if (user.id == message.sender_id) {
                 message.sender_name = user.name;
               }
             }
             this.timeline.push(message);
           }
-          console.log(this.timeline)
-
         })
         .catch(error => {
           console.log(error)
           console.log('データの取得に失敗しました。')
-        });
-    },
-    // チャットルームのwebsocketチャンネル確立
-    connectChannel(room_id) {
-      Echo.join('room.' + room_id)
-        .here((users) => {
-          console.log("参加しました");
-        })
-        .joining((user) => {
-          console.log('入室', user.name);
-        })
-        .leaving((user) => {
-          console.log('体質', user.name);
-        })
-        .listen('MessageRecieved', (e) => {
-          this.recieveMessage(e.message);
-        });
-    },
-    connectPrivateChannel(room_id) {
-      // ルームのプライベートチャンネル接続
-      Echo.private('user.' + this.user_id + '.room.' + room_id)
-        .listen('AlreadyRead', (e) => {
-          console.log('tinpo', e.chat);
-          this.alreadyReadUpdate(e.chat);
         });
     },
     // ルーム作成
@@ -260,18 +235,32 @@ const app = new Vue({
   mounted() {
     // プライベートチャンネル接続
     Echo.private('user.' + this.user_id)
-      // ルーム作成時に受信
+      // ルーム作成イベント
       .listen('RoomRecieved', (e) => {
         console.log('roomStore', e.room);
         const room = e.room;
 
         this.rooms.unshift(room);
-        this.connectChannel(room.id);
-        this.connectPrivateChannel(room.id);
       })
-      // ルーム更新時に受信
+      // ルーム更新イベント
       .listen('RoomUpdateRecieved', (e) => {
-        console.log('roomUpdate', e.room);
+        console.log(e.room);
+        // ルーム置換
+        for (let index = 0; index < this.rooms.length; index++) {
+          if (this.rooms[index].id == e.room.id) {
+            this.rooms.splice(index, 1, e.room);
+          }
+        }
+        this.now_room = e.room;
+      })
+      //　チャット取得イベント
+      .listen('MessageRecieved', (e) => {
+        this.recieveMessage(e.message);
+      })
+      //　既読処理発生イベント
+      .listen('AlreadyRead', (e) => {
+        console.log('tinpo', e.chat);
+        this.alreadyReadUpdate(e.chat);
       });
     // ユーザー検索
     axios.get("/api/users")
@@ -279,7 +268,7 @@ const app = new Vue({
         let users = res.data
 
         for (let user of users) {
-          this.listItems.push({
+          this.user_list.push({
             id: user.id,
             name: user.name
           });
@@ -294,8 +283,6 @@ const app = new Vue({
       .then(res => {
         for (let room of res.data) {
           this.rooms.push(room);
-          this.connectChannel(room.id);
-          this.connectPrivateChannel(room.id);
         }
         this.sortRoom();
       })
@@ -307,7 +294,6 @@ const app = new Vue({
     axios.get("/api/new-messages")
       .then(res => {
         for (let key of Object.keys(res.data)) {
-          console.log(res.data[key].is_group);
           if (res.data[key].is_group) {
             this.new_group_messages.push(res.data[key]);
           } else {

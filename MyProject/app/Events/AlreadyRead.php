@@ -37,7 +37,7 @@ class AlreadyRead implements ShouldBroadcast
     public function broadcastOn()
     {
         \Log::debug($this->chat);
-        return new PrivateChannel('user.'.$this->user->id.'.room.'.$this->chat["room_id"]);
+        return new PrivateChannel('user.'.$this->user->id);
     }
 
     public function broadcastWith()

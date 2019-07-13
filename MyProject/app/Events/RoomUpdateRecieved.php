@@ -7,7 +7,6 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use App\User;
 
 class RoomUpdateRecieved implements ShouldBroadcast
 {
@@ -20,7 +19,7 @@ class RoomUpdateRecieved implements ShouldBroadcast
      *
      * @param array $message
      */
-    public function __construct(User $user, Array $room)
+    public function __construct(Array $user, Array $room)
     {
         $this->user = $user;
         $this->room = $room;
@@ -33,6 +32,8 @@ class RoomUpdateRecieved implements ShouldBroadcast
      */
     public function broadcastOn()
     {
+        \Log::debug("aaa");
+        \Log::debug($this->room);
         return new PrivateChannel('user.' . $this->user['id']);
     }
 

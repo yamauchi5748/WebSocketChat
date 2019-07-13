@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use Illuminate\Broadcasting\PresenceChannel;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -35,8 +35,7 @@ class MessageRecieved implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        \Log::debug("tinnpo");
-        return new PresenceChannel('room.'.$this->message["room_id"]);
+        return new PrivateChannel('user.'.$this->user->id);
     }
 
     public function broadcastWith()

@@ -1,10 +1,21 @@
 <template>
   <div class="room-list-filter-wrapper">
-    <input class="room-list-filter" type="text" placeholder="ルーム名" />
+    <input class="room-list-filter" type="text" v-model="search_key" :change="change()" placeholder="ルーム名" />
   </div>
 </template>
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      search_key: ""
+    };
+  },
+  methods: {
+    change(){
+      this.$root.search_key = this.search_key;
+    }
+  },
+};
 </script>
 <style scoped>
 .room-list-filter-wrapper {

@@ -90,15 +90,31 @@ class ChatRoomController extends Controller
     public function update($room_id, Request $request)
     {
 
-        $room = ChatRoom::where('id', $room_id)
+        $chat_room = ChatRoom::where('id', $room_id)
             ->first();
 
-        if (!$room->admin == Auth::id()) {
+        if (!$chat_room->admin == Auth::id()) {
             return 'timpo';
         }
 
-        $room->group_name = $request->name;
-        $room->save();
+        $chat_room->group_name = $request->name;
+        $chat_room->save();
+
+        $room = [
+            'id' => $chat_room->id,
+            'group_name' => $chat_room->group_name,
+            'is_group' => $chat_room->is_group,
+            'admin' => $chat_room->admin,
+            'created_at' => $chat_room->created_at
+        ];
+
+        $room['contents'] = Chat::where('room_id', $room_id)
+            ->take(5)
+            ->orderBy('created_at', 'DESC')
+            ->get();
+        $room['users'] = User::select('users.id', 'users.name')
+            ->whereIn('id', $request->users)
+            ->get();
 
         ChatRoomUser::where('room_id', $room_id)->delete();
         foreach ($request->users as $user) {
@@ -110,7 +126,6 @@ class ChatRoomController extends Controller
 
             broadcast(new RoomUpdateRecieved($user, $room));
         }
-        $chat_room['users'] = $request->users;
     }
 
     public function destroy($room_id)

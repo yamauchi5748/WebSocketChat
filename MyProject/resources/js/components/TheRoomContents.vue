@@ -2,18 +2,18 @@
   <div class="room">
     <the-room-contents-header></the-room-contents-header>
     <div class="room-talk">
-      <room-contents-message v-for="(message,key) in messages" :message="message" :key="key"></room-contents-message>
+      <room-contents-message v-for="(message,key) in timeLine" :key="key" :message="message"></room-contents-message>
     </div>
     <div class="input-area">
       <div class="input-item-list">
         <label class="input-img-wrapper">
           <img class="input-img-icon" src="/img/send-file.png" />
-          <input class="input-img" type="file" />
+          <input class="input-img" type="file" @change="onDrop"/>
         </label>
       </div>
       <div class="input-text-wrapper">
-        <textarea class="input-text"></textarea>
-        <img class="send-action" src="/img/send.png" />
+        <textarea class="input-text" v-model="text"></textarea>
+        <img class="send-action" src="/img/send.png" @click="send"/>
       </div>
     </div>
   </div>
@@ -25,19 +25,52 @@ export default {
   components: { TheRoomContentsHeader, RoomContentsMessage },
   data() {
     return {
-      messages: [
-        {
-          text: "unko"
-        },
-        {
-          image:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1WwD38PnpXqMBlQa4SNFgwifwPFYKylqFxD_KL5E5sXPg_g4HDw"
-        },
-        {
-          video: "./video/temp.mp4"
-        }
-      ]
-    };
+      text : '',
+      file: null
+    }
+  },
+  computed: {
+    timeLine : function(){
+      console.log()
+      return this.$root.timeline;
+    }
+  },
+  methods: {
+    onDrop: function(event) {
+      console.log("otinnnnn", event);
+      this.file = event.target.files[0];
+      this.send();
+    },
+    send() {
+      // なぜかテキストと画像は別処理
+      const sendText = this.text.trim().replace(/\n$/, "");
+      if (this.text.length <= 0) {
+        console.log("noneText");
+      } else {
+        this.text = "";
+        this.$root.postMessage({
+          type: "text",
+          body: sendText
+        });
+      }
+
+      //ファイルアップロード
+      let data = new FormData();
+
+      if (this.file && this.file.type.match("video")) {
+        data.append("video", this.file);
+      } else if (this.file && this.file.type.match("image")) {
+        data.append("image", this.file);
+      }
+      else{
+        console.log("画像なし");
+        return;
+      }
+      console.log(this.file.type);
+
+      this.$root.postFile(data);
+      this.file = null;
+    }
   }
 };
 </script>

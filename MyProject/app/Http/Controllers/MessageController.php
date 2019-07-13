@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use App\Events\MessageRecieved;
 use Carbon\Carbon;
+use App\User;
 use App\Chat;
 use App\ChatRoom;
 use App\ChatRoomUser;
@@ -69,9 +70,15 @@ class MessageController extends Controller
         Chat::create($message);
 
         $room = ChatRoom::where('id', $request->room_id)->first();
+        $room['users'] = User::select('users.id')
+            ->join('chat_room_users', 'users.id', '=', 'chat_room_users.user_id')
+            ->where('chat_room_users.room_id', $request->room_id)
+            ->get();
         $message['is_group'] = $room->is_group;
 
-        broadcast(new MessageRecieved($user, $message));
+        foreach ($room['users'] as $user) {
+            broadcast(new MessageRecieved($user, $message));
+        }
     }
 
     public function newIndex()
@@ -127,10 +134,16 @@ class MessageController extends Controller
         ];
 
         $room = ChatRoom::where('id', $room_id)->first();
+        $room['users'] = User::select('users.id')
+            ->join('chat_room_users', 'users.id', '=', 'chat_room_users.user_id')
+            ->where('chat_room_users.room_id', $request->room_id)
+            ->get();
         $chat['is_group'] = $room->is_group;
 
         Chat::create($chat);
 
-        broadcast(new MessageRecieved($user, $chat));
+        foreach ($room['users'] as $user) {
+            broadcast(new MessageRecieved($user, $chat));
+        }
     }
 }
