@@ -1,5 +1,5 @@
 const mix = require('laravel-mix');
-
+// require('laravel-mix-polyfill');
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -34,5 +34,12 @@ mix.js('resources/js/app.js', 'public/js')
       poll: true,
       ignored: /node_modules/
     }
+  })
+  /*
+  .polyfill({
+    enabled: true,
+    useBuiltIns: "usage",
+    targets: { "ie": 11 }
   });
+  */
 

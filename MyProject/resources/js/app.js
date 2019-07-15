@@ -6,8 +6,11 @@
  */
 
 require('./bootstrap');
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import router from './router';
 
-window.Vue = require('vue');
+Vue.use(VueRouter);
 
 /**
  * The following block of code may be used to automatically register your
@@ -20,7 +23,7 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('my-chat', require('./components/App.vue').default);
+Vue.component('my-chat', require('./components/LineApp.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -328,6 +331,7 @@ const app = new Vue({
         console.log(error)
         console.log('データの取得に失敗しました。')
       });
-  }
+  },
+  router
 });
 
