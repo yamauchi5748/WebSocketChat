@@ -19,9 +19,9 @@
         <slot name="content"></slot>
       </div>
       <div class="drag-container-actions">
-        <slot name="actions" :close="close"></slot>
+        <slot name="actions" :close="close" :open="open"></slot>
       </div>
-    </div>
+   </div>  
   </div>
 </template>
 <script>
@@ -52,6 +52,9 @@ export default {
   methods: {
     close() {
       this.show = false;
+    },
+    open() {
+      this.show = true;
     },
     startEventHandler(e) {
       if (!this.show) return;
