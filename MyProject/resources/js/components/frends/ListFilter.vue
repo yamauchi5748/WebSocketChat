@@ -1,9 +1,29 @@
 <template>
   <label class="wrapper-input-search">
     <img class="icon-search" src="/img/icon-search.png" />
-    <input class="input-search" placeholder="名前で検索" type="text" />
+    <input
+      class="input-search"
+      placeholder="名前で検索"
+      type="text"
+      v-model="search_key"
+      :change="change()"
+    />
   </label>
 </template>
+<<script>
+export default {
+  data() {
+    return {
+      search_key: ""
+    };
+  },
+  methods: {
+    change(){
+      this.$root.search_key = this.search_key;
+    }
+  }
+}
+</script>>
 <style>
 .wrapper-input-search {
   display: flex;

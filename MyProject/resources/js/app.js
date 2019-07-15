@@ -35,7 +35,7 @@ const app = new Vue({
   el: '#app',
   data() {
     return {
-      user_id: null,
+      user: null,
       now_room: null,
       rooms: [],
       new_group_messages: [],
@@ -67,7 +67,7 @@ const app = new Vue({
     // テキスト投稿
     postMessage(text) {
       axios.post("/api/message", {
-        user_id: this.user_id,
+        user_id: this.user.id,
         room_id: this.now_room.id,
         text
       });
@@ -87,7 +87,7 @@ const app = new Vue({
     // ルームに参加すると呼ばれる
     checkAt() {
       axios.post("/api/check-at", {
-        user_id: this.user_id,
+        user_id: this.user.id,
         room_id: this.now_room.id
       });
     },
@@ -97,7 +97,7 @@ const app = new Vue({
       message.sender_name = this.user_list.filter(user => user.id == message.sender_id)[0].name;
 
       // 自ユーザのみ既読表示
-      if (message.sender_id == this.user_id) {
+      if (message.sender_id == this.user.id) {
         message.already_read = this.now_room.is_group ? 0 : false;
       };
 
@@ -186,12 +186,11 @@ const app = new Vue({
       for(let user of join_users){
         users.push(user);
       }
-      admin = is_group ? this.user_id : null;
       axios.post("/api/rooms", {
         join_users: users,
         is_group: is_group,
         group_name: group_name,
-        admin: admin
+        admin: is_group ? this.user.id : null
       })
         .then(res => {
           console.log("しました");
@@ -215,7 +214,7 @@ const app = new Vue({
     },
     // ルーム退出
     exitRoom() {
-      axios.delete("api/rooms/" + this.now_room.id + "/users/" + this.user_id)
+      axios.delete("api/rooms/" + this.now_room.id + "/users/" + this.user.id)
         .then(res => {
           console.log("退出しました", res.data);
           this.rooms = res.data;
@@ -228,7 +227,7 @@ const app = new Vue({
   },
   mounted() {
     // プライベートチャンネル接続
-    Echo.private('user.' + this.user_id)
+    Echo.private('user.' + this.user.id)
       // ルーム作成イベント
       .listen('RoomRecieved', (e) => {
         console.log('roomStore', e.room);

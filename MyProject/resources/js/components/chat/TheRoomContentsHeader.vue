@@ -48,7 +48,7 @@ export default {
   methods: {
     roomExit() {
       let text = null;
-      if (this.$root.user_id == this.$root.now_room.admin) {
+      if (this.$root.user.id == this.$root.now_room.admin) {
         text = "管理者が退出するとルームが削除されますが退出しますか？";
       } else {
         text = "ルームから退出しますか？";

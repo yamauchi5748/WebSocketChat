@@ -33,7 +33,7 @@ export default {
     timeLine: function() {
       if (this.$root.now_room) {
         console.log(this.$root.now_room.contents);
-        console.log(this.$root.user_id);
+        console.log(this.$root.user.id);
         return this.$root.now_room.contents;
       }
       return false;

@@ -66,7 +66,7 @@ export default {
   },
   computed: {
     userList() {
-      return this.$root.user_list.filter(user => user.id != this.$root.user_id);
+      return this.$root.user_list.filter(user => user.id != this.$root.user.id);
     }
   },
   methods: {
@@ -75,7 +75,7 @@ export default {
         console.log("値を入力してください");
         return;
       }
-      this.join_users.push(this.$root.user_id);
+      this.join_users.push(this.$root.user.id);
       this.$root.addRoom(this.join_users, true, this.group_name);
       this.join_users.splice(0);
       this.group_name = "";

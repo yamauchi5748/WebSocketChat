@@ -11,10 +11,11 @@ export default {
     TheGlobalNavigation
   },
   props : {
-    user_id : String
+    user : String
   },
   mounted() {
-    this.$root.user_id = this.user_id;
+    this.$root.user = JSON.parse(this.user);
+    console.log(this.$root.user);
   },
 };
 </script>

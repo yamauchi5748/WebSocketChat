@@ -29,7 +29,7 @@ export default {
   },
   computed: {
     isAite() {
-      return this.message.sender_id != this.$root.user_id;
+      return this.message.sender_id != this.$root.user.id;
     }
   },
   mounted() {

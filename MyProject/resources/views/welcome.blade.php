@@ -10,7 +10,7 @@
 <body>
     <div id="app" class="container-fluid">
         <my-chat
-            :user_id="'{{ $user->id }}'"
+            :user="'{{ $user }}'"
         ></my-chat>
     </div>
     <script>

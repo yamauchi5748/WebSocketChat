@@ -2,45 +2,47 @@
   <div class="page-frends">
     <list-filter class="filter"></list-filter>
     <div class="wrapper-list-accordion">
-      <accordion class="list-accordion-item">
+      <accordion class="list-accordion-item" v-if="!$root.search_key">
         <template #header="methods">
           <div @click="methods.changeShow" class="header-accordion">プロフィール</div>
         </template>
         <template #contents>
           <div class="contents-accordion">
-            <div v-for="key in 1" :key="key" class="list-item">
+            <div class="list-item">
               <img class="icon-item-img" src="/img/profile.jpg" />
-              <span class="name-item">ユーザー名</span>
+              <!-- ユーザーが存在すれば表示 -->
+              <span class="name-item" v-if="$root.user">{{ $root.user.name }}</span>
             </div>
           </div>
         </template>
       </accordion>
-      <accordion class="list-accordion-item">
+      <accordion class="list-accordion-item" v-if="roomList.length > 0">
         <template #header="methods">
-          <div @click="methods.changeShow" class="header-accordion">グループ</div>
+          <div @click="methods.changeShow" class="header-accordion">グループ({{ roomList.length }})</div>
         </template>
         <template #contents>
           <div class="contents-accordion">
-            <div v-for="key in 15" :key="key" class="list-item">
+            <div v-for="(room, key) in roomList" :key="key" :room="room" class="list-item">
               <img class="icon-item-img" src="/img/profile.jpg" />
-              <span class="name-item">グループ名</span>
+              <span class="name-item">{{ room.group_name }}</span>
             </div>
           </div>
         </template>
       </accordion>
-      <accordion class="list-accordion-item">
+      <accordion class="list-accordion-item" v-if="userList.length > 0">
         <template #header="methods">
-          <div @click="methods.changeShow" class="header-accordion">友だち</div>
+          <div @click="methods.changeShow" class="header-accordion">友だち({{ userList.length }})</div>
         </template>
         <template #contents>
           <div class="contents-accordion">
-            <div v-for="key in 120" :key="key" class="list-item">
-              <img class="icon-item-img" src="/img/profile.jpg" />
-              <span class="name-item">ユーザー名</span>
+            <div v-for="(user, key) in userList" :key="key" :user="user" class="list-item">
+              <img class="icon-item-img" :src="'/storage/images/' + user.id  + '.jpg'" />
+              <span class="name-item">{{ user.name }}</span>
             </div>
           </div>
         </template>
       </accordion>
+      <div v-show="!(roomList.length && userList.length)">表示結果がありません</div>
     </div>
   </div>
 </template>
@@ -48,7 +50,29 @@
 import ListFilter from "./frends/ListFilter.vue";
 import Accordion from "./Accordion.vue";
 export default {
-  components: { ListFilter, Accordion }
+  components: { ListFilter, Accordion },
+  computed: {
+    roomList: function() {
+      return this.$root.rooms.filter(room => {
+        if (room.is_group) {
+          return room.group_name.indexOf(this.$root.search_key) != -1;
+        } else {
+          return null;
+        }
+      });
+    },
+    userList: function(){
+      return this.$root.user_list.filter(user => {
+        return user.name.indexOf(this.$root.search_key) != -1;
+      });
+    },
+    existsListItems() {
+      if (this.roomList.length == 0) {
+        return false;
+      }
+      return true;
+    }
+  }
 };
 </script>
 <style scoped>
