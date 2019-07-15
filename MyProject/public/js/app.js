@@ -2100,6 +2100,33 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     ListFilter: _frends_ListFilter_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
     Accordion: _Accordion_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
+  computed: {
+    roomList: function roomList() {
+      var _this = this;
+
+      return this.$root.rooms.filter(function (room) {
+        if (room.is_group) {
+          return room.group_name.indexOf(_this.$root.search_key) != -1;
+        } else {
+          return null;
+        }
+      });
+    },
+    userList: function userList() {
+      var _this2 = this;
+
+      return this.$root.user_list.filter(function (user) {
+        return user.name.indexOf(_this2.$root.search_key) != -1;
+      });
+    },
+    existsListItems: function existsListItems() {
+      if (this.roomList.length == 0) {
+        return false;
+      }
+
+      return true;
+    }
   }
 });
 
@@ -2603,6 +2630,42 @@ __webpack_require__.r(__webpack_exports__);
     return {
       image: "data:image/jpeg;base64,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"
     };
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/frends/ListFilter.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/frends/ListFilter.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      search_key: ""
+    };
+  },
+  methods: {
+    change: function change() {
+      this.$root.search_key = this.search_key;
+    }
   }
 });
 
@@ -49316,27 +49379,18 @@ var render = function() {
                 key: "contents",
                 fn: function() {
                   return [
-                    _c(
-                      "div",
-                      { staticClass: "contents-accordion" },
-                      _vm._l(1, function(key) {
-                        return _c(
-                          "div",
-                          { key: key, staticClass: "list-item" },
-                          [
-                            _c("img", {
-                              staticClass: "icon-item-img",
-                              attrs: { src: "/img/profile.jpg" }
-                            }),
-                            _vm._v(" "),
-                            _c("span", { staticClass: "name-item" }, [
-                              _vm._v("ユーザー名")
-                            ])
-                          ]
-                        )
-                      }),
-                      0
-                    )
+                    _c("div", { staticClass: "contents-accordion" }, [
+                      _c("div", { staticClass: "list-item" }, [
+                        _c("img", {
+                          staticClass: "icon-item-img",
+                          attrs: { src: "/img/profile.jpg" }
+                        }),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "name-item" }, [
+                          _vm._v(_vm._s(_vm.$root.user_id))
+                        ])
+                      ])
+                    ])
                   ]
                 },
                 proxy: true
@@ -49369,10 +49423,14 @@ var render = function() {
                     _c(
                       "div",
                       { staticClass: "contents-accordion" },
-                      _vm._l(15, function(key) {
+                      _vm._l(_vm.roomList, function(room, key) {
                         return _c(
                           "div",
-                          { key: key, staticClass: "list-item" },
+                          {
+                            key: key,
+                            staticClass: "list-item",
+                            attrs: { room: room }
+                          },
                           [
                             _c("img", {
                               staticClass: "icon-item-img",
@@ -49380,7 +49438,7 @@ var render = function() {
                             }),
                             _vm._v(" "),
                             _c("span", { staticClass: "name-item" }, [
-                              _vm._v("グループ名")
+                              _vm._v(_vm._s(room.group_name))
                             ])
                           ]
                         )
@@ -49419,18 +49477,24 @@ var render = function() {
                     _c(
                       "div",
                       { staticClass: "contents-accordion" },
-                      _vm._l(120, function(key) {
+                      _vm._l(_vm.userList, function(user, key) {
                         return _c(
                           "div",
-                          { key: key, staticClass: "list-item" },
+                          {
+                            key: key,
+                            staticClass: "list-item",
+                            attrs: { user: user }
+                          },
                           [
                             _c("img", {
                               staticClass: "icon-item-img",
-                              attrs: { src: "/img/profile.jpg" }
+                              attrs: {
+                                src: "/storage/images/" + user.id + ".jpg"
+                              }
                             }),
                             _vm._v(" "),
                             _c("span", { staticClass: "name-item" }, [
-                              _vm._v("ユーザー名")
+                              _vm._v(_vm._s(user.name))
                             ])
                           ]
                         )
@@ -50001,26 +50065,36 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("label", { staticClass: "wrapper-input-search" }, [
+    _c("img", {
+      staticClass: "icon-search",
+      attrs: { src: "/img/icon-search.png" }
+    }),
+    _vm._v(" "),
+    _c("input", {
+      directives: [
+        {
+          name: "model",
+          rawName: "v-model",
+          value: _vm.search_key,
+          expression: "search_key"
+        }
+      ],
+      staticClass: "input-search",
+      attrs: { placeholder: "名前で検索", type: "text", change: _vm.change() },
+      domProps: { value: _vm.search_key },
+      on: {
+        input: function($event) {
+          if ($event.target.composing) {
+            return
+          }
+          _vm.search_key = $event.target.value
+        }
+      }
+    })
+  ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("label", { staticClass: "wrapper-input-search" }, [
-      _c("img", {
-        staticClass: "icon-search",
-        attrs: { src: "/img/icon-search.png" }
-      }),
-      _vm._v(" "),
-      _c("input", {
-        staticClass: "input-search",
-        attrs: { placeholder: "名前で検索", type: "text" }
-      })
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -64975,7 +65049,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: '#app',
   data: function data() {
     return {
-      user_id: null,
+      user: null,
       now_room: null,
       rooms: [],
       new_group_messages: [],
@@ -66596,17 +66670,19 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ListFilter_vue_vue_type_template_id_7afc5fc6___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ListFilter.vue?vue&type=template&id=7afc5fc6& */ "./resources/js/components/frends/ListFilter.vue?vue&type=template&id=7afc5fc6&");
-/* harmony import */ var _ListFilter_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ListFilter.vue?vue&type=style&index=0&lang=css& */ "./resources/js/components/frends/ListFilter.vue?vue&type=style&index=0&lang=css&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony import */ var _ListFilter_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ListFilter.vue?vue&type=script&lang=js& */ "./resources/js/components/frends/ListFilter.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _ListFilter_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ListFilter.vue?vue&type=style&index=0&lang=css& */ "./resources/js/components/frends/ListFilter.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
-var script = {}
+
+
 
 
 
 /* normalize component */
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  script,
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _ListFilter_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
   _ListFilter_vue_vue_type_template_id_7afc5fc6___WEBPACK_IMPORTED_MODULE_0__["render"],
   _ListFilter_vue_vue_type_template_id_7afc5fc6___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
@@ -66620,6 +66696,20 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 if (false) { var api; }
 component.options.__file = "resources/js/components/frends/ListFilter.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/frends/ListFilter.vue?vue&type=script&lang=js&":
+/*!********************************************************************************!*\
+  !*** ./resources/js/components/frends/ListFilter.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ListFilter_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./ListFilter.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/frends/ListFilter.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ListFilter_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 

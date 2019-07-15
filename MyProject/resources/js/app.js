@@ -35,7 +35,7 @@ const app = new Vue({
   el: '#app',
   data() {
     return {
-      user_id: null,
+      user: null,
       now_room: null,
       rooms: [],
       new_group_messages: [],
