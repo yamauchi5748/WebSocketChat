@@ -1,26 +1,33 @@
 <template>
-  <div class="room-talk-item">
+  <div class="room-talk-item" :class="{aite:isAite}">
     <span class="room-contents-message-information">
-      <span class="room-contents-message-already-read">既読数</span>
-      <span class="room-contents-message-date">投稿日時</span>
+      <span class="room-contents-message-already-read">{{ message.already_read }}</span>
+      <span class="room-contents-message-date">{{ message.created_at }}</span>
     </span>
-    <div class="room-talk-item-text" v-if="message.text">{{message.text}}</div>
-    <img class="room-talk-item-image" v-else-if="message.image" :src="message.image" />
-    <video class="room-talk-item-video" v-else-if="message.video" :src="message.video" controls></video>
+    <div class="room-talk-item-text" v-if="message.content_type == 'text'" :class="{aitetext:isAite}">{{ message.message }}</div>
+    <img class="room-talk-item-image" v-else-if="message.content_type == 'image'" :src="message.image" />
+    <video class="room-talk-item-video" v-else-if="message.content_type == 'video'" :src="message.video" controls></video>
   </div>
 </template>
 <script>
 export default {
   props: {
     message: Object
+  },
+  computed: {
+    isAite(){
+      console.log('unti', this.message.sender_id == this.$root.user_id);
+      return this.message.sender_id != this.$root.user_id;
+    }
   }
 };
 </script>
 <style>
+
 .room-talk-item {
   display: flex;
-  flex-direction: row;
   justify-content: flex-end;
+  flex-direction: row;
   font-size: 1.2rem;
   margin: 16px;
 }
@@ -40,8 +47,13 @@ export default {
   display: inline-flex;
   margin: 0 6px;
   flex-direction: column;
-  font-size: 0.4rem;
-  color: silver;
+  font-size: 0.8rem;
+}
+.aite{
+  flex-direction: row-reverse;
+}
+.aitetext{
+  background-color: ghostwhite;
 }
 </style>
 

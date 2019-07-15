@@ -2,9 +2,7 @@
 
 namespace App\Events;
 
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -39,7 +37,7 @@ class AlreadyRead implements ShouldBroadcast
     public function broadcastOn()
     {
         \Log::debug($this->chat);
-        return new PrivateChannel('user.'.$this->user->id.'.room.'.$this->chat["room_id"]);
+        return new PrivateChannel('user.'.$this->user->id);
     }
 
     public function broadcastWith()

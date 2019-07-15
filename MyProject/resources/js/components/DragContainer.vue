@@ -1,5 +1,4 @@
 <template>
-  <!--
   <div>
     <div v-on:click.stop="show=true">
       <slot name="button"></slot>
@@ -23,12 +22,6 @@
         <slot name="actions" :close="close" :open="open"></slot>
       </div>
    </div>  
-  </div>
-  -->
-  <div ref="drag" class="drag-container">
-    <slot name="contents" :grip="startEventHandler">
-      testtest
-    </slot>
   </div>
 </template>
 <script>

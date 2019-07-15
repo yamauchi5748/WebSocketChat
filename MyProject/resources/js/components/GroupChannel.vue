@@ -13,7 +13,7 @@
           <button
             id="group-exit"
             class="btn btn-primary btn-lg exit"
-            v-if="$root.now_room"
+            v-if="$root.now_room && $root.now_room.is_group"
             @click="roomExit()"
           >退出</button>
         </div>
@@ -236,6 +236,8 @@ export default {
       }
       if (confirm(text)) {
         this.$root.exitRoom();
+        this.$root.clearTimeline();
+        this.$root.now_room = null;
         this.label = "グループを選択してください▿";
       } else {
         console.log("キャンセル");

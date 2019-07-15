@@ -1,17 +1,83 @@
 <template>
-  <div class="room-list-item">
+  <div class="room-list-item" @click="action(room)">
     <div class="room-list-item-information-left">
-      <span class="room-list-item-name">ルーム名</span>
-      <span class="latest-content">DDSK</span>
+      <span class="room-list-item-name" v-if="room.is_group">{{ room.group_name }}</span>
+      <span
+        class="room-list-item-name"
+        v-if="!room.is_group && room.users[1]"
+      >{{ room.users[1].name }}</span>
+      <span
+        class="latest-content"
+        v-if="content && content.content_type == 'text'"
+      >{{ content.message }}</span>
+      <span
+        class="latest-content"
+        v-if="content && content.content_type == 'image'"
+      >send an image</span>
+      <span
+        class="latest-content"
+        v-if="content && content.content_type == 'video'"
+      >send a video</span>
     </div>
     <div class="room-list-item-information-right">
-      <span class="update-date">午後 12:34</span>
-      <span class="room-list-item-unread">3</span>
+      <span class="update-date" v-if="content">{{ content.created_at }}</span>
+      <span
+        class="room-list-item-unread"
+        :id="'badge-' + index"
+        v-if="badgeChecker(index, room.is_group)"
+      >{{ badge_counter[index] }}</span>
     </div>
   </div>
 </template>
 <script>
-export default {};
+export default {
+  props: {
+    room: Object,
+    index: Number
+  },
+  data() {
+    return {
+      activeItemKey: null,
+      badge_counter: []
+    };
+  },
+  computed: {
+    content: function() {
+      const contents = this.room.contents;
+      return contents[contents.length-1];
+    }
+  },
+  methods: {
+    badgeChecker(index, is_group) {
+      let badge = document.getElementById("badge-" + index);
+      let counter = 0;
+      if (is_group) {
+        for (let message of this.$root.new_group_messages) {
+          if (message.room_id == this.$root.rooms[index].id) {
+            counter++;
+          }
+        }
+      } else {
+        for (let message of this.$root.new_personal_messages) {
+          if (message.room_id == this.$root.rooms[index].id) {
+            counter++;
+          }
+        }
+      }
+      this.badge_counter[index] = counter;
+      if (counter > 0) {
+        return true;
+      }
+      return false;
+    },
+    action(room) {
+      this.$root.now_room = room;
+      this.$root.getMessages();
+      this.$root.newMessageUpdate();
+      this.$root.checkAt();
+    }
+  }
+};
 </script>
 <style>
 .room-list-item {
@@ -39,14 +105,14 @@ export default {};
   color: gray;
 }
 .room-list-item-information-right {
-  flex: 0 0 80px;
+  flex: 0 0 100px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
 }
 .update-date {
-  font-size: 0.8rem;
+  font-size: 0.6rem;
   text-align: right;
   color: gray;
 }

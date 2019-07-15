@@ -8,28 +8,40 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use App\Events\MessageRecieved;
 use Carbon\Carbon;
+use App\User;
 use App\Chat;
 use App\ChatRoom;
 use App\ChatRoomUser;
 
 class MessageController extends Controller
 {
-    public function index($room_id)
+    public function index($room_id, $created_at)
     {
-        $room_users = ChatRoomUser::where('room_id', $room_id)->get();
+        $room_users = ChatRoomUser::select('chat_room_users.user_id', 'chat_room_users.room_id', 'users.name')
+            ->join('users', 'chat_room_users.user_id', 'users.id')
+            ->where('room_id', $room_id)
+            ->get();
         $room = ChatRoom::where('id', $room_id)->first();
-        $messages = Chat::where('room_id', $room_id)->get();
+
+        if (!$created_at) {
+            return [];
+        }
+        $messages = Chat::where('room_id', $room_id)
+            ->where('created_at', '<', $created_at)
+            ->orderBy('created_at', 'DESC')
+            ->get();
 
 
         // 既読数カウント
         foreach ($messages as $message) {
             // 自ユーザ以外は既読処理しない
             if ($message['sender_id'] != Auth::user()->id) {
+                $message['sender_name'] = Auth::user()->name;
                 continue;
             };
             $already_read = $room->is_group ? 0 : false;
-            \Log::debug($message);
             foreach ($room_users as $room_user) {
+                $message['sender_name'] = $room_user->name;
                 // 自ユーザは省く
                 if ($room_user->user_id == Auth::user()->id) {
                     continue;
@@ -69,9 +81,15 @@ class MessageController extends Controller
         Chat::create($message);
 
         $room = ChatRoom::where('id', $request->room_id)->first();
+        $room['users'] = User::select('users.id')
+            ->join('chat_room_users', 'users.id', '=', 'chat_room_users.user_id')
+            ->where('chat_room_users.room_id', $request->room_id)
+            ->get();
         $message['is_group'] = $room->is_group;
 
-        broadcast(new MessageRecieved($user, $message));
+        foreach ($room['users'] as $user) {
+            broadcast(new MessageRecieved($user, $message));
+        }
     }
 
     public function newIndex()
@@ -102,7 +120,7 @@ class MessageController extends Controller
         $user = Auth::user();
         $uuid = (string) Str::uuid();
         $now = (string) Carbon::now();
-        $content_type;
+        $content_type = 'image';
 
         \Log::debug($request->file('image'));
         if ($request->file('image')) {
@@ -127,10 +145,16 @@ class MessageController extends Controller
         ];
 
         $room = ChatRoom::where('id', $room_id)->first();
+        $room['users'] = User::select('users.id')
+            ->join('chat_room_users', 'users.id', '=', 'chat_room_users.user_id')
+            ->where('chat_room_users.room_id', $request->room_id)
+            ->get();
         $chat['is_group'] = $room->is_group;
 
         Chat::create($chat);
 
-        broadcast(new MessageRecieved($user, $chat));
+        foreach ($room['users'] as $user) {
+            broadcast(new MessageRecieved($user, $chat));
+        }
     }
 }

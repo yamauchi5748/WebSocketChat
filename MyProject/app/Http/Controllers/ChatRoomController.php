@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use App\Events\Alreadyread;
+use App\Events\RoomRecieved;
+use App\Events\RoomUpdateRecieved;
 use App\User;
 use App\Chat;
 use App\ChatRoom;
@@ -46,7 +48,7 @@ class ChatRoomController extends Controller
             }
 
             $room['contents'] = Chat::where('room_id', $room['id'])
-                ->take(5)
+                ->take(10)
                 ->orderBy('created_at', 'DESC')
                 ->get();
         }
@@ -65,10 +67,14 @@ class ChatRoomController extends Controller
             'group_name' => $request->group_name,
             'is_group' => $request->is_group,
             'admin' => $admin,
-            'created_at' => Carbon::now()
+            'created_at' => (string) Carbon::now()
         ];
 
         ChatRoom::create($room);
+        $room['contents'] = [];
+        $room['users'] = User::select('users.id', 'users.name')
+            ->whereIn('id', $request->join_users)
+            ->get();
 
         foreach ($request->join_users as $user_id) {
             ChatRoomUser::create([
@@ -76,15 +82,9 @@ class ChatRoomController extends Controller
                 'user_id' => $user_id,
                 'checked_at' => Carbon::now()
             ]);
+            $user = User::where('id', $user_id)->first();
+            broadcast(new RoomRecieved($user, $room));
         }
-
-        $room['contents'] = [];
-        $room['users'] = User::select('users.id', 'users.name')
-            ->join('chat_room_users', 'users.id', '=', 'chat_room_users.user_id')
-            ->where('chat_room_users.room_id', $uuid)
-            ->get();
-
-        return $room;
     }
 
     public function update($room_id, Request $request)
@@ -100,6 +100,22 @@ class ChatRoomController extends Controller
         $chat_room->group_name = $request->name;
         $chat_room->save();
 
+        $room = [
+            'id' => $chat_room->id,
+            'group_name' => $chat_room->group_name,
+            'is_group' => $chat_room->is_group,
+            'admin' => $chat_room->admin,
+            'created_at' => $chat_room->created_at
+        ];
+
+        $room['contents'] = Chat::where('room_id', $room_id)
+            ->take(10)
+            ->orderBy('created_at', 'DESC')
+            ->get();
+        $room['users'] = User::select('users.id', 'users.name')
+            ->whereIn('id', $request->users)
+            ->get();
+
         ChatRoomUser::where('room_id', $room_id)->delete();
         foreach ($request->users as $user) {
             ChatRoomUser::create([
@@ -107,10 +123,9 @@ class ChatRoomController extends Controller
                 'user_id' => $user['id'],
                 'checked_at' => Carbon::now()
             ]);
-        }
-        $chat_room['users'] = $request->users;
 
-        return $chat_room;
+            broadcast(new RoomUpdateRecieved($user, $room));
+        }
     }
 
     public function destroy($room_id)
