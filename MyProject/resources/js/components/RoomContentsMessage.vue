@@ -4,9 +4,22 @@
       <span class="room-contents-message-already-read">{{ message.already_read }}</span>
       <span class="room-contents-message-date">{{ message.created_at }}</span>
     </span>
-    <div class="room-talk-item-text" v-if="message.content_type == 'text'" :class="{aitetext:isAite}">{{ message.message }}</div>
-    <img class="room-talk-item-image" v-else-if="message.content_type == 'image'" :src="message.image" />
-    <video class="room-talk-item-video" v-else-if="message.content_type == 'video'" :src="message.video" controls></video>
+    <div
+      class="room-talk-item-text"
+      v-if="message.content_type == 'text'"
+      :class="{aitetext:isAite}"
+    >{{ message.message }}</div>
+    <img
+      class="room-talk-item-image"
+      v-else-if="message.content_type == 'image'"
+      :src="message.image"
+    />
+    <video
+      class="room-talk-item-video"
+      v-else-if="message.content_type == 'video'"
+      :src="message.video"
+      controls
+    ></video>
   </div>
 </template>
 <script>
@@ -15,15 +28,18 @@ export default {
     message: Object
   },
   computed: {
-    isAite(){
-      console.log('unti', this.message.sender_id == this.$root.user_id);
+    isAite() {
       return this.message.sender_id != this.$root.user_id;
     }
+  },
+  mounted() {
+    //** */ スクロールを最下部にする **//
+    var obj = this.$parent.$el.children[1];//スクロールオブジェクト取得
+    obj.scrollTop = obj.scrollHeight;
   }
 };
 </script>
 <style>
-
 .room-talk-item {
   display: flex;
   justify-content: flex-end;
@@ -38,6 +54,7 @@ export default {
 .room-talk-item-text {
   padding: 6px 10px;
   word-wrap: break-word;
+  white-space: normal; /*指定widthに合わせて、文字を自動的に改行*/
   border-radius: 15px;
   background-color: lawngreen;
 }
@@ -49,10 +66,10 @@ export default {
   flex-direction: column;
   font-size: 0.8rem;
 }
-.aite{
+.aite {
   flex-direction: row-reverse;
 }
-.aitetext{
+.aitetext {
   background-color: ghostwhite;
 }
 </style>

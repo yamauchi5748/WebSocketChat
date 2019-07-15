@@ -179,13 +179,20 @@ const app = new Vue({
     },
     // ルーム作成
     addRoom(join_users, is_group, group_name) {
+      let users = [];
+      for(let user of join_users){
+        users.push(user);
+      }
       admin = is_group ? this.user_id : null;
       axios.post("/api/rooms", {
-        join_users: join_users,
+        join_users: users,
         is_group: is_group,
         group_name: group_name,
         admin: admin
       })
+        .then(res => {
+          console.log("しました");
+        })
         .catch(error => {
           console.log(error)
           console.log('データの取得に失敗しました。')
@@ -197,7 +204,6 @@ const app = new Vue({
         .then(res => {
           console.log("削除しました");
           this.rooms = res.data;
-          this.clearTimeline();
         })
         .catch(error => {
           console.log(error)

@@ -1,5 +1,6 @@
 <template>
   <div class="room-list-item" @click="action(room)">
+    <img class="user-list-item-profile-img" :src="'storage/images/' + room.users[1].id + '.jpg'" v-if="!room.is_group" />
     <div class="room-list-item-information-left">
       <span class="room-list-item-name" v-if="room.is_group">{{ room.group_name }}</span>
       <span
@@ -10,14 +11,8 @@
         class="latest-content"
         v-if="content && content.content_type == 'text'"
       >{{ content.message }}</span>
-      <span
-        class="latest-content"
-        v-if="content && content.content_type == 'image'"
-      >send an image</span>
-      <span
-        class="latest-content"
-        v-if="content && content.content_type == 'video'"
-      >send a video</span>
+      <span class="latest-content" v-if="content && content.content_type == 'image'">send an image</span>
+      <span class="latest-content" v-if="content && content.content_type == 'video'">send a video</span>
     </div>
     <div class="room-list-item-information-right">
       <span class="update-date" v-if="content">{{ content.created_at }}</span>
@@ -44,7 +39,7 @@ export default {
   computed: {
     content: function() {
       const contents = this.room.contents;
-      return contents[contents.length-1];
+      return contents[contents.length - 1];
     }
   },
   methods: {
@@ -103,6 +98,10 @@ export default {
 }
 .latest-content {
   color: gray;
+  width: 7em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .room-list-item-information-right {
   flex: 0 0 100px;
@@ -127,5 +126,12 @@ export default {
   background-color: limegreen;
   font-size: 1rem;
   border-radius: 2rem;
+}
+.user-list-item-profile-img {
+  max-width: 48px;
+  border-radius: 50%;
+  flex: 0 0 48px;
+  height: 48px;
+  user-select: none;
 }
 </style>

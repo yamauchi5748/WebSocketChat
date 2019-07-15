@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class RegisterController extends Controller
@@ -54,6 +55,7 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
+            'profile-image' => ['required', 'image'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:6', 'confirmed']
         ]);
@@ -68,6 +70,9 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $my_uuid = (string) Str::uuid();
+        Storage::putFileAs(
+            'public/images', $data['profile-image'], $my_uuid . '.jpg'
+        );
         $my_user = User::create([
             'id' => $my_uuid,
             'name' => $data['name'],
@@ -87,7 +92,6 @@ class RegisterController extends Controller
                 'created_at' => Carbon::now()
             ];
 
-            \Log::debug($user->id);
             ChatRoom::create($room);
             ChatRoomUser::create([
                 'room_id' => $room['id'],

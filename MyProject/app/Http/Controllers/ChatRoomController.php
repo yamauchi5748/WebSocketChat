@@ -58,6 +58,7 @@ class ChatRoomController extends Controller
 
     public function store(Request $request)
     {
+        \Log::debug($request->join_users);
         $admin = null;
         $request->is_group ? $admin = Auth::id() : null;
 
@@ -76,6 +77,7 @@ class ChatRoomController extends Controller
             ->whereIn('id', $request->join_users)
             ->get();
 
+        \Log::debug($request->join_users);
         foreach ($request->join_users as $user_id) {
             ChatRoomUser::create([
                 'room_id' => $room['id'],

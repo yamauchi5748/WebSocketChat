@@ -1922,6 +1922,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 
@@ -1941,7 +1943,8 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       image: "data:image/jpeg;base64,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",
-      join_users: []
+      join_users: [],
+      group_name: ""
     };
   },
   mounted: function mounted() {
@@ -1949,12 +1952,24 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     userList: function userList() {
-      return this.$root.user_list;
+      var _this = this;
+
+      return this.$root.user_list.filter(function (user) {
+        return user.id != _this.$root.user_id;
+      });
     }
   },
   methods: {
-    test: function test() {
-      console.log(this.join_users);
+    create: function create() {
+      if (this.group_name.length == 0) {
+        console.log("値を入力してください");
+        return;
+      }
+
+      this.join_users.push(this.$root.user_id);
+      this.$root.addRoom(this.join_users, true, this.group_name);
+      this.join_users.splice(0);
+      this.group_name = "";
     }
   }
 });
@@ -1981,15 +1996,33 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     message: Object
   },
   computed: {
     isAite: function isAite() {
-      console.log('unti', this.message.sender_id == this.$root.user_id);
       return this.message.sender_id != this.$root.user_id;
     }
+  },
+  mounted: function mounted() {
+    //** */ スクロールを最下部にする **//
+    var obj = this.$parent.$el.children[1]; //スクロールオブジェクト取得
+
+    obj.scrollTop = obj.scrollHeight;
   }
 });
 
@@ -2004,11 +2037,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
 //
 //
 //
@@ -9424,7 +9452,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.room-talk-item {\r\n  display: flex;\r\n  justify-content: flex-end;\r\n  flex-direction: row;\r\n  font-size: 1.2rem;\r\n  margin: 16px;\n}\n.room-talk-item * {\r\n  display: inline-block;\r\n  max-width: 350px;\n}\n.room-talk-item-text {\r\n  padding: 6px 10px;\r\n  word-wrap: break-word;\r\n  border-radius: 15px;\r\n  background-color: lawngreen;\n}\n.room-contents-message-information {\r\n  align-self: flex-end;\r\n\r\n  display: inline-flex;\r\n  margin: 0 6px;\r\n  flex-direction: column;\r\n  font-size: 0.8rem;\n}\n.aite{\r\n  flex-direction: row-reverse;\n}\n.aitetext{\r\n  background-color: ghostwhite;\n}\r\n", ""]);
+exports.push([module.i, "\n.room-talk-item {\r\n  display: flex;\r\n  justify-content: flex-end;\r\n  flex-direction: row;\r\n  font-size: 1.2rem;\r\n  margin: 16px;\n}\n.room-talk-item * {\r\n  display: inline-block;\r\n  max-width: 350px;\n}\n.room-talk-item-text {\r\n  padding: 6px 10px;\r\n  word-wrap: break-word;\r\n  white-space: normal; /*指定widthに合わせて、文字を自動的に改行*/\r\n  border-radius: 15px;\r\n  background-color: lawngreen;\n}\n.room-contents-message-information {\r\n  align-self: flex-end;\r\n\r\n  display: inline-flex;\r\n  margin: 0 6px;\r\n  flex-direction: column;\r\n  font-size: 0.8rem;\n}\n.aite {\r\n  flex-direction: row-reverse;\n}\n.aitetext {\r\n  background-color: ghostwhite;\n}\r\n", ""]);
 
 // exports
 
@@ -9443,7 +9471,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.room-list-item {\r\n  width: 100%;\r\n  height: 80px;\r\n  padding: 10px;\r\n  display: flex;\r\n  align-items: stretch;\r\n  -webkit-user-select: none;\r\n     -moz-user-select: none;\r\n      -ms-user-select: none;\r\n          user-select: none;\n}\n.room-list-item:hover {\r\n  background-color: whitesmoke;\n}\n.room-list-item-information-left {\r\n  flex: 1 1;\r\n\r\n  display: flex;\r\n  flex-direction: column;\r\n  align-items: stretch;\n}\n.room-list-item-name {\r\n  font-weight: bold;\n}\n.latest-content {\r\n  color: gray;\n}\n.room-list-item-information-right {\r\n  flex: 0 0 100px;\r\n  display: flex;\r\n  flex-direction: column;\r\n  justify-content: flex-start;\r\n  align-items: stretch;\n}\n.update-date {\r\n  font-size: 0.6rem;\r\n  text-align: right;\r\n  color: gray;\n}\n.room-list-item-unread {\r\n  align-self: center;\r\n\r\n  display: inline-flex;\r\n  margin-top: 7px;\r\n  padding: 0.25rem 0.75rem;\r\n  justify-content: center;\r\n  align-items: center;\r\n  background-color: limegreen;\r\n  font-size: 1rem;\r\n  border-radius: 2rem;\n}\r\n", ""]);
+exports.push([module.i, "\n.room-list-item {\r\n  width: 100%;\r\n  height: 80px;\r\n  padding: 10px;\r\n  display: flex;\r\n  align-items: stretch;\r\n  -webkit-user-select: none;\r\n     -moz-user-select: none;\r\n      -ms-user-select: none;\r\n          user-select: none;\n}\n.room-list-item:hover {\r\n  background-color: whitesmoke;\n}\n.room-list-item-information-left {\r\n  flex: 1 1;\r\n\r\n  display: flex;\r\n  flex-direction: column;\r\n  align-items: stretch;\n}\n.room-list-item-name {\r\n  font-weight: bold;\n}\n.latest-content {\r\n  color: gray;\r\n  width: 7em;\r\n  overflow: hidden;\r\n  text-overflow: ellipsis;\r\n  white-space: nowrap;\n}\n.room-list-item-information-right {\r\n  flex: 0 0 100px;\r\n  display: flex;\r\n  flex-direction: column;\r\n  justify-content: flex-start;\r\n  align-items: stretch;\n}\n.update-date {\r\n  font-size: 0.6rem;\r\n  text-align: right;\r\n  color: gray;\n}\n.room-list-item-unread {\r\n  align-self: center;\r\n\r\n  display: inline-flex;\r\n  margin-top: 7px;\r\n  padding: 0.25rem 0.75rem;\r\n  justify-content: center;\r\n  align-items: center;\r\n  background-color: limegreen;\r\n  font-size: 1rem;\r\n  border-radius: 2rem;\n}\n.user-list-item-profile-img {\r\n  max-width: 48px;\r\n  border-radius: 50%;\r\n  flex: 0 0 48px;\r\n  height: 48px;\r\n  -webkit-user-select: none;\r\n     -moz-user-select: none;\r\n      -ms-user-select: none;\r\n          user-select: none;\n}\r\n", ""]);
 
 // exports
 
@@ -48627,70 +48655,99 @@ var render = function() {
                   _c(
                     "div",
                     { staticClass: "create-channel-content" },
-                    _vm._l(_vm.userList, function(user, index) {
-                      return _c(
-                        "label",
-                        {
-                          key: index,
-                          staticClass: "user-list-item",
-                          attrs: { user: user }
+                    [
+                      _vm._v("\n          グループ名：\n          "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.group_name,
+                            expression: "group_name"
+                          }
+                        ],
+                        attrs: {
+                          type: "text",
+                          placeholder: "グループ名を入力してください"
                         },
-                        [
-                          _c("img", {
-                            staticClass: "user-list-item-profile-img",
-                            attrs: { src: _vm.image }
-                          }),
-                          _vm._v(" "),
-                          _c(
-                            "span",
-                            { staticClass: "user-list-item-profile-name" },
-                            [_vm._v(_vm._s(user.name))]
-                          ),
-                          _vm._v(" "),
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.join_users,
-                                expression: "join_users"
+                        domProps: { value: _vm.group_name },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.group_name = $event.target.value
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _vm._l(_vm.userList, function(user, index) {
+                        return _c(
+                          "label",
+                          {
+                            key: index,
+                            staticClass: "user-list-item",
+                            attrs: { user: user }
+                          },
+                          [
+                            _c("img", {
+                              staticClass: "user-list-item-profile-img",
+                              attrs: {
+                                src: "storage/images/" + user.id + ".jpg"
                               }
-                            ],
-                            staticClass: "user-list-item-checkbox",
-                            attrs: { type: "checkbox" },
-                            domProps: {
-                              value: user.id,
-                              checked: Array.isArray(_vm.join_users)
-                                ? _vm._i(_vm.join_users, user.id) > -1
-                                : _vm.join_users
-                            },
-                            on: {
-                              change: function($event) {
-                                var $$a = _vm.join_users,
-                                  $$el = $event.target,
-                                  $$c = $$el.checked ? true : false
-                                if (Array.isArray($$a)) {
-                                  var $$v = user.id,
-                                    $$i = _vm._i($$a, $$v)
-                                  if ($$el.checked) {
-                                    $$i < 0 &&
-                                      (_vm.join_users = $$a.concat([$$v]))
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "span",
+                              { staticClass: "user-list-item-profile-name" },
+                              [_vm._v(_vm._s(user.name))]
+                            ),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.join_users,
+                                  expression: "join_users"
+                                }
+                              ],
+                              staticClass: "user-list-item-checkbox",
+                              attrs: { type: "checkbox" },
+                              domProps: {
+                                value: user.id,
+                                checked: Array.isArray(_vm.join_users)
+                                  ? _vm._i(_vm.join_users, user.id) > -1
+                                  : _vm.join_users
+                              },
+                              on: {
+                                change: function($event) {
+                                  var $$a = _vm.join_users,
+                                    $$el = $event.target,
+                                    $$c = $$el.checked ? true : false
+                                  if (Array.isArray($$a)) {
+                                    var $$v = user.id,
+                                      $$i = _vm._i($$a, $$v)
+                                    if ($$el.checked) {
+                                      $$i < 0 &&
+                                        (_vm.join_users = $$a.concat([$$v]))
+                                    } else {
+                                      $$i > -1 &&
+                                        (_vm.join_users = $$a
+                                          .slice(0, $$i)
+                                          .concat($$a.slice($$i + 1)))
+                                    }
                                   } else {
-                                    $$i > -1 &&
-                                      (_vm.join_users = $$a
-                                        .slice(0, $$i)
-                                        .concat($$a.slice($$i + 1)))
+                                    _vm.join_users = $$c
                                   }
-                                } else {
-                                  _vm.join_users = $$c
                                 }
                               }
-                            }
-                          })
-                        ]
-                      )
-                    }),
-                    0
+                            })
+                          ]
+                        )
+                      })
+                    ],
+                    2
                   )
                 ]
               },
@@ -48706,7 +48763,7 @@ var render = function() {
                       staticClass: "create-button",
                       on: {
                         click: function($event) {
-                          return _vm.test()
+                          props.close(), _vm.create()
                         }
                       }
                     },
@@ -48825,6 +48882,13 @@ var render = function() {
       }
     },
     [
+      !_vm.room.is_group
+        ? _c("img", {
+            staticClass: "user-list-item-profile-img",
+            attrs: { src: "storage/images/" + _vm.room.users[1].id + ".jpg" }
+          })
+        : _vm._e(),
+      _vm._v(" "),
       _c("div", { staticClass: "room-list-item-information-left" }, [
         _vm.room.is_group
           ? _c("span", { staticClass: "room-list-item-name" }, [
@@ -61698,12 +61762,39 @@ var app = new Vue({
     },
     // ルーム作成
     addRoom: function addRoom(join_users, is_group, group_name) {
+      var users = [];
+      var _iteratorNormalCompletion5 = true;
+      var _didIteratorError5 = false;
+      var _iteratorError5 = undefined;
+
+      try {
+        for (var _iterator5 = join_users[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+          var user = _step5.value;
+          users.push(user);
+        }
+      } catch (err) {
+        _didIteratorError5 = true;
+        _iteratorError5 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion5 && _iterator5["return"] != null) {
+            _iterator5["return"]();
+          }
+        } finally {
+          if (_didIteratorError5) {
+            throw _iteratorError5;
+          }
+        }
+      }
+
       admin = is_group ? this.user_id : null;
       axios.post("/api/rooms", {
-        join_users: join_users,
+        join_users: users,
         is_group: is_group,
         group_name: group_name,
         admin: admin
+      }).then(function (res) {
+        console.log("しました");
       })["catch"](function (error) {
         console.log(error);
         console.log('データの取得に失敗しました。');
@@ -61716,8 +61807,6 @@ var app = new Vue({
       axios["delete"]("api/rooms/" + this.now_room.id).then(function (res) {
         console.log("削除しました");
         _this3.rooms = res.data;
-
-        _this3.clearTimeline();
       })["catch"](function (error) {
         console.log(error);
         console.log('データの取得に失敗しました。');
@@ -61769,49 +61858,18 @@ var app = new Vue({
 
     axios.get("/api/users").then(function (res) {
       var users = res.data;
-      var _iteratorNormalCompletion5 = true;
-      var _didIteratorError5 = false;
-      var _iteratorError5 = undefined;
-
-      try {
-        for (var _iterator5 = users[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-          var user = _step5.value;
-
-          _this5.user_list.push({
-            id: user.id,
-            name: user.name
-          });
-        }
-      } catch (err) {
-        _didIteratorError5 = true;
-        _iteratorError5 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion5 && _iterator5["return"] != null) {
-            _iterator5["return"]();
-          }
-        } finally {
-          if (_didIteratorError5) {
-            throw _iteratorError5;
-          }
-        }
-      }
-    })["catch"](function (error) {
-      console.log(error);
-      console.log('データの取得に失敗しました。');
-    }); // ルーム検索
-
-    axios.get("/api/rooms").then(function (res) {
       var _iteratorNormalCompletion6 = true;
       var _didIteratorError6 = false;
       var _iteratorError6 = undefined;
 
       try {
-        for (var _iterator6 = res.data[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
-          var room = _step6.value;
-          room.contents.reverse();
+        for (var _iterator6 = users[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+          var user = _step6.value;
 
-          _this5.rooms.push(room);
+          _this5.user_list.push({
+            id: user.id,
+            name: user.name
+          });
         }
       } catch (err) {
         _didIteratorError6 = true;
@@ -61824,6 +61882,37 @@ var app = new Vue({
         } finally {
           if (_didIteratorError6) {
             throw _iteratorError6;
+          }
+        }
+      }
+    })["catch"](function (error) {
+      console.log(error);
+      console.log('データの取得に失敗しました。');
+    }); // ルーム検索
+
+    axios.get("/api/rooms").then(function (res) {
+      var _iteratorNormalCompletion7 = true;
+      var _didIteratorError7 = false;
+      var _iteratorError7 = undefined;
+
+      try {
+        for (var _iterator7 = res.data[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
+          var room = _step7.value;
+          room.contents.reverse();
+
+          _this5.rooms.push(room);
+        }
+      } catch (err) {
+        _didIteratorError7 = true;
+        _iteratorError7 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion7 && _iterator7["return"] != null) {
+            _iterator7["return"]();
+          }
+        } finally {
+          if (_didIteratorError7) {
+            throw _iteratorError7;
           }
         }
       }

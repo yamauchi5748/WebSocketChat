@@ -8,7 +8,7 @@
                 <div class="card-header">{{ __('Register') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('register') }}">
+                    <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
                         @csrf
 
                         <div class="form-group row">
@@ -23,6 +23,14 @@
                                 </span>
                                 @endif
                             </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="profile-image" class="col-md-4 col-form-label text-md-right">{{ __('ProfileImage') }}</label>
+                            <div class="col-md-6">
+                                <img id='profile-image-preview' src="">
+                            </div>
+                            <input id="profile-image" type="file" class="form-control" name="profile-image" onchange="imgPreview()" required>
                         </div>
 
                         <div class="form-group row">
@@ -74,4 +82,25 @@
         </div>
     </div>
 </div>
+<script>
+    // プロフィール画像プレビュー
+    function imgPreview() {
+        var img_preview_obj = document.getElementById('profile-image-preview');
+        var img_obj = document.getElementById('profile-image');
+        var file = img_obj.files[0];
+        var reader = new FileReader();
+
+            // 画像ファイル以外の場合は何もしない
+            if (file.type.indexOf("image") < 0) {
+                return false;
+            }
+
+        // ファイル読み込みが完了した際のイベント登録
+        reader.onload = function(e) {
+            // .prevewの領域の中にロードした画像を表示するimageタグを追加
+            img_preview_obj.src = e.target.result;
+        };
+        console.log(reader.readAsDataURL(file));
+    }
+</script>
 @endsection
