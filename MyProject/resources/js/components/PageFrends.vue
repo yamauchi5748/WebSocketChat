@@ -2,7 +2,7 @@
   <div class="page-frends">
     <list-filter class="filter"></list-filter>
     <div class="wrapper-list-accordion">
-      <accordion class="list-accordion-item">
+      <accordion class="list-accordion-item" v-if="!$root.search_key">
         <template #header="methods">
           <div @click="methods.changeShow" class="header-accordion">プロフィール</div>
         </template>
@@ -10,14 +10,15 @@
           <div class="contents-accordion">
             <div class="list-item">
               <img class="icon-item-img" src="/img/profile.jpg" />
-              <span class="name-item">{{ $root.user_id }}</span>
+              <!-- ユーザーが存在すれば表示 -->
+              <span class="name-item" v-if="$root.user">{{ $root.user.name }}</span>
             </div>
           </div>
         </template>
       </accordion>
-      <accordion class="list-accordion-item">
+      <accordion class="list-accordion-item" v-if="roomList.length > 0">
         <template #header="methods">
-          <div @click="methods.changeShow" class="header-accordion">グループ</div>
+          <div @click="methods.changeShow" class="header-accordion">グループ({{ roomList.length }})</div>
         </template>
         <template #contents>
           <div class="contents-accordion">
@@ -28,9 +29,9 @@
           </div>
         </template>
       </accordion>
-      <accordion class="list-accordion-item">
+      <accordion class="list-accordion-item" v-if="userList.length > 0">
         <template #header="methods">
-          <div @click="methods.changeShow" class="header-accordion">友だち</div>
+          <div @click="methods.changeShow" class="header-accordion">友だち({{ userList.length }})</div>
         </template>
         <template #contents>
           <div class="contents-accordion">
@@ -41,6 +42,7 @@
           </div>
         </template>
       </accordion>
+      <div v-show="!(roomList.length && userList.length)">表示結果がありません</div>
     </div>
   </div>
 </template>

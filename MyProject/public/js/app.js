@@ -1926,10 +1926,11 @@ __webpack_require__.r(__webpack_exports__);
     TheGlobalNavigation: _TheGlobalNavigation__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   props: {
-    user_id: String
+    user: String
   },
   mounted: function mounted() {
-    this.$root.user_id = this.user_id;
+    this.$root.user = JSON.parse(this.user);
+    console.log(this.$root.user);
   }
 });
 
@@ -2016,7 +2017,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       return this.$root.user_list.filter(function (user) {
-        return user.id != _this.$root.user_id;
+        return user.id != _this.$root.user.id;
       });
     }
   },
@@ -2027,7 +2028,7 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
-      this.join_users.push(this.$root.user_id);
+      this.join_users.push(this.$root.user.id);
       this.$root.addRoom(this.join_users, true, this.group_name);
       this.join_users.splice(0);
       this.group_name = "";
@@ -2048,6 +2049,8 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _frends_ListFilter_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./frends/ListFilter.vue */ "./resources/js/components/frends/ListFilter.vue");
 /* harmony import */ var _Accordion_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Accordion.vue */ "./resources/js/components/Accordion.vue");
+//
+//
 //
 //
 //
@@ -2171,7 +2174,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     isAite: function isAite() {
-      return this.message.sender_id != this.$root.user_id;
+      return this.message.sender_id != this.$root.user.id;
     }
   },
   mounted: function mounted() {
@@ -2394,7 +2397,7 @@ __webpack_require__.r(__webpack_exports__);
     timeLine: function timeLine() {
       if (this.$root.now_room) {
         console.log(this.$root.now_room.contents);
-        console.log(this.$root.user_id);
+        console.log(this.$root.user.id);
         return this.$root.now_room.contents;
       }
 
@@ -2505,7 +2508,7 @@ __webpack_require__.r(__webpack_exports__);
     roomExit: function roomExit() {
       var text = null;
 
-      if (this.$root.user_id == this.$root.now_room.admin) {
+      if (this.$root.user.id == this.$root.now_room.admin) {
         text = "管理者が退出するとルームが削除されますが退出しますか？";
       } else {
         text = "ルームから退出しますか？";
@@ -49357,156 +49360,202 @@ var render = function() {
         "div",
         { staticClass: "wrapper-list-accordion" },
         [
-          _c("accordion", {
-            staticClass: "list-accordion-item",
-            scopedSlots: _vm._u([
-              {
-                key: "header",
-                fn: function(methods) {
-                  return [
-                    _c(
-                      "div",
-                      {
-                        staticClass: "header-accordion",
-                        on: { click: methods.changeShow }
-                      },
-                      [_vm._v("プロフィール")]
-                    )
-                  ]
-                }
-              },
-              {
-                key: "contents",
-                fn: function() {
-                  return [
-                    _c("div", { staticClass: "contents-accordion" }, [
-                      _c("div", { staticClass: "list-item" }, [
-                        _c("img", {
-                          staticClass: "icon-item-img",
-                          attrs: { src: "/img/profile.jpg" }
-                        }),
-                        _vm._v(" "),
-                        _c("span", { staticClass: "name-item" }, [
-                          _vm._v(_vm._s(_vm.$root.user_id))
-                        ])
-                      ])
-                    ])
-                  ]
-                },
-                proxy: true
-              }
-            ])
-          }),
-          _vm._v(" "),
-          _c("accordion", {
-            staticClass: "list-accordion-item",
-            scopedSlots: _vm._u([
-              {
-                key: "header",
-                fn: function(methods) {
-                  return [
-                    _c(
-                      "div",
-                      {
-                        staticClass: "header-accordion",
-                        on: { click: methods.changeShow }
-                      },
-                      [_vm._v("グループ")]
-                    )
-                  ]
-                }
-              },
-              {
-                key: "contents",
-                fn: function() {
-                  return [
-                    _c(
-                      "div",
-                      { staticClass: "contents-accordion" },
-                      _vm._l(_vm.roomList, function(room, key) {
-                        return _c(
-                          "div",
-                          {
-                            key: key,
-                            staticClass: "list-item",
-                            attrs: { room: room }
-                          },
-                          [
-                            _c("img", {
-                              staticClass: "icon-item-img",
-                              attrs: { src: "/img/profile.jpg" }
-                            }),
-                            _vm._v(" "),
-                            _c("span", { staticClass: "name-item" }, [
-                              _vm._v(_vm._s(room.group_name))
+          !_vm.$root.search_key
+            ? _c("accordion", {
+                staticClass: "list-accordion-item",
+                scopedSlots: _vm._u(
+                  [
+                    {
+                      key: "header",
+                      fn: function(methods) {
+                        return [
+                          _c(
+                            "div",
+                            {
+                              staticClass: "header-accordion",
+                              on: { click: methods.changeShow }
+                            },
+                            [_vm._v("プロフィール")]
+                          )
+                        ]
+                      }
+                    },
+                    {
+                      key: "contents",
+                      fn: function() {
+                        return [
+                          _c("div", { staticClass: "contents-accordion" }, [
+                            _c("div", { staticClass: "list-item" }, [
+                              _c("img", {
+                                staticClass: "icon-item-img",
+                                attrs: { src: "/img/profile.jpg" }
+                              }),
+                              _vm._v(" "),
+                              _vm.$root.user
+                                ? _c("span", { staticClass: "name-item" }, [
+                                    _vm._v(_vm._s(_vm.$root.user.name))
+                                  ])
+                                : _vm._e()
                             ])
-                          ]
-                        )
-                      }),
-                      0
-                    )
-                  ]
-                },
-                proxy: true
-              }
-            ])
-          }),
-          _vm._v(" "),
-          _c("accordion", {
-            staticClass: "list-accordion-item",
-            scopedSlots: _vm._u([
-              {
-                key: "header",
-                fn: function(methods) {
-                  return [
-                    _c(
-                      "div",
-                      {
-                        staticClass: "header-accordion",
-                        on: { click: methods.changeShow }
+                          ])
+                        ]
                       },
-                      [_vm._v("友だち")]
-                    )
-                  ]
-                }
-              },
-              {
-                key: "contents",
-                fn: function() {
-                  return [
-                    _c(
-                      "div",
-                      { staticClass: "contents-accordion" },
-                      _vm._l(_vm.userList, function(user, key) {
-                        return _c(
-                          "div",
-                          {
-                            key: key,
-                            staticClass: "list-item",
-                            attrs: { user: user }
-                          },
-                          [
-                            _c("img", {
-                              staticClass: "icon-item-img",
-                              attrs: {
-                                src: "/storage/images/" + user.id + ".jpg"
-                              }
+                      proxy: true
+                    }
+                  ],
+                  null,
+                  false,
+                  1798830535
+                )
+              })
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.roomList.length > 0
+            ? _c("accordion", {
+                staticClass: "list-accordion-item",
+                scopedSlots: _vm._u(
+                  [
+                    {
+                      key: "header",
+                      fn: function(methods) {
+                        return [
+                          _c(
+                            "div",
+                            {
+                              staticClass: "header-accordion",
+                              on: { click: methods.changeShow }
+                            },
+                            [
+                              _vm._v(
+                                "グループ(" + _vm._s(_vm.roomList.length) + ")"
+                              )
+                            ]
+                          )
+                        ]
+                      }
+                    },
+                    {
+                      key: "contents",
+                      fn: function() {
+                        return [
+                          _c(
+                            "div",
+                            { staticClass: "contents-accordion" },
+                            _vm._l(_vm.roomList, function(room, key) {
+                              return _c(
+                                "div",
+                                {
+                                  key: key,
+                                  staticClass: "list-item",
+                                  attrs: { room: room }
+                                },
+                                [
+                                  _c("img", {
+                                    staticClass: "icon-item-img",
+                                    attrs: { src: "/img/profile.jpg" }
+                                  }),
+                                  _vm._v(" "),
+                                  _c("span", { staticClass: "name-item" }, [
+                                    _vm._v(_vm._s(room.group_name))
+                                  ])
+                                ]
+                              )
                             }),
-                            _vm._v(" "),
-                            _c("span", { staticClass: "name-item" }, [
-                              _vm._v(_vm._s(user.name))
-                            ])
-                          ]
-                        )
-                      }),
-                      0
-                    )
-                  ]
-                },
-                proxy: true
-              }
-            ])
-          })
+                            0
+                          )
+                        ]
+                      },
+                      proxy: true
+                    }
+                  ],
+                  null,
+                  false,
+                  2180188480
+                )
+              })
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.userList.length > 0
+            ? _c("accordion", {
+                staticClass: "list-accordion-item",
+                scopedSlots: _vm._u(
+                  [
+                    {
+                      key: "header",
+                      fn: function(methods) {
+                        return [
+                          _c(
+                            "div",
+                            {
+                              staticClass: "header-accordion",
+                              on: { click: methods.changeShow }
+                            },
+                            [
+                              _vm._v(
+                                "友だち(" + _vm._s(_vm.userList.length) + ")"
+                              )
+                            ]
+                          )
+                        ]
+                      }
+                    },
+                    {
+                      key: "contents",
+                      fn: function() {
+                        return [
+                          _c(
+                            "div",
+                            { staticClass: "contents-accordion" },
+                            _vm._l(_vm.userList, function(user, key) {
+                              return _c(
+                                "div",
+                                {
+                                  key: key,
+                                  staticClass: "list-item",
+                                  attrs: { user: user }
+                                },
+                                [
+                                  _c("img", {
+                                    staticClass: "icon-item-img",
+                                    attrs: {
+                                      src: "/storage/images/" + user.id + ".jpg"
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c("span", { staticClass: "name-item" }, [
+                                    _vm._v(_vm._s(user.name))
+                                  ])
+                                ]
+                              )
+                            }),
+                            0
+                          )
+                        ]
+                      },
+                      proxy: true
+                    }
+                  ],
+                  null,
+                  false,
+                  4135619746
+                )
+              })
+            : _vm._e(),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: !(_vm.roomList.length && _vm.userList.length),
+                  expression: "!(roomList.length && userList.length)"
+                }
+              ]
+            },
+            [_vm._v("表示結果がありません")]
+          )
         ],
         1
       )
@@ -65080,7 +65129,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
     // テキスト投稿
     postMessage: function postMessage(text) {
       axios.post("/api/message", {
-        user_id: this.user_id,
+        user_id: this.user.id,
         room_id: this.now_room.id,
         text: text
       });
@@ -65097,7 +65146,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
     // ルームに参加すると呼ばれる
     checkAt: function checkAt() {
       axios.post("/api/check-at", {
-        user_id: this.user_id,
+        user_id: this.user.id,
         room_id: this.now_room.id
       });
     },
@@ -65108,7 +65157,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
         return user.id == message.sender_id;
       })[0].name; // 自ユーザのみ既読表示
 
-      if (message.sender_id == this.user_id) {
+      if (message.sender_id == this.user.id) {
         message.already_read = this.now_room.is_group ? 0 : false;
       }
 
@@ -65305,12 +65354,11 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
         }
       }
 
-      admin = is_group ? this.user_id : null;
       axios.post("/api/rooms", {
         join_users: users,
         is_group: is_group,
         group_name: group_name,
-        admin: admin
+        admin: is_group ? this.user.id : null
       }).then(function (res) {
         console.log("しました");
       })["catch"](function (error) {
@@ -65334,7 +65382,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
     exitRoom: function exitRoom() {
       var _this4 = this;
 
-      axios["delete"]("api/rooms/" + this.now_room.id + "/users/" + this.user_id).then(function (res) {
+      axios["delete"]("api/rooms/" + this.now_room.id + "/users/" + this.user.id).then(function (res) {
         console.log("退出しました", res.data);
         _this4.rooms = res.data;
       })["catch"](function (error) {
@@ -65347,7 +65395,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
     var _this5 = this;
 
     // プライベートチャンネル接続
-    Echo["private"]('user.' + this.user_id) // ルーム作成イベント
+    Echo["private"]('user.' + this.user.id) // ルーム作成イベント
     .listen('RoomRecieved', function (e) {
       console.log('roomStore', e.room);
       var room = e.room;
