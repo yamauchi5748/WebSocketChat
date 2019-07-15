@@ -1,6 +1,11 @@
 <template>
-  <div class="room-list-item" @click="action(room)">
-    <img class="user-list-item-profile-img" :src="'storage/images/' + room.users[1].id + '.jpg'" v-if="!room.is_group" />
+  <div class="room-list-item" @click="action()">
+    <img
+      class="user-list-item-profile-img"
+      :src="'storage/images/' + room.users[1].id + '.jpg'"
+      @error="setDefaultImg"
+      v-if="!room.is_group"
+    />
     <div class="room-list-item-information-left">
       <span class="room-list-item-name" v-if="room.is_group">{{ room.group_name }}</span>
       <span
@@ -65,11 +70,14 @@ export default {
       }
       return false;
     },
-    action(room) {
-      this.$root.now_room = room;
+    action() {
+      this.$root.now_room = this.room;
       this.$root.getMessages();
       this.$root.newMessageUpdate();
       this.$root.checkAt();
+    },
+    setDefaultImg(event) {
+      event.target.src = "/img/profile.jpg";
     }
   }
 };
@@ -80,11 +88,21 @@ export default {
   height: 80px;
   padding: 10px;
   display: flex;
-  align-items: stretch;
+  align-items: center;
   user-select: none;
 }
 .room-list-item:hover {
   background-color: whitesmoke;
+}
+
+.user-list-item-profile-img {
+  display: block;
+  margin-right: 8px; 
+  border-radius: 50%;
+  flex: 0 0 48px;
+  width: 48px;
+  height: 48px;
+  user-select: none;
 }
 .room-list-item-information-left {
   flex: 1 1;
@@ -126,12 +144,5 @@ export default {
   background-color: limegreen;
   font-size: 1rem;
   border-radius: 2rem;
-}
-.user-list-item-profile-img {
-  max-width: 48px;
-  border-radius: 50%;
-  flex: 0 0 48px;
-  height: 48px;
-  user-select: none;
 }
 </style>
