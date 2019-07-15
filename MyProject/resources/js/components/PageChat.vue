@@ -41,13 +41,13 @@
   </div>
 </template>
 <script>
-import TheRoomListFilter from "./TheRoomListFilter.vue";
-import TheRoomList from "./TheRoomList.vue";
+import TheRoomListFilter from "./chat/TheRoomListFilter.vue";
+import TheRoomList from "./chat/TheRoomList.vue";
 
 import DragContainer from "./DragContainer.vue";
-import UserListItem from "./UserListItem.vue";
+import UserListItem from "./chat/UserListItem.vue";
 
-import TheRoomContents from "./TheRoomContents";
+import TheRoomContents from "./chat/TheRoomContents";
 export default {
   components: {
     TheRoomListFilter,

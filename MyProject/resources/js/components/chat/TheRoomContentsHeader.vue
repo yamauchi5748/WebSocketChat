@@ -36,7 +36,7 @@
   </div>
 </template>
 <script>
-import DragContainer from "./DragContainer.vue";
+import DragContainer from "../DragContainer.vue";
 import UserListItem from "./UserListItem.vue";
 export default {
   components: { DragContainer, UserListItem },
