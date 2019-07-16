@@ -115,6 +115,8 @@ export default {
   border-bottom: solid 1px silver;
   background-color: ghostwhite;
   color: slategrey;
+  cursor: pointer;
+  user-select: none;
 }
 .contents-accordion {
   display: flex;
@@ -124,6 +126,7 @@ export default {
   display: flex;
   align-items: center;
   height: 80px;
+  cursor: pointer;
 }
 .list-item:hover {
   background-color: whitesmoke;
@@ -135,6 +138,7 @@ export default {
   width: 60px;
   border-radius: 50%;
   object-fit: cover;
+  user-select: none;
 }
 .name-item {
   display: block;
@@ -142,5 +146,6 @@ export default {
   font-size: 1.1rem;
   font-weight: bold;
   color: black;
+  user-select: none;
 }
 </style>
