@@ -1,9 +1,8 @@
 <template>
   <div>
-    <div
-      class="system-manager-message"
-      v-if="message.sender_id == 'system_manager'"
-    >{{ message.message }}</div>
+    <div class="system-manager-wrapper" v-if="message.sender_id == 'system_manager'">
+      <div class="system-manager-message">{{ message.message }}</div>
+    </div>
     <div class="room-talk-item" :class="{aite:isAite}" v-else>
       <span class="room-contents-message-information">
         <span class="room-contents-message-already-read" v-if="Boolean(message.already_read)">
@@ -81,9 +80,13 @@ export default {
 .aitetext {
   background-color: ghostwhite;
 }
-.system-manager-message {
+.system-manager-wrapper {
   text-align: center;
-  margin: 20px 170px;
+  margin: 15px 0;
+}
+.system-manager-message {
+  display: inline-block;
+  padding: 0 20px;
   background-color: darkgrey;
   border-radius: 15px;
 }
