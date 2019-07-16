@@ -46,11 +46,18 @@ class ChatRoomController extends Controller
 
                 ];
             }
-
             $room['contents'] = Chat::where('room_id', $room['id'])
                 ->take(10)
                 ->orderBy('created_at', 'DESC')
                 ->get();
+            foreach ($room['contents'] as $content) {
+                if ($content->sender_id == Auth::id()) {
+                    $content->already_read = ChatRoomUser::where('room_id', $room['id'])
+                        ->where('user_id', '!=', Auth::id())
+                        ->where('checked_at', '>', $content->created_at)
+                        ->count();
+                }
+            }
         }
 
         return $rooms;
@@ -68,7 +75,7 @@ class ChatRoomController extends Controller
             'group_name' => $request->group_name,
             'is_group' => $request->is_group,
             'admin' => $admin,
-            'created_at' => (string) Carbon::now()
+            'created_at' => (string) Carbon::now('Asia/Tokyo')
         ];
 
         ChatRoom::create($room);
@@ -82,7 +89,7 @@ class ChatRoomController extends Controller
             ChatRoomUser::create([
                 'room_id' => $room['id'],
                 'user_id' => $user_id,
-                'checked_at' => Carbon::now()
+                'checked_at' => Carbon::now('Asia/Tokyo')
             ]);
             $user = User::where('id', $user_id)->first();
             broadcast(new RoomRecieved($user, $room));
@@ -123,7 +130,7 @@ class ChatRoomController extends Controller
             ChatRoomUser::create([
                 'room_id' => $room_id,
                 'user_id' => $user['id'],
-                'checked_at' => Carbon::now()
+                'checked_at' => Carbon::now('Asia/Tokyo')
             ]);
 
             broadcast(new RoomUpdateRecieved($user, $room));
@@ -185,7 +192,7 @@ class ChatRoomController extends Controller
 
         $room_user = ChatRoomUser::where('user_id', $request->user_id)
             ->where('room_id', $request->room_id)
-            ->update(['checked_at' => (string) Carbon::now()]);
+            ->update(['checked_at' => (string) Carbon::now('Asia/Tokyo')]);
 
         return $room_user;
     }

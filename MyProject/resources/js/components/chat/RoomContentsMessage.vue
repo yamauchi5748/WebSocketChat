@@ -1,25 +1,34 @@
 <template>
-  <div class="room-talk-item" :class="{aite:isAite}">
-    <span class="room-contents-message-information">
-      <span class="room-contents-message-already-read">{{ message.already_read }}</span>
-      <span class="room-contents-message-date">{{ message.created_at }}</span>
-    </span>
+  <div>
     <div
-      class="room-talk-item-text"
-      v-if="message.content_type == 'text'"
-      :class="{aitetext:isAite}"
+      class="system-manager-message"
+      v-if="message.sender_id == 'system_manager'"
     >{{ message.message }}</div>
-    <img
-      class="room-talk-item-image"
-      v-else-if="message.content_type == 'image'"
-      :src="message.image"
-    />
-    <video
-      class="room-talk-item-video"
-      v-else-if="message.content_type == 'video'"
-      :src="message.video"
-      controls
-    ></video>
+    <div class="room-talk-item" :class="{aite:isAite}" v-else>
+      <span class="room-contents-message-information">
+        <span class="room-contents-message-already-read" v-if="Boolean(message.already_read)">
+          <span>Read</span>
+          <span v-if="$root.now_room.is_group">{{ message.already_read }}</span>
+        </span>
+        <span class="room-contents-message-date">{{ $root.getTime(message.created_at) }}</span>
+      </span>
+      <div
+        class="room-talk-item-text"
+        v-if="message.content_type == 'text'"
+        :class="{aitetext:isAite}"
+      >{{ message.message }}</div>
+      <img
+        class="room-talk-item-image"
+        v-else-if="message.content_type == 'image'"
+        :src="message.image"
+      />
+      <video
+        class="room-talk-item-video"
+        v-else-if="message.content_type == 'video'"
+        :src="message.video"
+        controls
+      ></video>
+    </div>
   </div>
 </template>
 <script>
@@ -34,7 +43,7 @@ export default {
   },
   mounted() {
     //** */ スクロールを最下部にする **//
-    var obj = this.$parent.$el.children[1];//スクロールオブジェクト取得
+    var obj = this.$parent.$el.children[1]; //スクロールオブジェクト取得
     obj.scrollTop = obj.scrollHeight;
   }
 };
@@ -60,17 +69,23 @@ export default {
 }
 .room-contents-message-information {
   align-self: flex-end;
-
   display: inline-flex;
   margin: 0 6px;
   flex-direction: column;
   font-size: 0.8rem;
+  color: black;
 }
 .aite {
   flex-direction: row-reverse;
 }
 .aitetext {
   background-color: ghostwhite;
+}
+.system-manager-message {
+  text-align: center;
+  margin: 20px 170px;
+  background-color: darkgrey;
+  border-radius: 15px;
 }
 </style>
 

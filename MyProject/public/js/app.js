@@ -2208,6 +2208,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     message: Object
@@ -9733,7 +9742,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.page-frends[data-v-6511c744] {\r\n  display: flex;\r\n  flex-direction: column;\r\n  align-items: stretch;\n}\n.filter[data-v-6511c744] {\r\n  flex: 0 0 56px;\n}\n.wrapper-list-accordion[data-v-6511c744] {\r\n  flex: 1 1;\r\n  width: 100%;\r\n  margin: 0;\r\n  padding: 0;\r\n  flex-direction: column;\r\n  align-items: stretch;\r\n  overflow: auto;\n}\n.list-accordion-item[data-v-6511c744] {\r\n  display: block;\r\n  flex-direction: column;\r\n  width: 100%;\r\n  margin: 0;\r\n  padding: 0;\r\n  background-color: white;\n}\n.header-accordion[data-v-6511c744] {\r\n  position: -webkit-sticky;\r\n  position: sticky;\r\n  top: 0;\r\n  display: flex;\r\n  padding-left: 16px;\r\n  align-items: center;\r\n  height: 40px;\r\n  border-top: solid 1px silver;\r\n  border-bottom: solid 1px silver;\r\n  background-color: ghostwhite;\r\n  color: slategrey;\n}\n.contents-accordion[data-v-6511c744] {\r\n  display: flex;\r\n  flex-direction: column;\n}\n.list-item[data-v-6511c744] {\r\n  display: flex;\r\n  align-items: center;\r\n  height: 80px;\n}\n.list-item[data-v-6511c744]:hover {\r\n  background-color: whitesmoke;\n}\n.icon-item-img[data-v-6511c744] {\r\n  display: block;\r\n  margin-left: 16px;\r\n  height: 60px;\r\n  width: 60px;\r\n  border-radius: 50%;\r\n  -o-object-fit: cover;\r\n     object-fit: cover;\n}\n.name-item[data-v-6511c744] {\r\n  display: block;\r\n  margin-left: 16px;\r\n  font-size: 1.1rem;\r\n  font-weight: bold;\r\n  color: black;\n}\r\n", ""]);
+exports.push([module.i, "\n.page-frends[data-v-6511c744] {\r\n  display: flex;\r\n  flex-direction: column;\r\n  align-items: stretch;\n}\n.filter[data-v-6511c744] {\r\n  flex: 0 0 56px;\n}\n.wrapper-list-accordion[data-v-6511c744] {\r\n  flex: 1 1;\r\n  width: 100%;\r\n  margin: 0;\r\n  padding: 0;\r\n  flex-direction: column;\r\n  align-items: stretch;\r\n  overflow: auto;\n}\n.list-accordion-item[data-v-6511c744] {\r\n  display: block;\r\n  flex-direction: column;\r\n  width: 100%;\r\n  margin: 0;\r\n  padding: 0;\r\n  background-color: white;\n}\n.header-accordion[data-v-6511c744] {\r\n  position: -webkit-sticky;\r\n  position: sticky;\r\n  top: 0;\r\n  display: flex;\r\n  padding-left: 16px;\r\n  align-items: center;\r\n  height: 40px;\r\n  border-top: solid 1px silver;\r\n  border-bottom: solid 1px silver;\r\n  background-color: ghostwhite;\r\n  color: slategrey;\r\n  cursor: pointer;\n}\n.contents-accordion[data-v-6511c744] {\r\n  display: flex;\r\n  flex-direction: column;\n}\n.list-item[data-v-6511c744] {\r\n  display: flex;\r\n  align-items: center;\r\n  height: 80px;\n}\n.list-item[data-v-6511c744]:hover {\r\n  background-color: whitesmoke;\n}\n.icon-item-img[data-v-6511c744] {\r\n  display: block;\r\n  margin-left: 16px;\r\n  height: 60px;\r\n  width: 60px;\r\n  border-radius: 50%;\r\n  -o-object-fit: cover;\r\n     object-fit: cover;\n}\n.name-item[data-v-6511c744] {\r\n  display: block;\r\n  margin-left: 16px;\r\n  font-size: 1.1rem;\r\n  font-weight: bold;\r\n  color: black;\n}\r\n", ""]);
 
 // exports
 
@@ -9771,7 +9780,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.room-talk-item {\r\n  display: flex;\r\n  justify-content: flex-end;\r\n  flex-direction: row;\r\n  font-size: 1.2rem;\r\n  margin: 16px;\n}\n.room-talk-item * {\r\n  display: inline-block;\r\n  max-width: 350px;\n}\n.room-talk-item-text {\r\n  padding: 6px 10px;\r\n  word-wrap: break-word;\r\n  white-space: normal; /*指定widthに合わせて、文字を自動的に改行*/\r\n  border-radius: 15px;\r\n  background-color: lawngreen;\n}\n.room-contents-message-information {\r\n  align-self: flex-end;\r\n\r\n  display: inline-flex;\r\n  margin: 0 6px;\r\n  flex-direction: column;\r\n  font-size: 0.8rem;\n}\n.aite {\r\n  flex-direction: row-reverse;\n}\n.aitetext {\r\n  background-color: ghostwhite;\n}\r\n", ""]);
+exports.push([module.i, "\n.room-talk-item {\r\n  display: flex;\r\n  justify-content: flex-end;\r\n  flex-direction: row;\r\n  font-size: 1.2rem;\r\n  margin: 16px;\n}\n.room-talk-item * {\r\n  display: inline-block;\r\n  max-width: 350px;\n}\n.room-talk-item-text {\r\n  padding: 6px 10px;\r\n  word-wrap: break-word;\r\n  white-space: normal; /*指定widthに合わせて、文字を自動的に改行*/\r\n  border-radius: 15px;\r\n  background-color: lawngreen;\n}\n.room-contents-message-information {\r\n  align-self: flex-end;\r\n  display: inline-flex;\r\n  margin: 0 6px;\r\n  flex-direction: column;\r\n  font-size: 0.8rem;\r\n  color: black;\n}\n.aite {\r\n  flex-direction: row-reverse;\n}\n.aitetext {\r\n  background-color: ghostwhite;\n}\n.system-manager-message {\r\n  text-align: center;\r\n  margin: 20px 170px;\r\n  background-color: darkgrey;\r\n  border-radius: 15px;\n}\r\n", ""]);
 
 // exports
 
@@ -49683,42 +49692,58 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "room-talk-item", class: { aite: _vm.isAite } },
-    [
-      _c("span", { staticClass: "room-contents-message-information" }, [
-        _c("span", { staticClass: "room-contents-message-already-read" }, [
-          _vm._v(_vm._s(_vm.message.already_read))
-        ]),
-        _vm._v(" "),
-        _c("span", { staticClass: "room-contents-message-date" }, [
-          _vm._v(_vm._s(_vm.message.created_at))
+  return _c("div", [
+    _vm.message.sender_id == "system_manager"
+      ? _c("div", { staticClass: "system-manager-message" }, [
+          _vm._v(_vm._s(_vm.message.message))
         ])
-      ]),
-      _vm._v(" "),
-      _vm.message.content_type == "text"
-        ? _c(
-            "div",
-            {
-              staticClass: "room-talk-item-text",
-              class: { aitetext: _vm.isAite }
-            },
-            [_vm._v(_vm._s(_vm.message.message))]
-          )
-        : _vm.message.content_type == "image"
-        ? _c("img", {
-            staticClass: "room-talk-item-image",
-            attrs: { src: _vm.message.image }
-          })
-        : _vm.message.content_type == "video"
-        ? _c("video", {
-            staticClass: "room-talk-item-video",
-            attrs: { src: _vm.message.video, controls: "" }
-          })
-        : _vm._e()
-    ]
-  )
+      : _c(
+          "div",
+          { staticClass: "room-talk-item", class: { aite: _vm.isAite } },
+          [
+            _c("span", { staticClass: "room-contents-message-information" }, [
+              Boolean(_vm.message.already_read)
+                ? _c(
+                    "span",
+                    { staticClass: "room-contents-message-already-read" },
+                    [
+                      _c("span", [_vm._v("Read")]),
+                      _vm._v(" "),
+                      _vm.$root.now_room.is_group
+                        ? _c("span", [_vm._v(_vm._s(_vm.message.already_read))])
+                        : _vm._e()
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c("span", { staticClass: "room-contents-message-date" }, [
+                _vm._v(_vm._s(_vm.$root.getTime(_vm.message.created_at)))
+              ])
+            ]),
+            _vm._v(" "),
+            _vm.message.content_type == "text"
+              ? _c(
+                  "div",
+                  {
+                    staticClass: "room-talk-item-text",
+                    class: { aitetext: _vm.isAite }
+                  },
+                  [_vm._v(_vm._s(_vm.message.message))]
+                )
+              : _vm.message.content_type == "image"
+              ? _c("img", {
+                  staticClass: "room-talk-item-image",
+                  attrs: { src: _vm.message.image }
+                })
+              : _vm.message.content_type == "video"
+              ? _c("video", {
+                  staticClass: "room-talk-item-video",
+                  attrs: { src: _vm.message.video, controls: "" }
+                })
+              : _vm._e()
+          ]
+        )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -65178,6 +65203,48 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
         }
       }
     },
+    // 年月日取得
+    getDate: function getDate(date) {
+      var dt = new Date();
+      var tmp1 = date.split("-");
+      var tmp2 = tmp1[2].split(" ");
+      var year = tmp1[0];
+      var month = tmp1[1];
+      var day = tmp2[0];
+      var result = "";
+
+      if (dt.getFullYear() > year) {
+        result += year + '.' + month + '.' + day;
+      } else {
+        result += month + '.' + day + '(' + dt.getDay() + ')';
+      }
+
+      return result;
+    },
+    // 時間取得
+    getTime: function getTime(date) {
+      var tmp = date.split("-")[2].split(" ")[1].split(":");
+      var hour = Number(tmp[0]);
+      var minute = tmp[1];
+      return hour + ":" + minute;
+    },
+    // 日付代入
+    pushDate: function pushDate(room) {
+      for (var index = 0; index < room.contents.length; index++) {
+        var dt = this.getDate(room.contents[index].created_at);
+
+        if (!room.forward_date || room.forward_date != dt) {
+          room.contents.splice(index, 0, {
+            message: dt,
+            content_type: 'text',
+            sender_id: 'system_manager',
+            created_at: room.contents[index].created_at
+          });
+          index++;
+          room.forward_date = dt;
+        }
+      }
+    },
     // テキスト投稿
     postMessage: function postMessage(text) {
       axios.post("/api/message", {
@@ -65343,10 +65410,13 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
     getMessages: function getMessages() {
       var _this2 = this;
 
-      if (!this.now_room.contents[0]) {
+      var index = 0;
+
+      if (!this.now_room.contents[index]) {
         return;
       }
 
+      console.log(this.now_room.contents[0].created_at);
       var url = "/api/rooms/" + this.now_room.id + "/messages/" + this.now_room.contents[0].created_at;
       axios.get(url).then(function (res) {
         var messages = res.data;
@@ -65358,7 +65428,20 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
           for (var _iterator4 = messages[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
             var message = _step4.value;
 
-            _this2.now_room.contents.unshift(message);
+            var dt = _this2.getDate(message.created_at);
+
+            if (_this2.now_room.forward_date != dt) {
+              _this2.now_room.contents.unshift({
+                message: dt,
+                content_type: 'text',
+                sender_id: 'system_manager',
+                created_at: message.created_at
+              });
+
+              _this2.now_room.forward_date = dt;
+            } else {
+              _this2.now_room.contents.splice(1, 0, message);
+            }
           }
         } catch (err) {
           _didIteratorError4 = true;
@@ -65411,8 +65494,6 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
         is_group: is_group,
         group_name: group_name,
         admin: is_group ? this.user.id : null
-      }).then(function (res) {
-        console.log("しました");
       })["catch"](function (error) {
         console.log(error);
         console.log('データの取得に失敗しました。');
@@ -65440,8 +65521,6 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
         for (var index = 0; index < _this4.rooms.length; index++) {
           if (res.data == _this4.rooms[index].id) {
             _this4.rooms.splice(index, 1);
-
-            console.log(_this4.rooms);
           }
         }
       })["catch"](function (error) {
@@ -65476,8 +65555,6 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
       _this5.recieveMessage(e.message);
     }) //　既読処理発生イベント
     .listen('AlreadyRead', function (e) {
-      console.log('tinpo', e.chat);
-
       _this5.alreadyReadUpdate(e.chat);
     }); // ユーザー検索
 
@@ -65524,6 +65601,9 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
         for (var _iterator7 = res.data[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
           var room = _step7.value;
           room.contents.reverse();
+          room.forward_date = null;
+
+          _this5.pushDate(room);
 
           _this5.rooms.push(room);
         }

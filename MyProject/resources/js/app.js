@@ -64,6 +64,48 @@ const app = new Vue({
         }
       }
     },
+    // 年月日取得
+    getDate(date) {
+      const dt = new Date();
+      const tmp1 = date.split("-");
+      const tmp2 = tmp1[2].split(" ");
+
+      const year = tmp1[0];
+      const month = tmp1[1];
+      const day = tmp2[0];
+      let result = "";
+
+      if (dt.getFullYear() > year) {
+        result += year + '.' + month + '.' + day;
+      } else {
+        result += month + '.' + day + '(' + dt.getDay() + ')';
+      }
+      return result;
+    },
+    // 時間取得
+    getTime(date) {
+      const tmp = date.split("-")[2].split(" ")[1].split(":");
+
+      const hour = Number(tmp[0]);
+      const minute = tmp[1];
+      return hour + ":" + minute;
+    },
+    // 日付代入
+    pushDate(room) {
+      for (let index = 0; index < room.contents.length; index++) {
+        const dt = this.getDate(room.contents[index].created_at);
+        if (!room.forward_date || room.forward_date != dt) {
+          room.contents.splice(index, 0, {
+            message: dt,
+            content_type: 'text',
+            sender_id: 'system_manager',
+            created_at: room.contents[index].created_at
+          });
+          index++;
+          room.forward_date = dt;
+        }
+      }
+    },
     // テキスト投稿
     postMessage(text) {
       axios.post("/api/message", {
@@ -163,16 +205,29 @@ const app = new Vue({
     },
     // チャット取得
     getMessages() {
-      if (!this.now_room.contents[0]) {
+      let index = 0;
+      if (!this.now_room.contents[index]) {
         return;
       }
+      console.log(this.now_room.contents[0].created_at)
       let url = "/api/rooms/" + this.now_room.id + "/messages/" +
         this.now_room.contents[0].created_at;
       axios.get(url)
         .then(res => {
           let messages = res.data;
           for (let message of messages) {
-            this.now_room.contents.unshift(message);
+            const dt = this.getDate(message.created_at);
+            if (this.now_room.forward_date != dt) {
+              this.now_room.contents.unshift({
+                message: dt,
+                content_type: 'text',
+                sender_id: 'system_manager',
+                created_at: message.created_at
+              });
+              this.now_room.forward_date = dt;
+            }else{
+              this.now_room.contents.splice(1, 0, message);
+            }
           }
         })
         .catch(error => {
@@ -183,7 +238,7 @@ const app = new Vue({
     // ルーム作成
     addRoom(join_users, is_group, group_name) {
       let users = [];
-      for(let user of join_users){
+      for (let user of join_users) {
         users.push(user);
       }
       axios.post("/api/rooms", {
@@ -192,9 +247,6 @@ const app = new Vue({
         group_name: group_name,
         admin: is_group ? this.user.id : null
       })
-        .then(res => {
-          console.log("しました");
-        })
         .catch(error => {
           console.log(error)
           console.log('データの取得に失敗しました。')
@@ -218,9 +270,8 @@ const app = new Vue({
         .then(res => {
           console.log("退出しました", res.data);
           for (let index = 0; index < this.rooms.length; index++) {
-            if(res.data == this.rooms[index].id){
+            if (res.data == this.rooms[index].id) {
               this.rooms.splice(index, 1);
-              console.log(this.rooms);
             }
           }
         })
@@ -257,7 +308,6 @@ const app = new Vue({
       })
       //　既読処理発生イベント
       .listen('AlreadyRead', (e) => {
-        console.log('tinpo', e.chat);
         this.alreadyReadUpdate(e.chat);
       });
     // ユーザー検索
@@ -281,6 +331,8 @@ const app = new Vue({
       .then(res => {
         for (let room of res.data) {
           room.contents.reverse();
+          room.forward_date = null;
+          this.pushDate(room);
           this.rooms.push(room);
         }
         this.sortRoom();
@@ -299,7 +351,6 @@ const app = new Vue({
             this.new_personal_messages.push(res.data[key]);
           }
         }
-
       })
       .catch(error => {
         console.log(error)

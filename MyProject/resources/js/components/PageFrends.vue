@@ -115,6 +115,7 @@ export default {
   border-bottom: solid 1px silver;
   background-color: ghostwhite;
   color: slategrey;
+  cursor: pointer;
 }
 .contents-accordion {
   display: flex;

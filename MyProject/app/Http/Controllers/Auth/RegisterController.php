@@ -89,19 +89,19 @@ class RegisterController extends Controller
                 'group_name' => null,
                 'is_group' => false,
                 'admin' => null,
-                'created_at' => Carbon::now()
+                'created_at' => Carbon::now('Asia/Tokyo')
             ];
 
             ChatRoom::create($room);
             ChatRoomUser::create([
                 'room_id' => $room['id'],
                 'user_id' => $user->id,
-                'checked_at' => Carbon::now()
+                'checked_at' => Carbon::now('Asia/Tokyo')
             ]);
             ChatRoomUser::create([
                 'room_id' => $room['id'],
                 'user_id' => $my_uuid,
-                'checked_at' => Carbon::now()
+                'checked_at' => Carbon::now('Asia/Tokyo')
             ]);
         }
 
