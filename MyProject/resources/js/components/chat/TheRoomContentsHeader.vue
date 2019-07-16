@@ -55,9 +55,7 @@ export default {
       }
       if (confirm(text)) {
         this.$root.exitRoom();
-        this.$root.clearTimeline();
         this.$root.now_room = null;
-        this.label = "グループを選択してください▿";
       } else {
         console.log("キャンセル");
       }

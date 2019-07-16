@@ -1930,7 +1930,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.$root.user = JSON.parse(this.user);
-    console.log(this.$root.user);
   }
 });
 
@@ -2120,6 +2119,10 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       return this.$root.user_list.filter(function (user) {
+        if (user.id == _this2.$root.user.id) {
+          return false;
+        }
+
         return user.name.indexOf(_this2.$root.search_key) != -1;
       });
     },
@@ -2161,7 +2164,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({});
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  computed: {
+    badge_count: function badge_count() {
+      return this.$root.new_group_messages.length + this.$root.new_personal_messages.length;
+    }
+  }
+});
 
 /***/ }),
 
@@ -2524,9 +2534,7 @@ __webpack_require__.r(__webpack_exports__);
 
       if (confirm(text)) {
         this.$root.exitRoom();
-        this.$root.clearTimeline();
         this.$root.now_room = null;
-        this.label = "グループを選択してください▿";
       } else {
         console.log("キャンセル");
       }
@@ -9744,7 +9752,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.global-navigation[data-v-3e2c72e6] {\r\n  display: flex;\r\n  padding: 30px 0;\r\n  flex-direction: column;\r\n  align-items: center;\r\n  background-color: darkslategray;\n}\n.item[data-v-3e2c72e6] {\r\n  position: relative;\r\n  display: flex;\r\n  margin: 20px 0;\r\n  justify-content: center;\r\n  align-items: center;\n}\n.item .icon[data-v-3e2c72e6] {\r\n  display: block;\r\n  height: 40px;\r\n  width: 40px;\n}\n.item .batch[data-v-3e2c72e6]{\r\n  position: absolute;\r\n  top:-8px;\r\n  right: -10px;\r\n  display: flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  height: 23px;\r\n  width: 23px;\r\n  border-radius: 50%;\r\n  color: white;\r\n  background-color: red;\n}\n.other[data-v-3e2c72e6]{\r\n  margin-top: auto;\n}\r\n", ""]);
+exports.push([module.i, "\n.global-navigation[data-v-3e2c72e6] {\r\n  display: flex;\r\n  padding: 30px 0;\r\n  flex-direction: column;\r\n  align-items: center;\r\n  background-color: darkslategray;\n}\n.item[data-v-3e2c72e6] {\r\n  position: relative;\r\n  display: flex;\r\n  margin: 20px 0;\r\n  justify-content: center;\r\n  align-items: center;\n}\n.item .icon[data-v-3e2c72e6] {\r\n  display: block;\r\n  height: 40px;\r\n  width: 40px;\n}\n.item .badge[data-v-3e2c72e6] {\r\n  position: absolute;\r\n  top: -8px;\r\n  right: -10px;\r\n  display: flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  height: 23px;\r\n  width: 23px;\r\n  border-radius: 50%;\r\n  color: white;\r\n  background-color: red;\n}\n.other[data-v-3e2c72e6] {\r\n  margin-top: auto;\n}\r\n", ""]);
 
 // exports
 
@@ -49393,18 +49401,23 @@ var render = function() {
                       fn: function() {
                         return [
                           _c("div", { staticClass: "contents-accordion" }, [
-                            _c("div", { staticClass: "list-item" }, [
-                              _c("img", {
-                                staticClass: "icon-item-img",
-                                attrs: { src: "/img/profile.jpg" }
-                              }),
-                              _vm._v(" "),
-                              _vm.$root.user
-                                ? _c("span", { staticClass: "name-item" }, [
+                            _vm.$root.user
+                              ? _c("div", { staticClass: "list-item" }, [
+                                  _c("img", {
+                                    staticClass: "icon-item-img",
+                                    attrs: {
+                                      src:
+                                        "/storage/images/" +
+                                        _vm.$root.user.id +
+                                        ".jpg"
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c("span", { staticClass: "name-item" }, [
                                     _vm._v(_vm._s(_vm.$root.user.name))
                                   ])
-                                : _vm._e()
-                            ])
+                                ])
+                              : _vm._e()
                           ])
                         ]
                       },
@@ -49413,7 +49426,7 @@ var render = function() {
                   ],
                   null,
                   false,
-                  1798830535
+                  1210381331
                 )
               })
             : _vm._e(),
@@ -49609,7 +49622,22 @@ var render = function() {
           staticClass: "icon",
           attrs: { src: "/img/icon-chat.png" }
         }),
-        2 ? _c("span", { staticClass: "batch" }, [_vm._v(_vm._s(2))]) : undefined
+        _vm._v(" "),
+        _c(
+          "span",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.badge_count > 0,
+                expression: "badge_count > 0"
+              }
+            ],
+            staticClass: "badge"
+          },
+          [_vm._v(_vm._s(_vm.badge_count))]
+        )
       ]),
       _vm._v(" "),
       _c("router-link", { staticClass: "item", attrs: { to: "/timeline" } }, [
@@ -65408,7 +65436,14 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
 
       axios["delete"]("api/rooms/" + this.now_room.id + "/users/" + this.user.id).then(function (res) {
         console.log("退出しました", res.data);
-        _this4.rooms = res.data;
+
+        for (var index = 0; index < _this4.rooms.length; index++) {
+          if (res.data == _this4.rooms[index].id) {
+            _this4.rooms.splice(index, 1);
+
+            console.log(_this4.rooms);
+          }
+        }
       })["catch"](function (error) {
         console.log(error);
         console.log('データの取得に失敗しました。');

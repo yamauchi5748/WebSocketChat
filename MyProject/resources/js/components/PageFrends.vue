@@ -8,10 +8,10 @@
         </template>
         <template #contents>
           <div class="contents-accordion">
-            <div class="list-item">
-              <img class="icon-item-img" src="/img/profile.jpg" />
+            <div class="list-item" v-if="$root.user">
+              <img class="icon-item-img" :src="'/storage/images/' + $root.user.id + '.jpg'" />
               <!-- ユーザーが存在すれば表示 -->
-              <span class="name-item" v-if="$root.user">{{ $root.user.name }}</span>
+              <span class="name-item">{{ $root.user.name }}</span>
             </div>
           </div>
         </template>
@@ -61,8 +61,11 @@ export default {
         }
       });
     },
-    userList: function(){
+    userList: function() {
       return this.$root.user_list.filter(user => {
+        if (user.id == this.$root.user.id) {
+          return false;
+        }
         return user.name.indexOf(this.$root.search_key) != -1;
       });
     },

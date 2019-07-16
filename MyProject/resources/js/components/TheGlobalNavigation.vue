@@ -4,7 +4,8 @@
       <img class="icon" src="/img/icon-frends.png" />
     </router-link>
     <router-link class="item" to="/chat">
-      <img class="icon" src="/img/icon-chat.png" /><span v-if="2" class="batch">{{2}}</span>
+      <img class="icon" src="/img/icon-chat.png" />
+      <span class="badge" v-show="badge_count > 0">{{ badge_count }}</span>
     </router-link>
     <router-link class="item" to="/timeline">
       <img class="icon" src="/img/icon-timeline.png" />
@@ -16,7 +17,16 @@
 </template>
 
 <script>
-export default {}; 
+export default {
+  computed: {
+    badge_count: function() {
+      return (
+        this.$root.new_group_messages.length +
+        this.$root.new_personal_messages.length
+      );
+    }
+  }
+};
 </script>
 
 <style scoped>
@@ -39,9 +49,9 @@ export default {};
   height: 40px;
   width: 40px;
 }
-.item .batch{
+.item .badge {
   position: absolute;
-  top:-8px;
+  top: -8px;
   right: -10px;
   display: flex;
   justify-content: center;
@@ -52,7 +62,7 @@ export default {};
   color: white;
   background-color: red;
 }
-.other{
+.other {
   margin-top: auto;
 }
 </style>

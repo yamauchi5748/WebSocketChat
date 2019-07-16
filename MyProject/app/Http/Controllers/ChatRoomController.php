@@ -161,13 +161,11 @@ class ChatRoomController extends Controller
             Chat::where('room_id', $room_id)->delete();
             ChatRoom::where('id', $room_id)->delete();
             ChatRoomUser::where('room_id', $room_id)->delete();
-
-            return $this->index();
         } else {
             ChatRoomUser::where('room_id', $room_id)->where('user_id', $user_id)->delete();
-
-            return $this->index();
         }
+
+        return $room_id;
     }
 
     public function checkAt(Request $request)

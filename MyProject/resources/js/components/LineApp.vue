@@ -15,7 +15,6 @@ export default {
   },
   mounted() {
     this.$root.user = JSON.parse(this.user);
-    console.log(this.$root.user);
   },
 };
 </script>

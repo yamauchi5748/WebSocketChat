@@ -217,7 +217,12 @@ const app = new Vue({
       axios.delete("api/rooms/" + this.now_room.id + "/users/" + this.user.id)
         .then(res => {
           console.log("退出しました", res.data);
-          this.rooms = res.data;
+          for (let index = 0; index < this.rooms.length; index++) {
+            if(res.data == this.rooms[index].id){
+              this.rooms.splice(index, 1);
+              console.log(this.rooms);
+            }
+          }
         })
         .catch(error => {
           console.log(error)
