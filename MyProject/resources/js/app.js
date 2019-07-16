@@ -78,7 +78,31 @@ const app = new Vue({
       if (dt.getFullYear() > year) {
         result += year + '.' + month + '.' + day;
       } else {
-        result += month + '.' + day + '(' + dt.getDay() + ')';
+        let week;
+        switch (dt.getDay()) {
+          case 0:
+            week = '日'
+            break;
+          case 1:
+            week = '月'
+            break;
+          case 2:
+            week = '火'
+            break;
+          case 3:
+            week = '水'
+            break;
+          case 4:
+            week = '木'
+            break;
+          case 5:
+            week = '金'
+            break;
+          case 6:
+            week = '土'
+            break;
+        }
+        result += month + '.' + day + '(' + week + ')';
       }
       return result;
     },
@@ -225,7 +249,7 @@ const app = new Vue({
                 created_at: message.created_at
               });
               this.now_room.forward_date = dt;
-            }else{
+            } else {
               this.now_room.contents.splice(1, 0, message);
             }
           }

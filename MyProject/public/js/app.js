@@ -65217,7 +65217,39 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
       if (dt.getFullYear() > year) {
         result += year + '.' + month + '.' + day;
       } else {
-        result += month + '.' + day + '(' + dt.getDay() + ')';
+        var week;
+
+        switch (dt.getDay()) {
+          case 0:
+            week = '日';
+            break;
+
+          case 1:
+            week = '月';
+            break;
+
+          case 2:
+            week = '火';
+            break;
+
+          case 3:
+            week = '水';
+            break;
+
+          case 4:
+            week = '木';
+            break;
+
+          case 5:
+            week = '金';
+            break;
+
+          case 6:
+            week = '土';
+            break;
+        }
+
+        result += month + '.' + day + '(' + week + ')';
       }
 
       return result;
