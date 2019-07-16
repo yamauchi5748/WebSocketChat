@@ -9,7 +9,11 @@
         <template #contents>
           <div class="contents-accordion">
             <div class="list-item" v-if="$root.user">
-              <img class="icon-item-img" :src="'/storage/images/' + $root.user.id + '.jpg'" />
+              <img
+                class="icon-item-img"
+                @error="ImgSrcErrorHandler"
+                :src="'/storage/images/' + $root.user.id + '.jpg'"
+              />
               <!-- ユーザーが存在すれば表示 -->
               <span class="name-item">{{ $root.user.name }}</span>
             </div>
@@ -23,7 +27,7 @@
         <template #contents>
           <div class="contents-accordion">
             <div v-for="(room, key) in roomList" :key="key" :room="room" class="list-item">
-              <img class="icon-item-img" src="/img/profile.jpg" />
+              <img class="icon-item-img" @error="ImgSrcErrorHandler" src="/img/profile.jpg" />
               <span class="name-item">{{ room.group_name }}</span>
             </div>
           </div>
@@ -36,7 +40,11 @@
         <template #contents>
           <div class="contents-accordion">
             <div v-for="(user, key) in userList" :key="key" :user="user" class="list-item">
-              <img class="icon-item-img" :src="'/storage/images/' + user.id  + '.jpg'" />
+              <img
+                class="icon-item-img"
+                @error="ImgSrcErrorHandler"
+                :src="'/storage/images/' + user.id  + '.jpg'"
+              />
               <span class="name-item">{{ user.name }}</span>
             </div>
           </div>
@@ -74,6 +82,11 @@ export default {
         return false;
       }
       return true;
+    }
+  },
+  methods: {
+    ImgSrcErrorHandler(e) {
+      e.target.src = "/img/profile.jpg";
     }
   }
 };
