@@ -114,13 +114,37 @@ const app = new Vue({
       const minute = tmp[1];
       return hour + ":" + minute;
     },
+    // 日付比較
+    dateComparator(dt) {
+      const date = new Date();
+      const Month = Number(date.getMonth()) + 1;
+      const day = date.getDate();
+      let result;
+      let month;
+
+      if (Month < 10) {
+        month = '0' + Month;
+      }
+      const target_month = dt.split('.')[0];
+      const target_day = dt.split('.')[1].split('(')[0];
+
+      console.log(month, day);
+      if ((target_month + target_day) == (month + day)) {
+        result = 'Today';
+      } else if ((day - target_day) == 1) {
+        result = 'Yestarday';
+      } else {
+        result = dt;
+      }
+      return result;
+    },
     // 日付代入
     pushDate(room) {
       for (let index = 0; index < room.contents.length; index++) {
         const dt = this.getDate(room.contents[index].created_at);
         if (!room.forward_date || room.forward_date != dt) {
           room.contents.splice(index, 0, {
-            message: dt,
+            message: this.dateComparator(dt),
             content_type: 'text',
             sender_id: 'system_manager',
             created_at: room.contents[index].created_at
@@ -233,7 +257,6 @@ const app = new Vue({
       if (!this.now_room.contents[index]) {
         return;
       }
-      console.log(this.now_room.contents[0].created_at)
       let url = "/api/rooms/" + this.now_room.id + "/messages/" +
         this.now_room.contents[0].created_at;
       axios.get(url)
@@ -243,7 +266,7 @@ const app = new Vue({
             const dt = this.getDate(message.created_at);
             if (this.now_room.forward_date != dt) {
               this.now_room.contents.unshift({
-                message: dt,
+                message: this.dateComparator(dt),
                 content_type: 'text',
                 sender_id: 'system_manager',
                 created_at: message.created_at

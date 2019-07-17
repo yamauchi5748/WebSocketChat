@@ -2416,14 +2416,13 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       text: "",
-      file: null
+      file: null,
+      contents: null
     };
   },
   computed: {
     timeLine: function timeLine() {
       if (this.$root.now_room) {
-        console.log(this.$root.now_room.contents);
-        console.log(this.$root.user.id);
         return this.$root.now_room.contents;
       }
 
@@ -65261,6 +65260,32 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
       var minute = tmp[1];
       return hour + ":" + minute;
     },
+    // 日付比較
+    dateComparator: function dateComparator(dt) {
+      var date = new Date();
+      var Month = Number(date.getMonth()) + 1;
+      var day = date.getDate();
+      var result;
+      var month;
+
+      if (Month < 10) {
+        month = '0' + Month;
+      }
+
+      var target_month = dt.split('.')[0];
+      var target_day = dt.split('.')[1].split('(')[0];
+      console.log(month, day);
+
+      if (target_month + target_day == month + day) {
+        result = 'Today';
+      } else if (day - target_day == 1) {
+        result = 'Yestarday';
+      } else {
+        result = dt;
+      }
+
+      return result;
+    },
     // 日付代入
     pushDate: function pushDate(room) {
       for (var index = 0; index < room.contents.length; index++) {
@@ -65268,7 +65293,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
 
         if (!room.forward_date || room.forward_date != dt) {
           room.contents.splice(index, 0, {
-            message: dt,
+            message: this.dateComparator(dt),
             content_type: 'text',
             sender_id: 'system_manager',
             created_at: room.contents[index].created_at
@@ -65449,7 +65474,6 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
         return;
       }
 
-      console.log(this.now_room.contents[0].created_at);
       var url = "/api/rooms/" + this.now_room.id + "/messages/" + this.now_room.contents[0].created_at;
       axios.get(url).then(function (res) {
         var messages = res.data;
@@ -65465,7 +65489,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
 
             if (_this2.now_room.forward_date != dt) {
               _this2.now_room.contents.unshift({
-                message: dt,
+                message: _this2.dateComparator(dt),
                 content_type: 'text',
                 sender_id: 'system_manager',
                 created_at: message.created_at

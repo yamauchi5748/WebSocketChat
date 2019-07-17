@@ -1,7 +1,7 @@
 <template>
   <div class="room">
     <the-room-contents-header></the-room-contents-header>
-    <div class="room-talk">
+    <div class="room-talk" >
       <room-contents-message v-for="(message,key) in timeLine" :key="key" :message="message"></room-contents-message>
     </div>
     <div class="input-area">
@@ -26,14 +26,13 @@ export default {
   data() {
     return {
       text: "",
-      file: null
+      file: null,
+      contents: null
     };
   },
   computed: {
     timeLine: function() {
       if (this.$root.now_room) {
-        console.log(this.$root.now_room.contents);
-        console.log(this.$root.user.id);
         return this.$root.now_room.contents;
       }
       return false;
