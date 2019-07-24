@@ -99,14 +99,15 @@ export default {
   align-items: stretch;
   flex: 0 0 140px;
 }
+
 .input-item-list {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-
   flex: 0 0 40px;
   border-bottom: solid 1px silver;
 }
+
 .input-text-wrapper {
   display: flex;
   flex: 1 1;

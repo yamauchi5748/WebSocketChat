@@ -128,7 +128,6 @@ const app = new Vue({
       const target_month = dt.split('.')[0];
       const target_day = dt.split('.')[1].split('(')[0];
 
-      console.log(month, day);
       if ((target_month + target_day) == (month + day)) {
         result = 'Today';
       } else if ((day - target_day) == 1) {
@@ -153,6 +152,7 @@ const app = new Vue({
           room.forward_date = dt;
         }
       }
+      room.forward_date = this.getDate(room.contents[0].created_at);
     },
     // テキスト投稿
     postMessage(text) {
@@ -168,7 +168,6 @@ const app = new Vue({
       axios
         .post("/api/rooms/" + this.now_room.id + "/file", data)
         .then(response => {
-          console.log(response.data);
         })
         .catch(error => {
           console.log(error);
@@ -197,7 +196,6 @@ const app = new Vue({
         this.checkAt(this.now_room.id);
       } else {
         // 新しいメッセージを新着ボックスに格納
-        console.log(message);
         message.is_group ? this.new_group_messages.push(message) : this.new_personal_messages.push(message)
         // ルームにメッセージを格納
         for (let room of this.rooms) {
@@ -315,7 +313,6 @@ const app = new Vue({
     exitRoom() {
       axios.delete("api/rooms/" + this.now_room.id + "/users/" + this.user.id)
         .then(res => {
-          console.log("退出しました", res.data);
           for (let index = 0; index < this.rooms.length; index++) {
             if (res.data == this.rooms[index].id) {
               this.rooms.splice(index, 1);
@@ -333,7 +330,6 @@ const app = new Vue({
     Echo.private('user.' + this.user.id)
       // ルーム作成イベント
       .listen('RoomRecieved', (e) => {
-        console.log('roomStore', e.room);
         const room = e.room;
 
         this.rooms.unshift(room);
@@ -379,7 +375,10 @@ const app = new Vue({
         for (let room of res.data) {
           room.contents.reverse();
           room.forward_date = null;
-          this.pushDate(room);
+          //コンテンツが存在するならば
+          if(room.contents[0]){
+            this.pushDate(room);
+          }
           this.rooms.push(room);
         }
         this.sortRoom();

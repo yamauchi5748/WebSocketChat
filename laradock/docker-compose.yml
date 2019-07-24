@@ -358,7 +358,6 @@ services:
         - "${MYSQL_PORT}:3306"
       networks:
         - backend
-      user: "1000:50" # 追加
       command: --innodb-use-native-aio=0 #追加
 
 ### Percona ################################################

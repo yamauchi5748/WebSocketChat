@@ -9924,7 +9924,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.room[data-v-3e8ae6cc] {\r\n  display: flex;\r\n  align-items: stretch;\r\n  flex-direction: column;\r\n  width: 100%;\r\n  height: 100%;\n}\n.room-talk[data-v-3e8ae6cc] {\r\n  display: flex;\r\n  flex-direction: column;\r\n  align-items: stretch;\r\n  overflow: auto;\r\n  flex-grow: 1;\r\n  background-color: darkslategray;\n}\n.input-area[data-v-3e8ae6cc] {\r\n  display: flex;\r\n  flex-direction: column;\r\n  align-items: stretch;\r\n  flex: 0 0 140px;\n}\n.input-item-list[data-v-3e8ae6cc] {\r\n  display: flex;\r\n  justify-content: flex-start;\r\n  align-items: center;\r\n\r\n  flex: 0 0 40px;\r\n  border-bottom: solid 1px silver;\n}\n.input-text-wrapper[data-v-3e8ae6cc] {\r\n  display: flex;\r\n  flex: 1 1;\r\n  align-items: stretch;\n}\n.input-text[data-v-3e8ae6cc] {\r\n  flex: 1 1;\r\n  resize: none;\r\n  border: none;\n}\n.send-action[data-v-3e8ae6cc] {\r\n  flex: 0 0 100px;\r\n  height: 100px;\r\n  border-left: solid 1px silver;\n}\n.input-img-wrapper[data-v-3e8ae6cc] {\r\n  padding: 0;\r\n  margin: 0;\n}\n.input-img-icon[data-v-3e8ae6cc] {\r\n  height: 30px;\r\n  width: 30px;\n}\n.input-img[data-v-3e8ae6cc] {\r\n  display: none;\n}\r\n", ""]);
+exports.push([module.i, "\n.room[data-v-3e8ae6cc] {\r\n  display: flex;\r\n  align-items: stretch;\r\n  flex-direction: column;\r\n  width: 100%;\r\n  height: 100%;\n}\n.room-talk[data-v-3e8ae6cc] {\r\n  display: flex;\r\n  flex-direction: column;\r\n  align-items: stretch;\r\n  overflow: auto;\r\n  flex-grow: 1;\r\n  background-color: darkslategray;\n}\n.input-area[data-v-3e8ae6cc] {\r\n  display: flex;\r\n  flex-direction: column;\r\n  align-items: stretch;\r\n  flex: 0 0 140px;\n}\n.input-item-list[data-v-3e8ae6cc] {\r\n  display: flex;\r\n  justify-content: flex-start;\r\n  align-items: center;\r\n  flex: 0 0 40px;\r\n  border-bottom: solid 1px silver;\n}\n.input-text-wrapper[data-v-3e8ae6cc] {\r\n  display: flex;\r\n  flex: 1 1;\r\n  align-items: stretch;\n}\n.input-text[data-v-3e8ae6cc] {\r\n  flex: 1 1;\r\n  resize: none;\r\n  border: none;\n}\n.send-action[data-v-3e8ae6cc] {\r\n  flex: 0 0 100px;\r\n  height: 100px;\r\n  border-left: solid 1px silver;\n}\n.input-img-wrapper[data-v-3e8ae6cc] {\r\n  padding: 0;\r\n  margin: 0;\n}\n.input-img-icon[data-v-3e8ae6cc] {\r\n  height: 30px;\r\n  width: 30px;\n}\n.input-img[data-v-3e8ae6cc] {\r\n  display: none;\n}\r\n", ""]);
 
 // exports
 
@@ -65459,7 +65459,6 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
 
       var target_month = dt.split('.')[0];
       var target_day = dt.split('.')[1].split('(')[0];
-      console.log(month, day);
 
       if (target_month + target_day == month + day) {
         result = 'Today';
@@ -65487,6 +65486,8 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
           room.forward_date = dt;
         }
       }
+
+      room.forward_date = this.getDate(room.contents[0].created_at);
     },
     // テキスト投稿
     postMessage: function postMessage(text) {
@@ -65672,6 +65673,8 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
 
             var dt = _this2.getDate(message.created_at);
 
+            console.log('あｓｓ', _this2.now_room.forward_date, dt);
+
             if (_this2.now_room.forward_date != dt) {
               _this2.now_room.contents.unshift({
                 message: _this2.dateComparator(dt),
@@ -65843,9 +65846,11 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
         for (var _iterator7 = res.data[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
           var room = _step7.value;
           room.contents.reverse();
-          room.forward_date = null;
+          room.forward_date = null; //コンテンツが存在するならば
 
-          _this5.pushDate(room);
+          if (room.contents[0]) {
+            _this5.pushDate(room);
+          }
 
           _this5.rooms.push(room);
         }
