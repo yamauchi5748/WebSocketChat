@@ -154,6 +154,19 @@ const app = new Vue({
       }
       room.forward_date = this.getDate(room.contents[0].created_at);
     },
+    //メッセージ単体での日付代入
+    dateMessagePush(room, message){
+      if (room.forward_date != dt) {
+        room.contents.unshift({
+          message: this.dateComparator(dt),
+          content_type: 'text',
+          sender_id: 'system_manager',
+          created_at: message.created_at
+        });
+        room.forward_date = dt;
+      }
+      room.contents.splice(1, 0, message);
+    },
     // テキスト投稿
     postMessage(text) {
       axios.post("/api/message", {
@@ -193,6 +206,7 @@ const app = new Vue({
       // 投稿時にルーム内にいるなら投稿を表示し、参加状況を更新する
       if (this.now_room && message.room_id == this.now_room.id) {
         this.now_room.contents.push(message);
+        this.pushDate(this.now_room);
         this.checkAt(this.now_room.id);
       } else {
         // 新しいメッセージを新着ボックスに格納
@@ -201,6 +215,7 @@ const app = new Vue({
         for (let room of this.rooms) {
           if (room.id == message.room_id) {
             room.contents.push(message);
+            this.pushDate(room);
           }
         }
       }
@@ -261,6 +276,10 @@ const app = new Vue({
         .then(res => {
           let messages = res.data;
           for (let message of messages) {
+            // 非同期処理のエラー回避
+            if (message.room_id != this.now_room.id) {
+              return
+            }
             const dt = this.getDate(message.created_at);
             if (this.now_room.forward_date != dt) {
               this.now_room.contents.unshift({
@@ -270,10 +289,10 @@ const app = new Vue({
                 created_at: message.created_at
               });
               this.now_room.forward_date = dt;
-            } else {
-              this.now_room.contents.splice(1, 0, message);
             }
+            this.now_room.contents.splice(1, 0, message);
           }
+          this.now_room.contents[0].created_at = this.now_room.contents[1].created_at;
         })
         .catch(error => {
           console.log(error)
@@ -376,7 +395,7 @@ const app = new Vue({
           room.contents.reverse();
           room.forward_date = null;
           //コンテンツが存在するならば
-          if(room.contents[0]){
+          if (room.contents[0]) {
             this.pushDate(room);
           }
           this.rooms.push(room);

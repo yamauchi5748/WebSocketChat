@@ -5,7 +5,7 @@
     </div>
     <div class="room-talk-item" :class="{aite:isAite}" v-else>
       <span class="room-contents-message-information">
-        <span class="room-contents-message-already-read" v-if="Boolean(message.already_read)">
+        <span class="room-contents-message-already-read" v-if="$root.now_room.is_group || Boolean(message.already_read)">
           <span>Read</span>
           <span v-if="$root.now_room.is_group">{{ message.already_read }}</span>
         </span>

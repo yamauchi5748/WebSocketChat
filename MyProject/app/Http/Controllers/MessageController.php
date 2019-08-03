@@ -17,8 +17,6 @@ class MessageController extends Controller
 {
     public function index($room_id, $created_at)
     {
-        $room = ChatRoom::where('id', $room_id)->first();
-
         if (!$created_at) {
             return [];
         }

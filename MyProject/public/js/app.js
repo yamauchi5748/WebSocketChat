@@ -49604,7 +49604,7 @@ var render = function() {
           { staticClass: "room-talk-item", class: { aite: _vm.isAite } },
           [
             _c("span", { staticClass: "room-contents-message-information" }, [
-              Boolean(_vm.message.already_read)
+              _vm.$root.now_room.is_group || Boolean(_vm.message.already_read)
                 ? _c(
                     "span",
                     { staticClass: "room-contents-message-already-read" },
@@ -65473,21 +65473,35 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
     // 日付代入
     pushDate: function pushDate(room) {
       for (var index = 0; index < room.contents.length; index++) {
-        var dt = this.getDate(room.contents[index].created_at);
+        var _dt = this.getDate(room.contents[index].created_at);
 
-        if (!room.forward_date || room.forward_date != dt) {
+        if (!room.forward_date || room.forward_date != _dt) {
           room.contents.splice(index, 0, {
-            message: this.dateComparator(dt),
+            message: this.dateComparator(_dt),
             content_type: 'text',
             sender_id: 'system_manager',
             created_at: room.contents[index].created_at
           });
           index++;
-          room.forward_date = dt;
+          room.forward_date = _dt;
         }
       }
 
       room.forward_date = this.getDate(room.contents[0].created_at);
+    },
+    //メッセージ単体での日付代入
+    dateMessagePush: function dateMessagePush(room, message) {
+      if (room.forward_date != dt) {
+        room.contents.unshift({
+          message: this.dateComparator(dt),
+          content_type: 'text',
+          sender_id: 'system_manager',
+          created_at: message.created_at
+        });
+        room.forward_date = dt;
+      }
+
+      room.contents.splice(1, 0, message);
     },
     // テキスト投稿
     postMessage: function postMessage(text) {
@@ -65500,9 +65514,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
     // 画像投稿
     postFile: function postFile(data) {
       console.log(data);
-      axios.post("/api/rooms/" + this.now_room.id + "/file", data).then(function (response) {
-        console.log(response.data);
-      })["catch"](function (error) {
+      axios.post("/api/rooms/" + this.now_room.id + "/file", data).then(function (response) {})["catch"](function (error) {
         console.log(error);
       });
     },
@@ -65528,10 +65540,10 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
 
       if (this.now_room && message.room_id == this.now_room.id) {
         this.now_room.contents.push(message);
+        this.pushDate(this.now_room);
         this.checkAt(this.now_room.id);
       } else {
         // 新しいメッセージを新着ボックスに格納
-        console.log(message);
         message.is_group ? this.new_group_messages.push(message) : this.new_personal_messages.push(message); // ルームにメッセージを格納
 
         var _iteratorNormalCompletion = true;
@@ -65544,6 +65556,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
 
             if (room.id == message.room_id) {
               room.contents.push(message);
+              this.pushDate(room);
             }
           }
         } catch (err) {
@@ -65671,22 +65684,25 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
           for (var _iterator4 = messages[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
             var message = _step4.value;
 
-            var dt = _this2.getDate(message.created_at);
+            // 非同期処理のエラー回避
+            if (message.room_id != _this2.now_room.id) {
+              return;
+            }
 
-            console.log('あｓｓ', _this2.now_room.forward_date, dt);
+            var _dt2 = _this2.getDate(message.created_at);
 
-            if (_this2.now_room.forward_date != dt) {
+            if (_this2.now_room.forward_date != _dt2) {
               _this2.now_room.contents.unshift({
-                message: _this2.dateComparator(dt),
+                message: _this2.dateComparator(_dt2),
                 content_type: 'text',
                 sender_id: 'system_manager',
                 created_at: message.created_at
               });
 
-              _this2.now_room.forward_date = dt;
-            } else {
-              _this2.now_room.contents.splice(1, 0, message);
+              _this2.now_room.forward_date = _dt2;
             }
+
+            _this2.now_room.contents.splice(1, 0, message);
           }
         } catch (err) {
           _didIteratorError4 = true;
@@ -65702,6 +65718,8 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
             }
           }
         }
+
+        _this2.now_room.contents[0].created_at = _this2.now_room.contents[1].created_at;
       })["catch"](function (error) {
         console.log(error);
         console.log('データの取得に失敗しました。');
@@ -65761,8 +65779,6 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
       var _this4 = this;
 
       axios["delete"]("api/rooms/" + this.now_room.id + "/users/" + this.user.id).then(function (res) {
-        console.log("退出しました", res.data);
-
         for (var index = 0; index < _this4.rooms.length; index++) {
           if (res.data == _this4.rooms[index].id) {
             _this4.rooms.splice(index, 1);
@@ -65780,7 +65796,6 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
     // プライベートチャンネル接続
     Echo["private"]('user.' + this.user.id) // ルーム作成イベント
     .listen('RoomRecieved', function (e) {
-      console.log('roomStore', e.room);
       var room = e.room;
 
       _this5.rooms.unshift(room);
