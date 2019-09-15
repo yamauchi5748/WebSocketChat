@@ -26,11 +26,13 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="profile-image" class="col-md-4 col-form-label text-md-right">{{ __('ProfileImage') }}</label>
-                            <div class="col-md-6">
-                                <img id='profile-image-preview' src="" style="max-width: 100%;">
+                            <label for="profile-image-label" class="col-md-4 col-form-label text-md-right">{{ __('ProfileImage') }}</label>
+                            <div class="col-md-6" style="display: flex; justify-content: center; margin-bottom: 20px;">
+                                <img id='profile-image-preview' src="" style="max-width: 30%;">
                             </div>
-                            <input id="profile-image" type="file" class="form-control" name="profile-image" onchange="imgPreview()" required>
+                            <label for="profile-image" class="btn btn-primary" style="margin-left: 3%; background-color: #0090ff; color: white; cursor: pointer;">select
+                                <input id="profile-image" type="file" name="profile-image" onchange="imgPreview()" required style="display: none;">
+                            </label>
                         </div>
 
                         <div class="form-group row">
