@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
-use App\Events\Alreadyread;
+use App\Events\AlreadyRead;
 use App\Events\RoomRecieved;
 use App\Events\RoomUpdateRecieved;
 use App\User;
