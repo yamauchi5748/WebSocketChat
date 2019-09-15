@@ -28,7 +28,7 @@
                         <div class="form-group row">
                             <label for="profile-image" class="col-md-4 col-form-label text-md-right">{{ __('ProfileImage') }}</label>
                             <div class="col-md-6">
-                                <img id='profile-image-preview' src="">
+                                <img id='profile-image-preview' src="" style="max-width: 100%;">
                             </div>
                             <input id="profile-image" type="file" class="form-control" name="profile-image" onchange="imgPreview()" required>
                         </div>

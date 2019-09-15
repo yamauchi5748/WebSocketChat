@@ -10,9 +10,9 @@
     <router-link class="item" to="/timeline">
       <img class="icon" src="/img/icon-timeline.png" />
     </router-link>
-    <router-link class="item other" to="/other">
-      <img class="icon" src="/img/icon-other.png" />
-    </router-link>
+    <div>
+      <button class="item button" @click="logout">ログアウト</button>
+    </div>
   </nav>
 </template>
 
@@ -24,6 +24,14 @@ export default {
         this.$root.new_group_messages.length +
         this.$root.new_personal_messages.length
       );
+    }
+  },
+  methods: {
+    logout: function(){
+      axios.post("/logout")
+      .catch(error => {
+        location.href = '/';
+      });
     }
   }
 };
@@ -64,5 +72,13 @@ export default {
 }
 .other {
   margin-top: auto;
+}
+.button {
+  display: block;
+  background-color: darkslategray;
+  border-style: none;
+  color: darkgrey;
+  outline: none; 
+  font-size: 0.9em;
 }
 </style>

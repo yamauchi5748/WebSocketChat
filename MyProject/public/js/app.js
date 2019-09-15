@@ -2092,6 +2092,13 @@ __webpack_require__.r(__webpack_exports__);
     badge_count: function badge_count() {
       return this.$root.new_group_messages.length + this.$root.new_personal_messages.length;
     }
+  },
+  methods: {
+    logout: function logout() {
+      axios.post("/logout")["catch"](function (error) {
+        location.href = '/';
+      });
+    }
   }
 });
 
@@ -9829,7 +9836,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.global-navigation[data-v-3e2c72e6] {\r\n  display: flex;\r\n  padding: 30px 0;\r\n  flex-direction: column;\r\n  align-items: center;\r\n  background-color: darkslategray;\n}\n.item[data-v-3e2c72e6] {\r\n  position: relative;\r\n  display: flex;\r\n  margin: 20px 0;\r\n  justify-content: center;\r\n  align-items: center;\n}\n.item .icon[data-v-3e2c72e6] {\r\n  display: block;\r\n  height: 40px;\r\n  width: 40px;\n}\n.item .badge[data-v-3e2c72e6] {\r\n  position: absolute;\r\n  top: -8px;\r\n  right: -10px;\r\n  display: flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  height: 23px;\r\n  width: 23px;\r\n  border-radius: 50%;\r\n  color: white;\r\n  background-color: red;\n}\n.other[data-v-3e2c72e6] {\r\n  margin-top: auto;\n}\r\n", ""]);
+exports.push([module.i, "\n.global-navigation[data-v-3e2c72e6] {\r\n  display: flex;\r\n  padding: 30px 0;\r\n  flex-direction: column;\r\n  align-items: center;\r\n  background-color: darkslategray;\n}\n.item[data-v-3e2c72e6] {\r\n  position: relative;\r\n  display: flex;\r\n  margin: 20px 0;\r\n  justify-content: center;\r\n  align-items: center;\n}\n.item .icon[data-v-3e2c72e6] {\r\n  display: block;\r\n  height: 40px;\r\n  width: 40px;\n}\n.item .badge[data-v-3e2c72e6] {\r\n  position: absolute;\r\n  top: -8px;\r\n  right: -10px;\r\n  display: flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  height: 23px;\r\n  width: 23px;\r\n  border-radius: 50%;\r\n  color: white;\r\n  background-color: red;\n}\n.other[data-v-3e2c72e6] {\r\n  margin-top: auto;\n}\n.button[data-v-3e2c72e6] {\r\n  display: block;\r\n  background-color: darkslategray;\r\n  border-style: none;\r\n  color: darkgrey;\r\n  outline: none; \r\n  font-size: 0.9em;\n}\r\n", ""]);
 
 // exports
 
@@ -49556,16 +49563,13 @@ var render = function() {
         })
       ]),
       _vm._v(" "),
-      _c(
-        "router-link",
-        { staticClass: "item other", attrs: { to: "/other" } },
-        [
-          _c("img", {
-            staticClass: "icon",
-            attrs: { src: "/img/icon-other.png" }
-          })
-        ]
-      )
+      _c("div", [
+        _c(
+          "button",
+          { staticClass: "item button", on: { click: _vm.logout } },
+          [_vm._v("ログアウト")]
+        )
+      ])
     ],
     1
   )
